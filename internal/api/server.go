@@ -7,6 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Forecast struct {
+	img_url     string
+	title       string
+	short_title string
+	desc        string
+	color       string
+}
+
 func StartServer() {
 	log.Println("Server start up")
 
