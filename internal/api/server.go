@@ -1,8 +1,10 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,29 +17,41 @@ type Forecast struct {
 	color       string
 }
 
+var Forecasts []Forecast
+
 func StartServer() {
+	jsonForecasts, err := os.ReadFile("forecasts.json")
+	json.Unmarshal(jsonForecasts, &Forecasts)
+	if err != nil {
+		log.Print(err)
+	}
 	log.Println("Server start up")
 
 	r := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+	r.LoadHTMLGlob("templates/*")
+
+	r.GET("/menu", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "menu.tmpl", gin.H{
+			"Forecasts": Forecasts,
 		})
 	})
 
-	r.LoadHTMLGlob("templates/*")
+	r.GET("/cart", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "menu.tmpl", gin.H{
+			"Forecasts": Forecasts,
+		})
+	})
 
-	r.GET("/home", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title": "Main website",
+	r.GET("/desc", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "menu.tmpl", gin.H{
+			"Forecasts": Forecasts,
 		})
 	})
 
 	r.Static("/image", "./resources")
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-
 	log.Println("Server down")
 }
 

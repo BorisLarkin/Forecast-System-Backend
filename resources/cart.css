@@ -16,37 +16,6 @@
 	font-size:36px;
 	letter-spacing:0;
 }
-.goback { 
-	width:155px;
-	height:47px;
-	position:absolute;
-	left:46px;
-	top:155px;
-}
-.back_lbl { 
-	color:rgba(0, 0, 0, 1);
-	width:121px;
-	height:31px;
-	position:absolute;
-	left:34px;
-	top:8px;
-	font-family:PT Sans Caption;
-	text-align:left;
-	font-size:24px;
-	letter-spacing:22;
-}
-.arrow { 
-	color:rgba(0, 0, 0, 1);
-	width:20px;
-	height:39px;
-	position:absolute;
-	left:1px;
-	top:-1px;
-	font-family:PT Sans Caption;
-	text-align:left;
-	font-size:36px;
-	letter-spacing:0;
-}
 .card_set { 
 	width:1720px;
 	height:455px;
@@ -54,14 +23,14 @@
 	left:100px;
 	top:229px;
 }
-.requests { 
+.forecasts { 
 	width:1720px;
 	height:455px;
 	position:absolute;
 	left:0px;
 	top:0px;
 }
-.request { 
+.forecast { 
 	width:790px;
 	height:194px;
 	position:absolute;
@@ -347,50 +316,4 @@
 	text-align:center;
 	font-size:24px;
 	letter-spacing:0;
-}
-.header_component { 
-	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-	background-color:rgba(0, 0, 0, 1);
-	width:1920px;
-	height:101px;
-	position:absolute;
-	left:0px;
-	top:0px;
-}
-.header_bg { 
-	background-image:linear-gradient(0deg, rgba(255, 255, 255, 1) 0%,rgba(244.3749949336052, 248.525390625, 255, 1) 100%) ;
-	width:1920px;
-	height:120px;
-	position:absolute;
-	left:0px;
-	top:0px;
-}
-.logo { 
-	width:247px;
-	height:82px;
-	position:absolute;
-	left:79px;
-	top:9px;
-}
-.logo_lbl { 
-	color:rgba(0, 0, 0, 1);
-	width:165px;
-	height:44px;
-	position:absolute;
-	left:82px;
-	top:19px;
-	font-family:PT Sans Caption;
-	text-align:center;
-	font-size:36px;
-	letter-spacing:0;
-}
-.logo_img { 
-	width:82px;
-	height:82px;
-	position:absolute;
-	left:0px;
-	top:0px;
-	background-image:url(images/logo_img.png);
-	background-repeat:no-repeat;
-	background-size:cover;
 }

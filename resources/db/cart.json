@@ -1,0 +1,26 @@
+[
+    {
+        "id":1,
+        "short_title":"Температура",
+	    "color":"FFC3B6",
+        "img_url":"http://127.0.0.1:9000/test/source_obj/temp.png",
+        "date-time":"18.09.2024, 19:54",
+        "place":"Москва"
+    },
+    {
+        "id":2,
+        "short_title":"Давление",
+	    "color":"D5CEFF",
+        "img_url":"http://127.0.0.1:9000/test/source_obj/pressure.png",
+        "date-time":"17.09.2024, 14:55",
+        "place":"Москва"
+    },
+    {
+        "id":3,
+        "short_title":"Влажность",
+	    "color":"DFE5FF",
+        "img_url":"http://127.0.0.1:9000/test/source_obj/humidity.png",
+        "date-time":"20.10.2024, 00:43",
+        "place":"Москва"
+    }
+]

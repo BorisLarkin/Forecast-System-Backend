@@ -45,4 +45,35 @@
     	background-repeat:no-repeat;
     	background-size:cover;
     }
+	.goback { 
+		width:155px;
+		height:47px;
+		position:absolute;
+		left:46px;
+		top:155px;
+	}
+	.back_lbl { 
+		color:rgba(0, 0, 0, 1);
+		width:121px;
+		height:31px;
+		position:absolute;
+		left:34px;
+		top:8px;
+		font-family:PT Sans Caption;
+		text-align:left;
+		font-size:24px;
+		letter-spacing:22;
+	}
+	.arrow { 
+		color:rgba(0, 0, 0, 1);
+		width:20px;
+		height:39px;
+		position:absolute;
+		left:1px;
+		top:-1px;
+		font-family:PT Sans Caption;
+		text-align:left;
+		font-size:36px;
+		letter-spacing:0;
+	}
 }
