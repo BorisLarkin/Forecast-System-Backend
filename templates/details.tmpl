@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Погода</title>
+    <link rel="stylesheet" href="details.css">
+  </head>
+  <body>
+<div class=details>
+  <div class=header_component>
+    <div class="header_bg"></div>
+    <div class=logo><span  class="logo_lbl">Погода</span>
+      <div class="logo_img"></div>
+    </div>
+  </div>
+  <div class=goback><span  class="back_lbl">Назад</span><span  class="arrow">< </span></div>
+  <div class=detail_body><span  class="detail_title">{{ .title }}</span>
+    <div class="detail_img" style="background-image:{{ .img_url }}"></div><span  class="detail_desc">{{ .desc }}</span>
+  </div>
+</div>
+  </body>
+</html>

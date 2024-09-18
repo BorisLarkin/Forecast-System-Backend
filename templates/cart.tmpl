@@ -12,10 +12,10 @@
     {{ range .ForecastCart }}
       <div class=forecast>
         <div class=cart_card>
-          <div class="cart_card_bg" style="background-color:{{ .color }}"></div>
-          <div class="cart_card_img" style="background-image:{{ .img_url }}"></div>
-          <div class="cart_card_fade" style="background-color:{{ .color }}"></div>
-          <div class=card_content><span  class="cart_card_title">{{ .short_title }}</span>
+          <div class="cart_card_bg" style="background-color:{{ .forecast.color }}"></div>
+          <div class="cart_card_img" style="background-image:{{ .forecast.img_url }}"></div>
+          <div class="cart_card_fade" style="background-color:{{ .forecast.color }}"></div>
+          <div class=card_content><span  class="cart_card_title">{{ .forecast.short_title }}</span>
             <div class=cart_card_date>
               <div class="cart_card_bg"></div><span  class="cart_card_lbl">{{ .date_time }}</span>
             </div>
