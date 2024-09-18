@@ -10,6 +10,7 @@ import (
 )
 
 type Forecast struct {
+	id          int
 	img_url     string
 	title       string
 	short_title string
@@ -19,12 +20,30 @@ type Forecast struct {
 
 var Forecasts []Forecast
 
+type Prediction struct {
+	id        int
+	f_id      int
+	date_time string
+	place     string
+	f_type    Forecast
+}
+
+var Predictions [3]Prediction
+
 func StartServer() {
+
 	jsonForecasts, err := os.ReadFile("forecasts.json")
+	jsonPredictions, err := os.ReadFile("predictions.json")
 	json.Unmarshal(jsonForecasts, &Forecasts)
+	json.Unmarshal(jsonPredictions, &Predictions)
 	if err != nil {
 		log.Print(err)
 	}
+	for i, p := range Predictions {
+		p.f_type = Forecasts[p.f_id]
+		log.Println("got request ", i)
+	}
+
 	log.Println("Server start up")
 
 	r := gin.Default()
