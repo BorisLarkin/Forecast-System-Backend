@@ -1,90 +1,89 @@
 package api
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Forecast struct {
-	id          int
-	img_url     string
-	title       string
-	short_title string
-	desc        string
-	color       string
+	Id          int
+	Img_url     string
+	Title       string
+	Short_Title string
+	Desc        string
+	Color       string
 }
 
 var Forecasts []Forecast = []Forecast{
 	{
-		id:          1,
-		title:       "Прогноз температуры",
-		short_title: "Температура",
-		desc:        "Предскажем температуру посредством применения метода авторегрессии",
-		color:       "FFC3B6",
-		img_url:     "http://127.0.0.1:9000/test/source_obj/temp.png",
+		Id:          1,
+		Title:       "Прогноз температуры",
+		Short_Title: "Температура",
+		Desc:        "Предскажем температуру посредством применения метода авторегрессии",
+		Color:       "FFC3B6",
+		Img_url:     "http://127.0.0.1:9000/test/source_obj/temp.png",
 	},
 	{
-		id:          2,
-		title:       "Предсказать давление",
-		short_title: "Давление",
-		desc:        "Покажем в мм рт. ст. наиболее вероятного значения атмосферного давления",
-		color:       "D5CEFF",
-		img_url:     "http://127.0.0.1:9000/test/source_obj/pressure.png",
+		Id:          2,
+		Title:       "Предсказать давление",
+		Short_Title: "Давление",
+		Desc:        "Покажем в мм рт. ст. наиболее вероятного значения атмосферного давления",
+		Color:       "D5CEFF",
+		Img_url:     "http://127.0.0.1:9000/test/source_obj/pressure.png",
 	},
 	{
-		id:          3,
-		title:       "Предугадать влажность",
-		short_title: "Влажность",
-		desc:        "Подскажем, как одеться по влажности атмосферного воздуха, в процентах",
-		color:       "DFE5FF",
-		img_url:     "http://127.0.0.1:9000/test/source_obj/humidity.png",
+		Id:          3,
+		Title:       "Предугадать влажность",
+		Short_Title: "Влажность",
+		Desc:        "Подскажем, как одеться по влажности атмосферного воздуха, в процентах",
+		Color:       "DFE5FF",
+		Img_url:     "http://127.0.0.1:9000/test/source_obj/humidity.png",
 	},
 }
 
 type Prediction struct {
-	id        int
-	forecast  Forecast
-	date_time string
-	place     string
+	Id        int
+	Forecast  Forecast
+	Date_time string
+	Place     string
 }
 
 var Predictions []Prediction = []Prediction{
 	{
-		id:        1,
-		date_time: "18.09.2024, 19:54",
-		place:     "Москва",
-		forecast:  Forecasts[0],
+		Id:        1,
+		Date_time: "18.09.2024, 19:54",
+		Place:     "Москва",
+		Forecast:  Forecasts[0],
 	},
 	{
-		id:        2,
-		date_time: "17.09.2024, 14:55",
-		place:     "Санкт-Петербург",
-		forecast:  Forecasts[2],
+		Id:        2,
+		Date_time: "17.09.2024, 14:55",
+		Place:     "Санкт-Петербург",
+		Forecast:  Forecasts[2],
 	},
 	{
-		id:        3,
-		date_time: "20.10.2024, 00:43",
-		place:     "Москва",
-		forecast:  Forecasts[1],
+		Id:        3,
+		Date_time: "20.10.2024, 00:43",
+		Place:     "Москва",
+		Forecast:  Forecasts[1],
 	},
 }
 
 func StartServer() {
-
-	jsonForecasts, err := os.ReadFile("forecasts.json")
-	if err != nil {
-		log.Print(err)
-	}
-	jsonPredictions, err := os.ReadFile("predictions.json")
-	json.Unmarshal(jsonForecasts, &Forecasts)
-	json.Unmarshal(jsonPredictions, &Predictions)
-	if err != nil {
-		log.Print(err)
-	}
+	/*
+		jsonForecasts, err := os.ReadFile("Forecasts.json")
+		if err != nil {
+			log.Print(err)
+		}
+		jsonPredictions, err := os.ReadFile("predictions.json")
+		json.Unmarshal(jsonForecasts, &Forecasts)
+		json.Unmarshal(jsonPredictions, &Predictions)
+		if err != nil {
+			log.Print(err)
+		}
+	*/
 
 	log.Println("Server start up")
 
@@ -103,14 +102,19 @@ func StartServer() {
 			"Forecasts": Predictions,
 		})
 	})
+	r.GET("/test", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"Title": "Predictions",
+		})
+	})
 
 	r.GET("/details", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "details.tmpl", gin.H{
-			"id":          1,
-			"title":       "Прогноз температуры",
-			"short_title": "Температура",
-			"desc":        "Предскажем температуру посредством применения метода авторегрессии",
-			"color":       "FFC3B6",
+			"Id":          1,
+			"Title":       "Прогноз температуры",
+			"Short_Title": "Температура",
+			"Desc":        "Предскажем температуру посредством применения метода авторегрессии",
+			"Color":       "FFC3B6",
 			"img_url":     "http://127.0.0.1:9000/test/source_obj/temp.png",
 		})
 	})

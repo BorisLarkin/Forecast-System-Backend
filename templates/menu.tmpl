@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href='https://fonts.googleapis.com/css?family=PT Sans' rel='stylesheet'>
     <title>Погода</title>
-    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" type="text/css" href="../resources/menu.css">
   </head>
   <body>
     <div class=assort>
         <div class=assort_body>
             <div class=assort_cards>
-                {{ range .Forecasts }}
-                    <div class=assort_card>
-                        <div class="assort_card_bg" style="background-color:{{ .bg_color }}"></div>
-                            <div class="assort_card_img" style="background-image:url({{ .img_url }})"></div>
-                            <div class="assort_card_fade" style="background-image:linear-gradient(0deg, {{ .bg_color }} 0%,rgba(255, 255, 255, 0) 100%) ;"></div><span  class="card_desc">{{ .desc }}</span><span  class="card_title">{{ .title }}</span>
-                            <div class=btn_add>
-                                <div class="btn_bg"></div><span  class="btn_lbl">Добавить</span>
-                            </div>
-                        </div>
-                    </div>
-                {{ end }}
+              {{ range .Forecasts }}
+              <div class=assort_card>
+                <div class="assort_card_bg" style="background-color:{{ .Color }}"></div>
+                <div class="assort_card_img" style="background-image:url({{ .Img_url }})"></div>
+                <div class="assort_card_fade" style="background-image:linear-gradient(0deg, {{ .Color }} 0%,rgba(255, 255, 255, 0) 100%) ;"></div><span  class="card_desc">{{ .Desc }}</span><span  class="card_title">{{ .Title }}</span>
+                <div class=btn_add>
+                  <div class="btn_bg"></div><span  class="btn_lbl">Добавить</span>
+                </div>
+              </div>
+              {{ end }}
             </div>
-        </div><span  class="assort_title">Типы прогнозов</span>
+        </div>
+        <span  class="assort_title">Типы прогнозов</span>
         <div class=header_component>
           <div class="header_bg"></div>
           <div class=logo><span  class="logo_lbl">Погода</span>
