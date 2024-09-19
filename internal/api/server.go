@@ -118,7 +118,7 @@ func StartServer() {
 			"img_url":     "http://127.0.0.1:9000/test/source_obj/temp.png",
 		})
 	})
-
+	r.Static("/assets", "./resources")
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	log.Println("Server down")
 }
