@@ -22,7 +22,7 @@ var Forecasts []Forecast = []Forecast{
 		Title:       "Прогноз температуры",
 		Short_Title: "Температура",
 		Desc:        "Предскажем температуру посредством применения метода авторегрессии",
-		Color:       "FFC3B6",
+		Color:       "(255, 195, 182, 1)",
 		Img_url:     "http://127.0.0.1:9000/test/source_obj/temp.png",
 	},
 	{
@@ -30,7 +30,7 @@ var Forecasts []Forecast = []Forecast{
 		Title:       "Предсказать давление",
 		Short_Title: "Давление",
 		Desc:        "Покажем в мм рт. ст. наиболее вероятного значения атмосферного давления",
-		Color:       "D5CEFF",
+		Color:       "(213, 206, 255, 1)",
 		Img_url:     "http://127.0.0.1:9000/test/source_obj/pressure.png",
 	},
 	{
@@ -38,7 +38,7 @@ var Forecasts []Forecast = []Forecast{
 		Title:       "Предугадать влажность",
 		Short_Title: "Влажность",
 		Desc:        "Подскажем, как одеться по влажности атмосферного воздуха, в процентах",
-		Color:       "DFE5FF",
+		Color:       "(223, 229, 255, 1)",
 		Img_url:     "http://127.0.0.1:9000/test/source_obj/humidity.png",
 	},
 }
@@ -72,18 +72,6 @@ var Predictions []Prediction = []Prediction{
 }
 
 func StartServer() {
-	/*
-		jsonForecasts, err := os.ReadFile("Forecasts.json")
-		if err != nil {
-			log.Print(err)
-		}
-		jsonPredictions, err := os.ReadFile("predictions.json")
-		json.Unmarshal(jsonForecasts, &Forecasts)
-		json.Unmarshal(jsonPredictions, &Predictions)
-		if err != nil {
-			log.Print(err)
-		}
-	*/
 
 	log.Println("Server start up")
 
@@ -99,7 +87,7 @@ func StartServer() {
 
 	r.GET("/cart", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "cart.tmpl", gin.H{
-			"Forecasts": Predictions,
+			"Predictions": Predictions,
 		})
 	})
 
@@ -113,12 +101,11 @@ func StartServer() {
 			"Title":       "Прогноз температуры",
 			"Short_Title": "Температура",
 			"Desc":        "Предскажем температуру посредством применения метода авторегрессии",
-			"Color":       "FFC3B6",
 			"img_url":     "http://127.0.0.1:9000/test/source_obj/temp.png",
 		})
 	})
 	r.Static("/assets", "./resources")
-	r.Static("", "./resources/source_obj/favicon.ico")
+	//r.Static("/favicon.ico", "./resources/source_obj/favicon.ico")
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	log.Println("Server down")
 }

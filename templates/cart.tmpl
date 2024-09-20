@@ -7,41 +7,41 @@
     <link rel="stylesheet" type="text/css" href="./assets/cart.css">
     <link rel="stylesheet" type="text/css" href="./assets/global.css">
   </head>
-  <body>
-<div class=cart><span  class="cart_title">Текущая заявка на прогнозы</span>
-  <div class=goback><span  class="back_lbl">Назад</span><span  class="arrow">< </span></div>
-  <div class=card_set>
-    <div class=forecasts>
-    {{ range .ForecastCart }}
-      <div class=forecast>
-        <div class=cart_card>
-          <div class="cart_card_bg" style="background-color:{{ .forecast.color }}"></div>
-          <div class="cart_card_img" style="background-image:{{ .forecast.img_url }}"></div>
-          <div class="cart_card_fade" style="background-color:{{ .forecast.color }}"></div>
-          <div class=card_content><span  class="cart_card_title">{{ .forecast.short_title }}</span>
-            <div class=cart_card_date>
-              <div class="cart_card_bg"></div><span  class="cart_card_lbl">{{ .date_time }}</span>
+  <body style="margin:0;">
+    <div class=cart><span  class="cart_title">Текущая заявка на прогнозы</span>
+      <div class=goback><span  class="back_lbl">Назад</span><span  class="arrow">< </span></div>
+      <div class=card_set>
+        <div class=forecasts>
+        {{ range .Predictions }}
+          <div class=forecast>
+            <div class=cart_card>
+              <div class="cart_card_bg" style="background-color:{{ .Forecast.Color }}"></div>
+              <div class="cart_card_img" style="background-image:{{ .Forecast.Img_url }}"></div>
+              <div class="cart_card_fade" style="background-color:{{ .Forecast.Color }}"></div>
+              <div class=card_content><span  class="cart_card_title">{{ .Forecast.Short_title }}</span>
+                <div class=cart_card_date>
+                  <div class="cart_card_bg"></div><span  class="cart_card_lbl">{{ .Date_time }}</span>
+                </div>
+                <div class=cart_card_city>
+                  <div class="cart_card_city_bg"></div><span  class="cart_card_city_lbl">{{ .Place }}</span>
+                  <div class="cart_card_loc_img"></div>
+                </div>
+              </div>
             </div>
-            <div class=cart_card_city>
-              <div class="cart_card_city_bg"></div><span  class="cart_card_city_lbl">{{ .place }}</span>
-              <div class="cart_card_loc_img"></div>
-            </div>
+            <div class="trash_img"></div>
           </div>
+        {{ end }}
         </div>
-        <div class="trash_img"></div>
       </div>
-    {{ end }}
+      <div class=btn_affirm>
+        <div class="affirm_bg"></div><span  class="affirm_lbl">Оформить</span>
+      </div>
+      <div class=header_component>
+        <div class="header_bg"></div>
+        <div class=logo><span  class="logo_lbl">Погода</span>
+          <div class="logo_img"></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class=btn_affirm>
-    <div class="affirm_bg"></div><span  class="affirm_lbl">Оформить</span>
-  </div>
-  <div class=header_component>
-    <div class="header_bg"></div>
-    <div class=logo><span  class="logo_lbl">Погода</span>
-      <div class="logo_img"></div>
-    </div>
-  </div>
-</div>
   </body>
 </html>

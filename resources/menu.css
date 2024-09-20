@@ -6,33 +6,34 @@
 }
 .assort_body { 
 	width:1390px;
-	height:540px;
+	height:auto;
 	position:absolute;
 	left:265px;
 	top:304px;
 }
 .assort_cards { 
 	width:1390px;
-	height:540px;
+	height:auto;
 	position:absolute;
 	left:0px;
 	top:0px;
+	display: grid;
+  	grid-template-columns: repeat(3, 1fr);
+  	gap: 10px;
 }
 .assort_card { 
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
 	width:410px;
 	height:540px;
-	position:absolute;
-	left:980px;
-	top:0px;
+	border-top-left-radius:20px;
+	border-top-right-radius:20px;
+	border-bottom-left-radius:20px;
+	border-bottom-right-radius:20px;
 }
 .assort_card_bg { 
 	background-color:rgba(223.125, 229.49999392032623, 255, 1);
 	width:410px;
 	height:540px;
-	position:absolute;
-	left:0px;
-	top:0px;
 	border-top-left-radius:20px;
 	border-top-right-radius:20px;
 	border-bottom-left-radius:20px;
@@ -41,9 +42,6 @@
 .assort_card_img { 
 	width:410px;
 	height:324px;
-	position:absolute;
-	left:0px;
-	top:0px;
 	border-top-left-radius:20px;
 	border-top-right-radius:20px;
 	border-bottom-left-radius:20px;
@@ -56,9 +54,6 @@
 	background-image:linear-gradient(0deg, rgba(223.00000190734863, 229.00000154972076, 255, 1) 0%,rgba(255, 255, 255, 0) 100%) ;
 	width:410px;
 	height:346px;
-	position:absolute;
-	left:0px;
-	top:10px;
 	border-top-left-radius:12px;
 	border-top-right-radius:12px;
 	border-bottom-left-radius:12px;
@@ -68,9 +63,6 @@
 	color:rgba(0, 0, 0, 1);
 	width:384px;
 	height:83px;
-	position:absolute;
-	left:13px;
-	top:368px;
 	font-family:PT Sans Caption;
 	text-align:left;
 	font-size:22px;
@@ -80,9 +72,6 @@
 	color:rgba(0, 0, 0, 1);
 	width:410px;
 	height:40px;
-	position:absolute;
-	left:0px;
-	top:309px;
 	font-family:PT Sans Caption;
 	text-align:center;
 	font-size:32px;
@@ -91,17 +80,11 @@
 .btn_add { 
 	width:350px;
 	height:44px;
-	position:absolute;
-	left:30px;
-	top:481px;
 }
 .btn_bg { 
 	background-color:rgba(255, 255, 255, 0.44999998807907104);
 	width:350px;
 	height:44px;
-	position:absolute;
-	left:0px;
-	top:0px;
 	border-top-left-radius:28px;
 	border-top-right-radius:28px;
 	border-bottom-left-radius:28px;
@@ -111,9 +94,6 @@
 	color:rgba(0, 0, 0, 1);
 	width:350px;
 	height:44px;
-	position:absolute;
-	left:0px;
-	top:0px;
 	font-family:PT Sans Caption;
 	text-align:center;
 	font-size:22px;
@@ -121,11 +101,10 @@
 }
 .assort_title { 
 	color:rgba(0, 0, 0, 1);
-	width:389px;
+	margin: auto;
+  	padding: 10px;
+	width:auto;
 	height:51px;
-	position:absolute;
-	left:766px;
-	top:148px;
 	font-family:PT Sans Caption;
 	text-align:left;
 	font-size:48px;
@@ -150,7 +129,7 @@
 	position:absolute;
 	left:16px;
 	top:16.5px;
-	font-family:Inter;
+	font-family:PT Sans Caption;
 	text-align:left;
 	font-size:16px;
 	letter-spacing:0;
@@ -174,11 +153,12 @@
 }
 .assort_cart { 
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-	width:114.33447265625px;
-	height:114.33447265625px;
+	width:114px;
+	height:114px;
 	position:absolute;
-	left:1742px;
+	left:1740px;
 	top:150px;
+	border-radius: 50%;
 }
 .cart_bg { 
 	border-radius:500px;
@@ -201,11 +181,12 @@
 }
 .assort_history { 
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-	width:114.33447265625px;
-	height:114.33447265625px;
+	width:114px;
+	height:114px;
+	border-radius: 50%;
 	position:absolute;
-	left:1727px;
-	top:844px;
+	left:1720px;
+	top:830px;
 }
 .history_bg { 
 	border-radius:500px;
