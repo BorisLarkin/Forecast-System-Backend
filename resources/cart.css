@@ -67,7 +67,7 @@
 	border-top-right-radius:20px;
 	border-bottom-left-radius:20px;
 	border-bottom-right-radius:20px;
-	background-image:url(images/cart_card_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -160,7 +160,7 @@
 	position:absolute;
 	left:11px;
 	top:6px;
-	background-image:url(images/cart_card_loc_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/area.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -170,7 +170,7 @@
 	position:absolute;
 	left:746px;
 	top:67.76605224609375px;
-	background-image:url(images/trash_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/trash.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -204,7 +204,7 @@
 	border-top-right-radius:20px;
 	border-bottom-left-radius:20px;
 	border-bottom-right-radius:20px;
-	background-image:url(images/img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -281,7 +281,7 @@
 	position:absolute;
 	left:11px;
 	top:6px;
-	background-image:url(images/loc_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/area.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }

@@ -102,10 +102,9 @@ func StartServer() {
 			"Forecasts": Predictions,
 		})
 	})
-	r.GET("/test", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"Title": "Predictions",
-		})
+
+	r.GET("/home", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "home.tmpl", gin.H{})
 	})
 
 	r.GET("/details", func(c *gin.Context) {
@@ -119,6 +118,7 @@ func StartServer() {
 		})
 	})
 	r.Static("/assets", "./resources")
+	r.Static("", "./resources/source_obj/favicon.ico")
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	log.Println("Server down")
 }

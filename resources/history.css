@@ -93,7 +93,7 @@
 	position:absolute;
 	left:633.75px;
 	top:0px;
-	background-image:url(images/img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/history.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -196,7 +196,7 @@
 	position:absolute;
 	left:19px;
 	top:6.316398620605469px;
-	background-image:url(images/loc_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/area.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -206,7 +206,7 @@
 	position:absolute;
 	left:12px;
 	top:14.937583923339844px;
-	background-image:url(images/arrow_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/list_down.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -236,50 +236,4 @@
 	position:absolute;
 	left:65px;
 	top:5.135498046875px;
-}
-.header_component { 
-	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-	background-color:rgba(0, 0, 0, 1);
-	width:1920px;
-	height:101px;
-	position:absolute;
-	left:0px;
-	top:0px;
-}
-.header_bg { 
-	background-image:linear-gradient(0deg, rgba(255, 255, 255, 1) 0%,rgba(244.3749949336052, 248.525390625, 255, 1) 100%) ;
-	width:1920px;
-	height:120px;
-	position:absolute;
-	left:0px;
-	top:0px;
-}
-.logo { 
-	width:247px;
-	height:82px;
-	position:absolute;
-	left:79px;
-	top:9px;
-}
-.logo_lbl { 
-	color:rgba(0, 0, 0, 1);
-	width:165px;
-	height:44px;
-	position:absolute;
-	left:82px;
-	top:19px;
-	font-family:PT Sans Caption;
-	text-align:center;
-	font-size:36px;
-	letter-spacing:0;
-}
-.logo_img { 
-	width:82px;
-	height:82px;
-	position:absolute;
-	left:0px;
-	top:0px;
-	background-image:url(images/logo_img.png);
-	background-repeat:no-repeat;
-	background-size:cover;
 }

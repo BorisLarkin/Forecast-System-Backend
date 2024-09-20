@@ -48,7 +48,7 @@
 	border-top-right-radius:20px;
 	border-bottom-left-radius:20px;
 	border-bottom-right-radius:20px;
-	background-image:url(images/assort_card_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -195,7 +195,7 @@
 	position:absolute;
 	left:16.445323944091797px;
 	top:24.276487350463867px;
-	background-image:url(images/cart_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/check.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -222,7 +222,7 @@
 	position:absolute;
 	left:3px;
 	top:7px;
-	background-image:url(images/history_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/history.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }

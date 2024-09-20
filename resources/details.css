@@ -29,7 +29,7 @@
 	position:absolute;
 	left:0px;
 	top:109px;
-	background-image:url(images/detail_img.png);
+	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
