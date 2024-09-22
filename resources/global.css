@@ -2,7 +2,7 @@
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
 	background-color:rgba(0, 0, 0, 1);
 	width:1920px;
-	height:101px;
+	height:80px;
 	position:absolute;
 	left:0px;
 	top:0px;
@@ -10,14 +10,14 @@
 .header_bg { 
 	background-image:linear-gradient(0deg, rgba(255, 255, 255, 1) 0%,rgba(244.3749949336052, 248.525390625, 255, 1) 100%) ;
 	width:1920px;
-	height:120px;
+	height:80px;
 	position:absolute;
 	left:0px;
 	top:0px;
 }
 .logo { 
 	width:247px;
-	height:82px;
+	height:80px;
 	position:absolute;
 	left:79px;
 	top:9px;
@@ -25,18 +25,18 @@
 .logo_lbl { 
 	color:rgba(0, 0, 0, 1);
 	width:165px;
-	height:44px;
+	height:30px;
 	position:absolute;
 	left:82px;
 	top:19px;
 	font-family:PT Sans Caption;
 	text-align:center;
-	font-size:36px;
+	font-size:24px;
 	letter-spacing:0;
 }
 .logo_img { 
-	width:82px;
-	height:82px;
+	width:60px;
+	height:60px;
 	position:absolute;
 	left:0px;
 	top:0px;

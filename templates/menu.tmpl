@@ -13,9 +13,9 @@
             <div class=assort_cards>
               {{ range .Forecasts }}
               <div class=assort_card>
-                <div class="assort_card_bg" style="background-color:rgba{{ .Color }}"></div>
-                <div class="assort_card_img" style="background-image:url({{ .Img_url }})"></div>
-                <div class="assort_card_fade" style="background-image:linear-gradient(0deg, rgba{{ .Color }} 0%,rgba(255, 255, 255, 0) 100%) ;"></div><span  class="card_desc">{{ .Desc }}</span><span  class="card_title">{{ .Title }}</span>
+                <div class="assort_card_bg" style="{{ .Solid_style }}"></div>
+                <div class="assort_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
+                <div class="assort_card_fade" style="{{ .Fade_style }}"></div><span  class="card_desc">{{ .Forecast.Desc }}</span><span  class="card_title">{{ .Forecast.Title }}</span>
                 <div class=btn_add>
                   <div class="btn_bg"></div><span  class="btn_lbl">Добавить</span>
                 </div>
