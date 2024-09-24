@@ -8,41 +8,43 @@
     <link rel="stylesheet" type="text/css" href="./assets/global.css">
   </head>
   <body style="margin:0;">
-    <div class=assort>
-        <div class=assort_body>
-            <div class=assort_cards>
-              {{ range .Forecasts }}
-              <div class=assort_card>
-                <div class="assort_card_bg" style="{{ .Solid_style }}"></div>
-                <div class="assort_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
-                <div class="assort_card_fade" style="{{ .Fade_style }}"></div><span  class="card_desc">{{ .Forecast.Desc }}</span><span  class="card_title">{{ .Forecast.Title }}</span>
-                <div class=btn_add>
-                  <div class="btn_bg"></div><span  class="btn_lbl">Добавить</span>
-                </div>
-              </div>
-              {{ end }}
-            </div>
-        </div>
-        <span  class="assort_title">Типы прогнозов</span>
-        <div class=header_component>
-          <div class="header_bg"></div>
-          <div class=logo><span  class="logo_lbl">Погода</span>
-            <div class="logo_img"></div>
+    <div class=assort_cards>
+      {{ range .Forecasts }}
+      <div class=assort_card>
+        <div class="assort_card_bg" style="{{ .Solid_style }}"></div>
+        <div class="assort_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
+        <div class="assort_card_fade" style="{{ .Fade_style }}"></div>
+        <div class="content_block">
+          <div  class="card_title">{{ .Forecast.Title }}</div>
+          <div  class="card_desc">{{ .Forecast.Desc }}</div>
+          <div class=btn_add>
+            <div class="btn_bg"></div>
+            <span  class="btn_lbl">Добавить</span>
           </div>
         </div>
-        <div class=search style="position:fixed;"><span  class="value">Поиск</span>
-          <div class=x>
-            <div class="icon"></div>
-          </div>
-        </div>
-        <div class=assort_cart style="position:fixed;">
-          <div class="cart_bg"></div>
-          <div class="cart_img"></div>
-        </div>
-        <div class=assort_history style="position:fixed;">
-          <div class="history_bg"></div>
-          <div class="history_img"></div>
-        </div>
+      </div>
+      {{ end }}
     </div>
-  </body>
+    <span  class="assort_title">Типы прогнозов</span>
+    <div class=header_component>
+      <div class="header_bg"></div>
+      <div class=logo><span  class="logo_lbl">Погода</span>
+        <div class="logo_img"></div>
+      </div>
+    </div>
+    <div class=search style="position:fixed;"><span  class="value">Поиск</span>
+      <div class=x>
+        <div class="icon"></div>
+      </div>
+    </div>
+    <div class=assort_cart style="position:fixed;">
+      <div class="cart_bg"></div>
+      <div class="cart_img"></div>
+    </div>
+    <div class=assort_history style="position:fixed;">
+      <div class="history_bg"></div>
+      <div class="history_img"></div>
+    </div>
+  </div>
+</body>
 </html>

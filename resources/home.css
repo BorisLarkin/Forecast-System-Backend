@@ -1,12 +1,12 @@
 .home { 
 	background-color:rgba(245.43749392032623, 245.43749392032623, 245.43749392032623, 1);
 	width:1920px;
-	height:960px;
+	height:auto;
 	position:absolute;
 }
 .home_bg_img { 
 	width:1920px;
-	height:960px;
+	height:963px;
 	position:absolute;
 	left:0px;
 	top:0px;
@@ -17,7 +17,7 @@
 .home_bg_fade { 
 	background-color:rgba(45.00394530594349, 0, 141.31250202655792, 0.03999999910593033);
 	width:1920px;
-	height:960px;
+	height:963px;
 	position:absolute;
 	left:0px;
 	top:0px;
