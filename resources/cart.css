@@ -11,72 +11,58 @@
 	position:absolute;
 	left:691px;
 	top:139px;
-	font-family:PT Sans Caption;
+	font-family:"PT Sans Caption";
 	text-align:center;
 	font-size:36px;
 	letter-spacing:0;
 }
-.card_set { 
-	width:1720px;
-	height:455px;
-	position:absolute;
-	left:100px;
-	top:229px;
-}
 .forecasts { 
 	width:1720px;
 	position:absolute;
-	height:auto;
+	height:455px;
 	display: grid;
   	grid-template-columns: repeat(2, 1fr);
   	gap: 10px;
-	left:0px;
-	top:0px;
+	left:100px;
+	top:229px;
 }
 .forecast { 
 	width:790px;
 	height:194px;
+	position: relative;
+	border-radius: 25px;
 }
 .cart_card { 
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-	width:741px;
-	height:193.23394775390625px;
+	width:100%;
+	height:100%;
 	position:absolute;
 	left:0px;
 	top:0px;
 }
 .cart_card_bg { 
 	background-color:rgba(255, 255, 255, 0.7099999785423279);
-	width:470px;
-	height:50px;
-	border-top-left-radius:25px;
-	border-top-right-radius:25px;
-	border-bottom-left-radius:25px;
-	border-bottom-right-radius:25px;
+	width:100%;
+	height:100%;
+	border-radius: 25px;
 }
 .cart_card_img { 
-	width:297.1395568847656px;
-	height:193.23394775390625px;
-	left:443.860107421875px;
+	width:300px;
+	height:100%;
+	right:0px;
 	top:0px;
-	border-top-left-radius:20px;
-	border-top-right-radius:20px;
-	border-bottom-left-radius:20px;
-	border-bottom-right-radius:20px;
+	position: absolute;
+	border-radius: 25px;
 	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
 .cart_card_fade { 
-	background-image:linear-gradient(0deg, rgba(213.00000250339508, 206.0000029206276, 255, 1) 0%,rgba(255, 255, 255, 0) 100%) ;
-	width:297.5863037109375px;
-	height:193.23394775390625px;
-	left:443.41339111328125px;
+	background-image:linear-gradient(90deg, rgba(213.00000250339508, 206.0000029206276, 255, 1) 0%,rgba(255, 255, 255, 0) 100%) ;
+	width:300px;
+	height:100%;
+	right:0px;
 	top:0px;
-	border-top-left-radius:20px;
-	border-top-right-radius:20px;
-	border-bottom-left-radius:20px;
-	border-bottom-right-radius:20px;
 }
 .card_content { 
 	width:471px;
@@ -90,7 +76,7 @@
 	height:41px;
 	left:156px;
 	top:0px;
-	font-family:PT Sans Caption;
+	font-family:"PT Sans Caption";
 	text-align:center;
 	font-size:32px;
 	letter-spacing:0;
@@ -108,7 +94,7 @@
 	height:53.111083984375px;
 	left:0px;
 	top:0px;
-	font-family:PT Sans Caption;
+	font-family:"PT Sans Caption";
 	text-align:center;
 	font-size:22px;
 	letter-spacing:0;
@@ -137,7 +123,7 @@
 	height:53.111083984375px;
 	left:0px;
 	top:0px;
-	font-family:PT Sans Caption;
+	font-family:"PT Sans Caption";
 	text-align:center;
 	font-size:22px;
 	letter-spacing:0;
@@ -187,7 +173,7 @@
 	position:absolute;
 	left:0px;
 	top:0px;
-	font-family:PT Sans Caption;
+	font-family:"PT Sans Caption";
 	text-align:center;
 	font-size:24px;
 	letter-spacing:0;

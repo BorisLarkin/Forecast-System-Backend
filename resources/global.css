@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css2?family=PT+Sans+Caption);
 .header_component { 
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
 	background-color:rgba(0, 0, 0, 1);
@@ -19,27 +20,27 @@
 	width:247px;
 	height:80px;
 	position:absolute;
-	left:79px;
-	top:9px;
+	left:70px;
 }
 .logo_lbl { 
 	color:rgba(0, 0, 0, 1);
 	width:165px;
 	height:30px;
 	position:absolute;
-	left:82px;
-	top:19px;
-	font-family:PT Sans Caption;
+	left:60px;
+	top:18px;
+	font-family: 'PT Sans Caption';
 	text-align:center;
-	font-size:24px;
+	font-size:32px;
 	letter-spacing:0;
+	font-weight: bold;
 }
 .logo_img { 
 	width:60px;
 	height:60px;
 	position:absolute;
 	left:0px;
-	top:0px;
+	top:10px;
 	background-image:url(http://127.0.0.1:9000/test/source_obj/logo_dark.png);
 	background-repeat:no-repeat;
 	background-size:cover;
@@ -58,7 +59,7 @@
 	position:absolute;
 	left:34px;
 	top:8px;
-	font-family:PT Sans Caption;
+	font-family:'PT Sans Caption';
 	text-align:left;
 	font-size:24px;
 	letter-spacing:22;
@@ -70,8 +71,13 @@
 	position:absolute;
 	left:1px;
 	top:-1px;
-	font-family:PT Sans Caption;
+	font-family:'PT Sans Caption';
 	text-align:left;
 	font-size:36px;
 	letter-spacing:0;
+}
+body{
+	width:1920px;
+	height:100%;
+	background-color:rgba(244.3749949336052, 244.3749949336052, 244.3749949336052, 1);
 }

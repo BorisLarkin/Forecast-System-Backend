@@ -10,28 +10,25 @@
   <body style="margin:0;">
     <div class=cart><span  class="cart_title">Текущая заявка на прогнозы</span>
       <div class=goback><span  class="back_lbl">Назад</span><span  class="arrow">< </span></div>
-      <div class=card_set>
-        <div class=forecasts>
-        {{ range .Predictions }}
-          <div class=forecast>
-            <div class=cart_card>
-              <div class="cart_card_bg" style="{{ .Solid_style}}"></div>
-              <div class="cart_card_img" style="background-image:{{ .Forecast.Img_url }}"></div>
-              <div class="cart_card_fade" style="{{.Fade_style}}"></div>
-              <div class=card_content><span  class="cart_card_title">{{ .Forecast.Short }}</span>
-                <div class=cart_card_date>
-                  <div class="cart_card_bg"></div><span  class="cart_card_lbl">{{ .Prediction.Date_time }}</span>
-                </div>;
-                <div class=cart_card_city>
-                  <div class="cart_card_city_bg"></div><span  class="cart_card_city_lbl">{{ .Prediction.Place }}</span>
-                  <div class="cart_card_loc_img"></div>
-                </div>
+      <div class=forecasts>
+      {{ range .Predictions }}
+        <div class=forecast>
+            <div class="cart_card_bg" style="{{ .Solid_style}}"></div>
+            <div class="cart_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
+            <div class="cart_card_fade" style="{{ .Fade_style }}"></div>
+            <div class=card_content>
+              <span  class="cart_card_title">{{ .Forecast.Short }}</span>
+              <div class=cart_card_date>
+                <div class="cart_card_bg"></div>
+                <span  class="cart_card_lbl">{{ .Prediction.Date_time }}</span>
+              </div>;
+              <div class=cart_card_city>
+                <div class="cart_card_city_bg"></div><span  class="cart_card_city_lbl">{{ .Prediction.Place }}</span>
+                <div class="cart_card_loc_img"></div>
               </div>
             </div>
-            <div class="trash_img"></div>
-          </div>
-        {{ end }}
         </div>
+      {{ end }}
       </div>
       <div class=btn_affirm>
         <div class="affirm_bg"></div><span  class="affirm_lbl">Оформить</span>

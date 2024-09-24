@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link href='https://fonts.googleapis.com/css?family=PT Sans' rel='stylesheet'>
     <title>Погода</title>
     <link rel="stylesheet" type="text/css" href="./assets/menu.css"/>
     <link rel="stylesheet" type="text/css" href="./assets/global.css">
@@ -19,7 +18,7 @@
           <div  class="card_desc">{{ .Forecast.Desc }}</div>
           <div class=btn_add>
             <div class="btn_bg"></div>
-            <span  class="btn_lbl">Добавить</span>
+            <span  class="btn_lbl">Подробнее</span>
           </div>
         </div>
       </div>
@@ -32,18 +31,13 @@
         <div class="logo_img"></div>
       </div>
     </div>
-    <div class=search style="position:fixed;"><span  class="value">Поиск</span>
-      <div class=x>
-        <div class="icon"></div>
-      </div>
+    <div class=search>
+      <input type="text" placeholder="Поиск..." class="value">
+      
     </div>
     <div class=assort_cart style="position:fixed;">
       <div class="cart_bg"></div>
       <div class="cart_img"></div>
-    </div>
-    <div class=assort_history style="position:fixed;">
-      <div class="history_bg"></div>
-      <div class="history_img"></div>
     </div>
   </div>
 </body>
