@@ -79,10 +79,10 @@ type Forecast_parse struct {
 	Fade_style  template.CSS
 }
 type Prediction_parse struct {
-	Prediction  Prediction
-	Forecast    Forecast
-	Solid_style template.CSS
-	Fade_style  template.CSS
+	Prediction       Prediction
+	Forecast         Forecast
+	Solid_cart_style template.CSS
+	Fade_cart_style  template.CSS
 }
 
 var Forecast_parses []Forecast_parse
@@ -118,8 +118,8 @@ func StartServer() {
 			Prediction_parse_tmp.Prediction = Predictions[i]
 			Prediction_parse_tmp.Forecast = Forecasts[slices.IndexFunc(Forecasts, func(f Forecast) bool { return f.Id == v.F_id })]
 			var color = Prediction_parse_tmp.Forecast.Color
-			Prediction_parse_tmp.Solid_style = template.CSS("background-color: rgba" + color)
-			Prediction_parse_tmp.Fade_style = template.CSS("background-image:linear-gradient(90deg, rgba" + Forecasts[i].Color + " 0%,rgba(255, 255, 255, 0) 100%)")
+			Prediction_parse_tmp.Solid_cart_style = template.CSS("background-color: rgba" + color)
+			Prediction_parse_tmp.Fade_cart_style = template.CSS("background-image:linear-gradient(90deg, rgba" + color + " 0%,rgba(255, 255, 255, 0) 100%)")
 			Prediction_parses = append(Prediction_parses, Prediction_parse_tmp)
 		}
 		c.HTML(http.StatusOK, "cart.tmpl", gin.H{
