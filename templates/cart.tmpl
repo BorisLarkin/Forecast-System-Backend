@@ -29,6 +29,7 @@
         <div class="cart_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
         <div class="cart_card_fade" style="{{ .Fade_cart_style }}"></div>
         <div class=btn_add>
+          <button class="btn_det" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Id}}'">
           <div class="btn_bg"></div><span  class="btn_lbl">Подробнее</span>
         </div>
         <div class=card_content><span  class="cart_card_title">{{ .Forecast.Short }}</span><span  class="desc">{{ .Forecast.Desc }}</span></div>

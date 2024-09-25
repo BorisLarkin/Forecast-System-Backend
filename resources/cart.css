@@ -198,7 +198,7 @@
 	height:40px;
 	position:absolute;
 	left:0px;
-	top:0px;
+	top:10%;
 	font-family:PT Sans Caption;
 	text-align:center;
 	font-size:22px;
@@ -345,4 +345,16 @@
 	letter-spacing:0;
 	left:0px;
 	top:20%;
+}
+.btn_det{
+	width:594px;
+	height:40px;
+	position:absolute;
+	border-radius: 28px;
+	background: none;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	z-index: 2;
 }

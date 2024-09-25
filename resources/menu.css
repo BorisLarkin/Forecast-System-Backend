@@ -88,21 +88,20 @@
 	margin-right: 5px;
 }
 .btn_add { 
-	width:auto;
-	height:44px;
-	margin-top: 15px;
+	width:90%;
+	height:53px;
+	margin-top: 10px;
 	display:flex;
 	justify-content: center;
 	align-items: center;
+	border-radius: 2rem;
+	position:relative;
+	left:20px;
 }
 .btn_bg { 
 	background-color:rgba(255, 255, 255, 0.45);
 	width:350px;
 	height:44px;
-	border-top-left-radius:28px;
-	border-top-right-radius:28px;
-	border-bottom-left-radius:28px;
-	border-bottom-right-radius:28px;
 	outline: 5px ridge rgb(100, 100, 100);
 	border-radius: 2rem;
 	position:absolute;
@@ -204,6 +203,20 @@
 	top:135px;
 	left:1750px;
 	border-radius: 50%;
+}
+.btn_cart{
+	width:70px;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	border-radius: 35px;
+	background: none;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	z-index: 2;
 }
 .cart_bg { 
 	border-radius:500px;

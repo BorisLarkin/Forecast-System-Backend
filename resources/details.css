@@ -31,6 +31,7 @@
 	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
 	background-repeat:no-repeat;
 	background-size:cover;
+	background-position: 50% 50%;
 }
 .detail_desc { 
 	color:rgba(0, 0, 0, 1);

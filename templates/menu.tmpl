@@ -16,10 +16,10 @@
         <div class="content_block">
           <div  class="card_title">{{ .Forecast.Title }}</div>
           <div  class="card_desc">{{ .Forecast.Desc }}</div>
-          <div class=btn_add>
+          <button class="btn_add" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Id}}'">
             <div class="btn_bg"></div>
             <span  class="btn_lbl">Подробнее</span>
-          </div>
+          </button>
         </div>
       </div>
       {{ end }}
@@ -36,6 +36,7 @@
       
     </div>
     <div class=assort_cart>
+      <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart'"></button>
       <div class="cart_bg"></div>
       <div class="cart_size_bg">
         <span  class="cart_size">3</span>
