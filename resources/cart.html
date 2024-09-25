@@ -2,68 +2,36 @@
 <html>
   <head>
     <title>Погода</title>
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="cart.css">
   </head>
-  <body>
-<div class=cart><span  class="cart_title">Текущая заявка на прогнозы</span>
-  <div class=goback><span  class="back_lbl">Назад</span><span  class="arrow">< </span></div>
+  <body style="margin:0">
+<div class=cart><span  class="cart_title">Корзина предсказаний</span>
   <div class=card_set>
-    <div class=forecasts>
-      <div class=forecast>
-        <div class=cart_card>
+    <div class=predictions>
+      <div class=prediction>
           <div class="cart_card_bg"></div>
           <div class="cart_card_img"></div>
           <div class="cart_card_fade"></div>
-          <div class=card_content><span  class="cart_card_title">Давление</span>
-            <div class=cart_card_date>
-              <div class="cart_card_bg"></div><span  class="cart_card_lbl">12.09.2025 12:43</span>
-            </div>
-            <div class=cart_card_city>
-              <div class="cart_card_city_bg"></div><span  class="cart_card_city_lbl">Москва</span>
-              <div class="cart_card_loc_img"></div>
-            </div>
+          <div class=btn_add>
+            <div class="btn_bg"></div><span  class="btn_lbl">Подробнее</span>
           </div>
-        </div>
-        <div class="trash_img"></div>
-      </div>
-      <div class=forecast>
-        <div class=card>
-          <div class="bg"></div>
-          <div class="img"></div>
-          <div class="fade"></div>
-          <div class=content><span  class="title">Температура</span>
-            <div class=date>
-              <div class="bg"></div><span  class="lbl">12.09.2025 12:43</span>
-            </div>
-            <div class=city>
-              <div class="city_bg"></div><span  class="lbl">Москва</span>
-              <div class="loc_img"></div>
-            </div>
+          <div class=card_content><span  class="cart_card_title">Давление</span><span  class="desc">Покажем в мм рт. ст. наиболее вероятного значения атмосферного давления</span></div>
+          <div class=result>
+            <div class="pred_result"></div><span  class="result_logo">760 мм. рт. ст.</span>
           </div>
-        </div>
-        <div class="trash_img"></div>
-      </div>
-      <div class=forecast>
-        <div class=card>
-          <div class="bg"></div>
-          <div class="img"></div>
-          <div class="fade"></div>
-          <div class=content><span  class="title">Влажность</span>
-            <div class=date>
-              <div class="bg"></div><span  class="lbl">12.09.2025 12:43</span>
-            </div>
-            <div class=city>
-              <div class="city_bg"></div><span  class="lbl">Москва</span>
-              <div class="loc_img"></div>
-            </div>
-          </div>
-        </div>
-        <div class="trash_img"></div>
       </div>
     </div>
   </div>
-  <div class=btn_affirm>
-    <div class="affirm_bg"></div><span  class="affirm_lbl">Оформить</span>
+  <div class=cart_header>
+    <div class=save_btn>
+      <div class="save_bg"></div><span  class="save_lbl">Сохранить</span>
+    </div>
+    <div class=day_amount>
+      <div class="day_amount_bg"></div><span  class="day_amount_lbl">Прогноз на 3 дня</span>
+    </div>
+    <div class=calc_type>
+      <div class="cart_card_bg"></div><span  class="calc_lbl">Тип вычислений</span>
+    </div>
   </div>
   <div class=header_component>
     <div class="header_bg"></div>
@@ -72,5 +40,5 @@
     </div>
   </div>
 </div>
-  </body>
+</body>
 </html>

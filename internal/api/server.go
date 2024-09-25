@@ -49,26 +49,26 @@ type Prediction struct {
 	Id        int
 	F_id      int
 	Date_time string
-	Place     string
+	Result    string
 }
 
 var Predictions []Prediction = []Prediction{
 	{
 		Id:        1,
 		Date_time: "18.09.2024, 19:54",
-		Place:     "Москва",
+		Result:    "760 мм. рт. ст.",
 		F_id:      1,
 	},
 	{
 		Id:        2,
 		Date_time: "17.09.2024, 14:55",
-		Place:     "Санкт-Петербург",
+		Result:    "38%",
 		F_id:      3,
 	},
 	{
 		Id:        3,
 		Date_time: "20.10.2024, 00:43",
-		Place:     "Москва",
+		Result:    "В работе...",
 		F_id:      2,
 	},
 }
@@ -133,11 +133,11 @@ func StartServer() {
 
 	r.GET("/details", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "details.tmpl", gin.H{
-			"Id":      1,
-			"Title":   "Прогноз температуры",
-			"Short":   "Температура",
-			"Desc":    "Предскажем температуру посредством применения метода авторегрессии",
-			"img_url": "http://127.0.0.1:9000/test/source_obj/temp.png",
+			"Det_id":      1,
+			"Det_title":   "Прогноз температуры",
+			"Det_short":   "Температура",
+			"Det_desc":    "Предскажем температуру посредством применения метода авторегрессии",
+			"Det_img_url": "http://127.0.0.1:9000/test/source_obj/temp.png",
 		})
 	})
 	r.Static("/assets", "./resources")
