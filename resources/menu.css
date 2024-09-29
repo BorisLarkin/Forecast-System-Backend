@@ -96,6 +96,7 @@
 	align-items: center;
 	border-radius: 2rem;
 	position:relative;
+	background: none;
 	left:20px;
 }
 .btn_bg { 
@@ -220,7 +221,7 @@
 }
 .cart_bg { 
 	border-radius:500px;
-	background-image:linear-gradient(0deg, rgba(184.87500607967377, 184.87500607967377, 184.87500607967377, 1) 0%,rgba(66.93749696016312, 66.93749696016312, 66.93749696016312, 1) 100%) ;
+	background-image:linear-gradient(180deg, rgba(96,96,96,1) 0%,rgba(8,8,8, 1) 100%) ;
 	width:100%;
 	height:100%;
 	position:absolute;
@@ -229,22 +230,23 @@
 }
 .cart_size_bg { 
 	border-radius:13px;
-	background-image:linear-gradient(0deg, rgba(255, 212.4999949336052, 250.75001925230026, 1) 0%,rgba(163.62499594688416, 227.58748054504395, 255, 1) 100%) ;
+	background-image:linear-gradient(90deg, rgba(255, 212.4999949336052, 250.75001925230026, 1) 0%,rgba(163.62499594688416, 227.58748054504395, 255, 1) 100%) ;
 	width:26px;
 	height:26px;
 	position:absolute;
 	left:54px;
-	top:51px;
+	top:0px;
 }
 .cart_img { 
-	width:55px;
-	height:44px;
+	width:69px;
+	height:69px;
 	position:absolute;
-	left:11.07530403137207px;
-	top:16.34931182861328px;
-	background-image:url(http://127.0.0.1:9000/test/source_obj/check.png);
+	left:6.1px;
+	top:6.3px;
+	background-image:url(http://127.0.0.1:9000/test/source_obj/cart.svg);
 	background-repeat:no-repeat;
 	background-size:cover;
+	filter:invert(100%);
 }
 .cart_size { 
 	color:rgba(0, 0, 0, 1);
@@ -257,4 +259,15 @@
 	text-align:center;
 	font-size:20px;
 	letter-spacing:0;
+}
+.search_btn{
+	background-image:url(http://127.0.0.1:9000/test/source_obj/search.svg);
+	position:absolute;
+	vertical-align:middle;
+	top:25%;
+	right:0px;
+	width: 32px;
+	height: 32px;
+	cursor: pointer;
+	border: none;
 }

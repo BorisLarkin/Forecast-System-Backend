@@ -25,15 +25,10 @@
       {{ end }}
     </div>
     <span  class="assort_title">Типы прогнозов</span>
-    <div class=header_component>
-      <div class="header_bg"></div>
-      <div class=logo><span  class="logo_lbl">Погода</span>
-        <div class="logo_img"></div>
-      </div>
-    </div>
+    {{ .Forec_header }}
     <div class=search>
       <input type="text" placeholder="Поиск..." class="value">
-      
+      <div class="search_btn"></div>
     </div>
     <div class=assort_cart>
       <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart'"></button>

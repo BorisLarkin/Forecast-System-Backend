@@ -7,6 +7,7 @@
 	position:absolute;
 	left:0px;
 	top:0px;
+	z-index: 1;
 }
 .header_bg { 
 	background-image:linear-gradient(0deg, rgba(255, 255, 255, 1) 0%,rgba(244.3749949336052, 248.525390625, 255, 1) 100%) ;
@@ -75,6 +76,15 @@
 	text-align:left;
 	font-size:36px;
 	letter-spacing:0;
+}
+.logo_btn{
+	cursor: pointer;
+	background: none; 
+	border: none; 
+	width:100%;
+	height:100%; 
+	position:absolute;
+	z-index:2;
 }
 body{
 	width:1920px;

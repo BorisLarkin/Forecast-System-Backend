@@ -18,7 +18,7 @@ var Forecasts []Forecast = []Forecast{
 		Short:   "Температура",
 		Desc:    "Предскажем температуру посредством применения метода авторегрессии",
 		Color:   "(255, 195, 182, 1)",
-		Img_url: "http://127.0.0.1:9000/test/source_obj/temp.png",
+		Img_url: "http://127.0.0.1:9000/test/source_obj/temp_crop.png",
 	},
 	{
 		Id:      2,
@@ -80,3 +80,13 @@ type Prediction_parse struct {
 
 var Forecast_parses []Forecast_parse
 var Prediction_parses []Prediction_parse
+
+var HeaderDiv template.HTML = template.HTML(`
+	<div class=header_component>
+      <div class="header_bg"></div>
+      <div class=logo>
+        <button class="logo_btn" onclick="location.href='http://127.0.0.1:8080/menu'"></button>
+        <span  class="logo_lbl">Погода</span>
+        <div class="logo_img"></div>
+      </div>
+    </div>`)

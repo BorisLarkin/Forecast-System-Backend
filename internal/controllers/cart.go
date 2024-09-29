@@ -22,5 +22,6 @@ func ParseCart(c *gin.Context) {
 	}
 	c.HTML(http.StatusOK, "cart.tmpl", gin.H{
 		"Predictions": models.Prediction_parses,
+		"Pred_header": models.HeaderDiv,
 	})
 }

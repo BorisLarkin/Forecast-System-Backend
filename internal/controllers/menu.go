@@ -19,6 +19,7 @@ func Parse_menu(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "menu.tmpl", gin.H{
-		"Forecasts": models.Forecast_parses,
+		"Forecasts":    models.Forecast_parses,
+		"Forec_header": models.HeaderDiv,
 	})
 }
