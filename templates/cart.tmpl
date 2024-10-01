@@ -22,17 +22,17 @@
     </div><span  class="calc_window">Окно расчета:</span>
   </div>
   <div class=predictions>
-    {{ range .Predictions }}
+    {{ range .Forecasts_to_parse }}
     <div class=prediction>
       <div class = "cart_card">
-        <div class="cart_card_bg" style="{{ .Solid_cart_style}}"></div>
-        <div class="cart_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
-        <div class="cart_card_fade" style="{{ .Fade_cart_style }}"></div>
+        <div class="cart_card_bg" style="background-color: rgba({{ .Color }})"></div>
+        <div class="cart_card_img" style="background-image:url({{ .Img_url }})"></div>
+        <div class="cart_card_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class=btn_add>
-          <button class="btn_det" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Id}}'">
+          <button class="btn_det" onclick="location.href='http://127.0.0.1:8080/details?id={{.Id}}'">
           <div class="btn_bg"></div><span  class="btn_lbl">Подробнее</span>
         </div>
-        <div class=card_content><span  class="cart_card_title">{{ .Forecast.Short }}</span><span  class="desc">{{ .Forecast.Desc }}</span></div>
+        <div class=card_content><span  class="cart_card_title">{{ .Short }}</span><span  class="desc">{{ .Desc }}</span></div>
       </div>
       <div class=measures>
         <div class=cell>
