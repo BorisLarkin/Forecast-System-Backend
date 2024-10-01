@@ -16,6 +16,146 @@
 	letter-spacing:0;
 	font-weight: bold;
 }
+.cart_header { 
+	width:1598px;
+	height:51px;
+	position:relative;
+	left:185px;
+}
+.save_btn { 
+	width:720px;
+	height:51px;
+	position:relative;
+	left:904px;
+	top:0px;
+}
+.coolfade{
+	background-image:linear-gradient(90deg, rgba(255, 212.4999949336052, 250.75001925230026, 1) 0%,rgba(163.62499594688416, 227.58748054504395, 255, 1) 100%) ;
+}
+.save_bg { 
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0px;
+	top:0px;
+	border-top-left-radius:25px;
+	border-top-right-radius:25px;
+	border-bottom-left-radius:25px;
+	border-bottom-right-radius:25px;
+}
+.save_lbl { 
+	color:rgba(0, 0, 0, 1);
+	width:100%;
+	height:auto;
+	position:absolute;
+	left:0px;
+	top:15%;
+	font-family:PT Sans Caption;
+	text-align:center;
+	font-size:24px;
+	letter-spacing:0;
+	font-weight: bold;
+}
+.day_amount { 
+	width:66px;
+	height:51px;
+	position:absolute;
+	left:288px;
+	top:0px;
+}
+.day_amount_bg { 
+	background-color:rgba(255, 255, 255, 0.7099999785423279);
+	width:100%;
+	height:51px;
+	position:absolute;
+	left:0.76153564453125px;
+	top:0px;
+	border-top-left-radius:25px;
+	border-top-right-radius:25px;
+	border-bottom-left-radius:25px;
+	border-bottom-right-radius:25px;
+}
+.day_amount_lbl { 
+	color:rgba(0, 0, 0, 1);
+	width:100%;
+	height:100%;
+	font-family:PT Sans Caption;
+	text-align:center;
+	font-size:20px;
+	letter-spacing:0;
+	border-radius: 25px;
+	padding: 0;
+  	border: none;
+  	background: none;
+	position: absolute;
+}
+.pred_amount { 
+	color:rgba(0, 0, 0, 1);
+	width:273px;
+	height:51px;
+	position:absolute;
+	left:0px;
+	top:20%;
+	font-family:PT Sans Caption;
+	text-align:left;
+	font-size:20px;
+	letter-spacing:0;
+}
+.meas { 
+	color:rgba(0, 0, 0, 1);
+	width:113px;
+	height:51px;
+	position:absolute;
+	left:668px;
+	top:20%;
+	font-family:PT Sans Caption;
+	text-align:left;
+	font-size:20px;
+	letter-spacing:0;
+}
+.calc_type { 
+	width:66px;
+	height:51px;
+	position:absolute;
+	left:588px;
+	top:0px;
+}
+.calc_bg { 
+	background-color:rgba(255, 255, 255, 0.7099999785423279);
+	width:65.23846435546875px;
+	height:51px;
+	position:absolute;
+	left:0.76153564453125px;
+	top:0px;
+	border-radius: 25px;
+}
+.calc_lbl { 
+	color:rgba(0, 0, 0, 1);
+	width:100%;
+	height:100%;
+	font-family:PT Sans Caption;
+	text-align:center;
+	font-size:20px;
+	letter-spacing:0;
+	padding: 0;
+  	border: none;
+  	background: none;
+	border-radius: 25px;
+	position:absolute;
+}
+.calc_window { 
+	color:rgba(0, 0, 0, 1);
+	width:148px;
+	height:51px;
+	position:absolute;
+	left:427px;
+	top:20%;
+	font-family:PT Sans Caption;
+	text-align:left;
+	font-size:20px;
+	letter-spacing:0;
+}
+
 .predictions { 
 	width:1687px;
 	height:auto;
@@ -33,12 +173,6 @@
 	border-radius: 25px;
 }
 .cart_card_bg { 
-	background-color:rgba(255, 255, 255, 0.7099999785423279);
-	width:100%;
-	height:100%;
-	border-radius: 25px;
-}
-.calc_bg{
 	background-color:rgba(255, 255, 255, 0.7099999785423279);
 	width:100%;
 	height:100%;
@@ -256,95 +390,13 @@
 	left:17px;
 	top:7.5321044921875px;
 }
-.result {
-	width:727px;
+.measures {
+	width:720px;
 	height:194px;
 	position:relative;
-}
-.cart_header { 
-	width:1687px;
-	height:51px;
-	position: relative;
-	left:130px;
-}
-.save_btn { 
-	width:727px;
-	height:51px;
-	position:absolute;
-	left:959px;
-	top:0px;
-}
-.save_bg { 
-	background-image:linear-gradient(90deg, rgba(255, 212.4999949336052, 250.75001925230026, 1) 0%,rgba(163.62499594688416, 227.58748054504395, 255, 1) 100%) ;
-	width:727px;
-	height:51px;
-	position:absolute;
-	left:0px;
-	top:0px;
-	border-radius: 25px;
-}
-.save_lbl { 
-	color:rgba(0, 0, 0, 1);
-	width:727px;
-	height:auto;
-	position:absolute;
-	left:0px;
-	top:15%;
-	font-family:PT Sans Caption;
-	text-align:center;
-	font-size:24px;
-	letter-spacing:0;
-	font-weight: bold;
-}
-.day_amount { 
-	width:520px;
-	height:51px;
-	position:absolute;
-	left:0px;
-	top:0px;
-}
-.day_amount_bg { 
-	background-color:rgba(255, 255, 255, 0.7099999785423279);
-	width:514px;
-	height:51px;
-	position:absolute;
-	left:0px;
-	top:0px;
-	border-top-left-radius:25px;
-	border-top-right-radius:25px;
-	border-bottom-left-radius:25px;
-	border-bottom-right-radius:25px;
-}
-.day_amount_lbl { 
-	color:rgba(0, 0, 0, 1);
-	width:520px;
-	height:50px;
-	position:absolute;
-	font-family:PT Sans Caption;
-	text-align:center;
-	font-size:20px;
-	letter-spacing:0;
-	left:0px;
-	top:20%;
-}
-.calc_type { 
-	width:364px;
-	height:51px;
-	position:absolute;
-	left:557px;
-	top:0px;
-}
-.calc_lbl { 
-	color:rgba(0, 0, 0, 1);
-	width:367px;
-	height:50px;
-	position:absolute;
-	font-family:"PT Sans Caption";
-	text-align:center;
-	font-size:20px;
-	letter-spacing:0;
-	left:0px;
-	top:20%;
+	display: flex;
+	flex-flow: row;
+	gap: 10px;
 }
 .btn_det{
 	width:594px;
@@ -357,4 +409,36 @@
 	cursor: pointer;
 	outline: inherit;
 	z-index: 2;
+}
+.cell { 
+	width:136px;
+	height:193px;
+	position: relative;
+}
+.cell_bg { 
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0px;
+	top:0px;
+	border-top-left-radius:20px;
+	border-top-right-radius:20px;
+	border-bottom-left-radius:20px;
+	border-bottom-right-radius:20px;
+}
+.cell_lbl { 
+	color:rgba(0, 0, 0, 1);
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0px;
+	top:0px;
+	font-family:PT Sans Caption;
+	text-align:center;
+	font-size:36px;
+	letter-spacing:0;
+	padding: 0;
+  	border: none;
+  	background: none;
+	border-radius: 20px;
 }
