@@ -1,6 +1,9 @@
 package models
 
-import "html/template"
+import (
+	"html/template"
+	"slices"
+)
 
 type Forecast struct {
 	Id            int
@@ -111,20 +114,6 @@ var Prediction_Forecasts_arr []Prediction_Forecasts = []Prediction_Forecasts{
 	},
 }
 
-type Forecast_parse struct {
-	Forecast    Forecast
-	Solid_style template.CSS
-	Fade_style  template.CSS
-}
-type Prediction_parse struct {
-	Prediction       Prediction
-	Forecasts        Forecast
-	Solid_cart_style template.CSS
-	Fade_cart_style  template.CSS
-}
-
-var Forecast_parses []Forecast_parse
-
 var HeaderDiv template.HTML = template.HTML(`
 	<div class=header_component>
       <div class="header_bg"></div>
@@ -134,3 +123,19 @@ var HeaderDiv template.HTML = template.HTML(`
         <div class="logo_img"></div>
       </div>
     </div>`)
+
+func GetForecastById(id int) Forecast {
+	return Forecasts[slices.IndexFunc(Forecasts, func(f Forecast) bool { return f.Id == id })]
+}
+func GetPredictionById(id int) Prediction {
+	return Predictions[slices.IndexFunc(Predictions, func(f Prediction) bool { return f.Id == id })]
+}
+func GetForecastsByPredictionId(id int) []Forecast {
+	var Fs []Forecast
+	for i, v := range Prediction_Forecasts_arr {
+		if Prediction_Forecasts_arr[i].Predicition_id == id {
+			Fs = append(Fs, GetForecastById(v.Forecast_id))
+		}
+	}
+	return Fs
+}
