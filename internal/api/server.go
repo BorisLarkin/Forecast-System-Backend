@@ -17,7 +17,7 @@ func StartServer() {
 
 	r.GET("/menu", controllers.Parse_menu)
 
-	r.GET("/cart", controllers.ParseCart)
+	r.GET("/cart/:id", controllers.ParseCart)
 
 	/*
 		r.GET("/home", func(c *gin.Context) {

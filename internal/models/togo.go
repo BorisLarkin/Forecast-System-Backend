@@ -3,66 +3,111 @@ package models
 import "html/template"
 
 type Forecast struct {
-	Id      int
-	Img_url string
-	Title   string
-	Short   string
-	Desc    string
-	Color   string
+	Id            int
+	Img_url       string
+	Title         string
+	Short         string
+	Desc          string
+	Color         string
+	Measure_type  string
+	Extended_desc string
 }
 
 var Forecasts []Forecast = []Forecast{
 	{
-		Id:      1,
-		Title:   "Прогноз температуры",
-		Short:   "Температура",
-		Desc:    "Предскажем температуру посредством применения метода авторегрессии",
-		Color:   "(255, 195, 182, 1)",
-		Img_url: "http://127.0.0.1:9000/test/source_obj/temp_crop.png",
+		Id:            0,
+		Title:         "Прогноз температуры",
+		Short:         "Температура",
+		Desc:          "Предскажем температуру посредством применения метода скользящего среднего",
+		Color:         "255, 195, 182, 1",
+		Img_url:       "http://127.0.0.1:9000/test/source_obj/temp_crop.png",
+		Measure_type:  "градусы цельсия",
+		Extended_desc: "Нахождение вероятных значений средних температур на последующие дни с учетом тренда изменения средней за скользящее окно дней температуры.",
 	},
 	{
-		Id:      2,
-		Title:   "Предсказать давление",
-		Short:   "Давление",
-		Desc:    "Покажем в мм рт. ст. наиболее вероятного значения атмосферного давления",
-		Color:   "(213, 206, 255, 1)",
-		Img_url: "http://127.0.0.1:9000/test/source_obj/pressure.png",
+		Id:           1,
+		Title:        "Предсказать давление",
+		Short:        "Давление",
+		Desc:         "Покажем в мм рт. ст. наиболее вероятного значения атмосферного давления",
+		Color:        "213, 206, 255, 1",
+		Img_url:      "http://127.0.0.1:9000/test/source_obj/pressure.png",
+		Measure_type: "миллиметры ртутного столба",
 	},
 	{
-		Id:      3,
-		Title:   "Предугадать влажность",
-		Short:   "Влажность",
-		Desc:    "Подскажем, как одеться по влажности атмосферного воздуха, в процентах",
-		Color:   "(223, 229, 255, 1)",
-		Img_url: "http://127.0.0.1:9000/test/source_obj/humidity.png",
+		Id:           2,
+		Title:        "Предугадать влажность",
+		Short:        "Влажность",
+		Desc:         "Подскажем, как одеться по влажности атмосферного воздуха, в процентах",
+		Color:        "223, 229, 255, 1",
+		Img_url:      "http://127.0.0.1:9000/test/source_obj/humidity.png",
+		Measure_type: "проценты",
 	},
 }
 
 type Prediction struct {
-	Id        int
-	F_id      int
-	Date_time string
-	Result    string
+	Id             int
+	Date_created   string
+	Date_formed    string
+	Date_completed string
+	Creator        string
+	Moderator      string
+	Status         string
+}
+
+type Prediction_Forecasts struct {
+	Predicition_id int
+	Forecast_id    int
+	Measures       string
+	Result         string
 }
 
 var Predictions []Prediction = []Prediction{
 	{
-		Id:        1,
-		Date_time: "18.09.2024, 19:54",
-		Result:    "760 мм. рт. ст.",
-		F_id:      1,
+		Id:             0,
+		Date_created:   "",
+		Date_formed:    "",
+		Date_completed: "",
+		Creator:        "",
+		Moderator:      "",
+		Status:         "done",
 	},
 	{
-		Id:        2,
-		Date_time: "17.09.2024, 14:55",
-		Result:    "38%",
-		F_id:      3,
+		Id:             1,
+		Date_created:   "",
+		Date_formed:    "",
+		Date_completed: "",
+		Creator:        "",
+		Moderator:      "",
+		Status:         "done",
 	},
 	{
-		Id:        3,
-		Date_time: "20.10.2024, 00:43",
-		Result:    "В работе...",
-		F_id:      2,
+		Id:             2,
+		Date_created:   "",
+		Date_formed:    "",
+		Date_completed: "",
+		Creator:        "",
+		Moderator:      "",
+		Status:         "in-work",
+	},
+}
+var Prediction_Forecasts_arr []Prediction_Forecasts = []Prediction_Forecasts{
+	{
+		Predicition_id: 0,
+		Forecast_id:    1,
+		Measures:       "",
+		Result:         "",
+	},
+	{
+		Predicition_id: 0,
+		Forecast_id:    2,
+		Measures:       "",
+		Result:         "",
+	},
+	{
+		Predicition_id: 0,
+		Forecast_id:    0,
+		Measures:       "",
+		Result:         "",
 	},
 }
 
@@ -73,13 +118,12 @@ type Forecast_parse struct {
 }
 type Prediction_parse struct {
 	Prediction       Prediction
-	Forecast         Forecast
+	Forecasts        Forecast
 	Solid_cart_style template.CSS
 	Fade_cart_style  template.CSS
 }
 
 var Forecast_parses []Forecast_parse
-var Prediction_parses []Prediction_parse
 
 var HeaderDiv template.HTML = template.HTML(`
 	<div class=header_component>

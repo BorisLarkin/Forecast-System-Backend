@@ -10,13 +10,13 @@
     <div class=assort_cards>
       {{ range .Forecasts }}
       <div class=assort_card>
-        <div class="assort_card_bg" style="{{ .Solid_style }}"></div>
-        <div class="assort_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
-        <div class="assort_card_fade" style="{{ .Fade_style }}"></div>
+        <div class="assort_card_bg" style="background-color: rgba({{ .Color }})"></div>
+        <div class="assort_card_img" style="background-image:url({{ .Img_url }})"></div>
+        <div class="assort_card_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class="content_block">
-          <div  class="card_title">{{ .Forecast.Title }}</div>
-          <div  class="card_desc">{{ .Forecast.Desc }}</div>
-          <button class="btn_add" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Id}}'">
+          <div  class="card_title">{{ .Title }}</div>
+          <div  class="card_desc">{{ .Desc }}</div>
+          <button class="btn_add" onclick="location.href='http://127.0.0.1:8080/details?id={{.Id}}'">
             <div class="btn_bg"></div>
             <span  class="btn_lbl">Подробнее</span>
           </button>
@@ -31,7 +31,7 @@
       <div class="search_btn"></div>
     </div>
     <div class=assort_cart>
-      <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart'"></button>
+      <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart/0'"></button>
       <div class="cart_bg"></div>
       <div class="cart_size_bg">
         <span  class="cart_size">3</span>
