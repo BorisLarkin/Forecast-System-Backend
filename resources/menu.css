@@ -89,6 +89,7 @@
 	position:relative;
 	background: none;
 	left:20px;
+	cursor: pointer;
 }
 .btn_bg { 
 	background-color:rgba(255, 255, 255, 0.45);
@@ -135,7 +136,7 @@
 }
 .value { 
 	color:rgba(30, 30, 30, 1);
-	width: 100%;
+	width: 90%;
 	height:100%;
 	position:absolute;
 	top:0px;
@@ -148,6 +149,7 @@
 	background: none;
 	padding:0;
 	outline: none;
+	left:20px;
 }
 .x { 
 	width:16px;
@@ -257,13 +259,13 @@
 	letter-spacing:0;
 }
 .search_btn{
-	background-image:url(http://127.0.0.1:9000/test/source_obj/search.svg);
 	position:absolute;
 	vertical-align:middle;
 	top:20%;
 	right:10px;
 	width: 32px;
 	height: 32px;
-	cursor: pointer;
 	border: none;
+	background: none;
+	padding:0px;
 }

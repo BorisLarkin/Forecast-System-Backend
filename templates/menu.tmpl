@@ -26,15 +26,22 @@
     </div>
     <span  class="assort_title">Типы прогнозов</span>
     {{ .Forec_header }}
-    <div class=search>
-      <input type="text" placeholder="Поиск..." class="value">
-      <div class="search_btn"></div>
-    </div>
+    <form action="/menu" method="GET" class=search>
+              <input
+                  type="text"
+                  name="search"
+                  class="value"
+                  maxlength="55"
+                  placeholder="Поиск..."
+              />
+              <button type="submit" class="search_btn" style="z-index:2; cursor:pointer;"></button> <!-- скрытая кнопка для отправки формы -->
+              <img class="search_btn" src="http://127.0.0.1:9000/test/source_obj/search.svg">
+          </form>
     <div class=assort_cart>
-      <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart/0'"></button>
+      <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart/{{.Curr_pred_id}}'"></button>
       <div class="cart_bg"></div>
       <div class="cart_size_bg">
-        <span  class="cart_size">3</span>
+        <span  class="cart_size">{{.Curr_pred_len}}</span>
       </div>
       <div class="cart_img"></div>
     </div>

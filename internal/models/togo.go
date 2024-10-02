@@ -3,6 +3,7 @@ package models
 import (
 	"html/template"
 	"slices"
+	"strings"
 )
 
 type Forecast struct {
@@ -135,6 +136,43 @@ func GetForecastsByPredictionId(id int) []Forecast {
 	for i, v := range Prediction_Forecasts_arr {
 		if Prediction_Forecasts_arr[i].Predicition_id == id {
 			Fs = append(Fs, GetForecastById(v.Forecast_id))
+		}
+	}
+	return Fs
+}
+
+var CURRENT_PREDICTION_ID = 0
+
+func GetPredictionLen(id int) int {
+	var len = 0
+	for i := range Prediction_Forecasts_arr {
+		if Prediction_Forecasts_arr[i].Predicition_id == id {
+			len += 1
+		}
+	}
+	return len
+}
+
+func GetCartLen() int {
+	return GetPredictionLen(CURRENT_PREDICTION_ID)
+}
+func GetForecasts() []Forecast {
+	return Forecasts
+}
+func GetPredictions() []Prediction {
+	return Predictions
+}
+func GetCurrPredictionId() int {
+	return CURRENT_PREDICTION_ID
+}
+func SetCurrPredictionId(id int) {
+	CURRENT_PREDICTION_ID = id
+}
+func GetForecastsByName(name_like string) []Forecast {
+	var Fs []Forecast
+	for i := range Forecasts {
+		if strings.Contains(Forecasts[i].Title, name_like) {
+			Fs = append(Fs, Forecasts[i])
 		}
 	}
 	return Fs
