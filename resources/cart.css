@@ -156,7 +156,7 @@
 	letter-spacing:0;
 }
 
-.predictions { 
+.prediction { 
 	width:1687px;
 	height:auto;
 	display: flex;
@@ -375,7 +375,7 @@
 	font-size:22px;
 	letter-spacing:0;
 }
-.prediction { 
+.forecast { 
 	width:100%;
 	height:194px;
 	position:relative;
@@ -394,9 +394,6 @@
 	width:720px;
 	height:194px;
 	position:relative;
-	display: flex;
-	flex-flow: row;
-	gap: 10px;
 }
 .btn_det{
 	width:594px;
@@ -409,12 +406,6 @@
 	cursor: pointer;
 	outline: inherit;
 	z-index: 2;
-}
-.cell {
-	width:136px;
-	height:193px;
-	position: relative;
-
 }
 .cell_bg {
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);

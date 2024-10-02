@@ -10,6 +10,7 @@ import (
 
 func Parse_menu(c *gin.Context) {
 	c.HTML(http.StatusOK, "menu.tmpl", gin.H{
-		"Forecasts": models.Forecasts,
+		"Forecasts":    models.Forecasts,
+		"Forec_header": models.HeaderDiv,
 	})
 }
