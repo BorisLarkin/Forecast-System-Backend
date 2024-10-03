@@ -119,7 +119,7 @@ var HeaderDiv template.HTML = template.HTML(`
 	<div class=header_component>
       <div class="header_bg"></div>
       <div class=logo>
-        <button class="logo_btn" onclick="location.href='http://127.0.0.1:8080/menu'"></button>
+        <button class="logo_btn" onclick="location.href='http://127.0.0.1:8080/forecasts'"></button>
         <span  class="logo_lbl">Погода</span>
         <div class="logo_img"></div>
       </div>
@@ -171,7 +171,7 @@ func SetCurrPredictionId(id int) {
 func GetForecastsByName(name_like string) []Forecast {
 	var Fs []Forecast
 	for i := range Forecasts {
-		if strings.Contains(Forecasts[i].Title, name_like) {
+		if strings.Contains(Forecasts[i].Title, name_like) || strings.Contains(Forecasts[i].Short, name_like) {
 			Fs = append(Fs, Forecasts[i])
 		}
 	}

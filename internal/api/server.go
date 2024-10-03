@@ -15,9 +15,9 @@ func StartServer() {
 
 	r.LoadHTMLGlob("templates/*")
 
-	r.GET("/menu", controllers.Parse_menu)
+	r.GET("/forecasts", controllers.Parse_forecasts)
 
-	r.GET("/cart/:id", controllers.ParseCart)
+	r.GET("/prediction/:id", controllers.Parseprediction)
 
 	/*
 		r.GET("/home", func(c *gin.Context) {

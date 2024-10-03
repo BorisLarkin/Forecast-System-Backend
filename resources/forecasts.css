@@ -1,4 +1,4 @@
-.assort_cards { 
+.forecasts { 
 	width:1390px;
 	height:auto;
 	position:absolute;
@@ -8,7 +8,7 @@
   	grid-template-columns: repeat(3, 1fr);
   	gap: 10px;
 }
-.assort_card {
+.forecast {
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
 	width:410px;
 	height:540px;
@@ -19,7 +19,7 @@
     justify-content:left; 
 	grid-auto-rows: minmax(540px,auto);
 }
-.assort_card_bg { 
+.forecast_bg { 
 	background-color:rgba(223.125, 229.49999392032623, 255, 1);
 	width:410px;
 	height:100%;
@@ -29,7 +29,7 @@
 	border-bottom-left-radius:20px;
 	border-bottom-right-radius:20px;
 }
-.assort_card_img { 
+.forecast_img { 
 	top:0px;
 	left:0px;
 	position: absolute;
@@ -40,7 +40,7 @@
 	background-repeat:no-repeat;
 	background-size:cover;
 }
-.assort_card_fade { 
+.forecast_fade { 
 	top:0px;
 	left:0px;
 	position: absolute;
@@ -109,7 +109,7 @@
 	font-size:22px;
 	letter-spacing:0;
 }
-.assort_title { 
+.forecasts_title { 
 	color:rgba(0, 0, 0, 1);
 	width:100%;
 	height:51px;
@@ -194,7 +194,7 @@
 	background-repeat:no-repeat;
 	background-size:cover;
 }
-.assort_cart { 
+.prediction { 
 	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
 	width:70px;
 	height:70px;
@@ -203,7 +203,7 @@
 	left:1750px;
 	border-radius: 50%;
 }
-.btn_cart{
+.btn_prediction{
 	width:70px;
 	height:100%;
 	position:absolute;
@@ -217,7 +217,7 @@
 	outline: inherit;
 	z-index: 2;
 }
-.cart_bg { 
+.prediction_bg { 
 	border-radius:500px;
 	background-image:linear-gradient(180deg, rgba(96,96,96,1) 0%,rgba(8,8,8, 1) 100%) ;
 	width:100%;
@@ -226,7 +226,7 @@
 	left:0px;
 	top:0px;
 }
-.cart_size_bg { 
+.prediction_size_bg { 
 	border-radius:13px;
 	background-image:linear-gradient(90deg, rgba(255, 212.4999949336052, 250.75001925230026, 1) 0%,rgba(163.62499594688416, 227.58748054504395, 255, 1) 100%) ;
 	width:26px;
@@ -235,7 +235,7 @@
 	left:54px;
 	top:0px;
 }
-.cart_img { 
+.prediction_img { 
 	width:69px;
 	height:69px;
 	position:absolute;
@@ -246,7 +246,7 @@
 	background-size:cover;
 	filter:invert(100%);
 }
-.cart_size { 
+.prediction_size { 
 	color:rgba(0, 0, 0, 1);
 	width:26px;
 	height:26px;

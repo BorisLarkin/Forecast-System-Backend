@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8">
     <title>Погода</title>
-    <link rel="stylesheet" type="text/css" href="./assets/menu.css"/>
+    <link rel="stylesheet" type="text/css" href="./assets/forecasts.css"/>
     <link rel="stylesheet" type="text/css" href="./assets/global.css">
   </head>
   <body style="margin:0;">
-    <div class=assort_cards>
+    <div class=forecasts>
       {{ range .Forecasts }}
-      <div class=assort_card>
-        <div class="assort_card_bg" style="background-color: rgba({{ .Color }})"></div>
-        <div class="assort_card_img" style="background-image:url({{ .Img_url }})"></div>
-        <div class="assort_card_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
+      <div class=forecast>
+        <div class="forecast_bg" style="background-color: rgba({{ .Color }})"></div>
+        <div class="forecast_img" style="background-image:url({{ .Img_url }})"></div>
+        <div class="forecast_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class="content_block">
           <div  class="card_title">{{ .Title }}</div>
           <div  class="card_desc">{{ .Desc }}</div>
@@ -24,9 +24,9 @@
       </div>
       {{ end }}
     </div>
-    <span  class="assort_title">Типы прогнозов</span>
+    <span  class="forecasts_title">Типы прогнозов</span>
     {{ .Forec_header }}
-    <form action="/menu" method="GET" class=search>
+    <form action="/forecasts" method="GET" class=search>
               <input
                   type="text"
                   name="search"
@@ -37,13 +37,13 @@
               <button type="submit" class="search_btn" style="z-index:2; cursor:pointer;"></button> <!-- скрытая кнопка для отправки формы -->
               <img class="search_btn" src="http://127.0.0.1:9000/test/source_obj/search.svg">
           </form>
-    <div class=assort_cart>
-      <button class="btn_cart" onclick="location.href='http://127.0.0.1:8080/cart/{{.Curr_pred_id}}'"></button>
-      <div class="cart_bg"></div>
-      <div class="cart_size_bg">
-        <span  class="cart_size">{{.Curr_pred_len}}</span>
+    <div class=prediction>
+      <button class="btn_prediction" onclick="location.href='http://127.0.0.1:8080/prediction/{{.Curr_pred_id}}'"></button>
+      <div class="prediction_bg"></div>
+      <div class="prediction_size_bg">
+        <span  class="prediction_size">{{.Curr_pred_len}}</span>
       </div>
-      <div class="cart_img"></div>
+      <div class="prediction_img"></div>
     </div>
 </body>
 </html>

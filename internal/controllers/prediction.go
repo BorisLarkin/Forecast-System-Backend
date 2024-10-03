@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ParseCart(c *gin.Context) {
+func Parseprediction(c *gin.Context) {
 	id := c.Param("id")
 	pred_id, err := strconv.Atoi(id)
 	if (err) != nil || pred_id < 0 || pred_id >= len(models.Predictions) {
@@ -18,7 +18,7 @@ func ParseCart(c *gin.Context) {
 	var Prediction_to_parse models.Prediction = models.GetPredictionById(pred_id)
 	var Forecasts_to_parse []models.Forecast = models.GetForecastsByPredictionId(pred_id)
 
-	c.HTML(http.StatusOK, "cart.tmpl", gin.H{
+	c.HTML(http.StatusOK, "prediction.tmpl", gin.H{
 		"Prediction_to_parse": Prediction_to_parse,
 		"Forecasts_to_parse":  Forecasts_to_parse,
 		"Pred_header":         models.HeaderDiv,
