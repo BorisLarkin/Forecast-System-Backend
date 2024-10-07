@@ -1,10 +1,10 @@
 package repository
 
 import (
+	"web/internal/app/ds"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	"web/internal/app/ds"
 )
 
 type Repository struct {
@@ -22,17 +22,47 @@ func New(dsn string) (*Repository, error) {
 	}, nil
 }
 
-func (r *Repository) GetProductByID(id int) (*ds.Forecast, error) {
-	product := &ds.Forecast{}
+func (r *Repository) GetForecastByID(id int) (*ds.Forecasts, error) {
+	forecast := &ds.Forecasts{}
 
-	err := r.db.First(product, "id = ?", "1").Error // find product with id = 1
+	err := r.db.First(forecast, "id = ?", "1").Error // find product with id = 1
 	if err != nil {
 		return nil, err
 	}
 
-	return product, nil
+	return forecast, nil
 }
 
-func (r *Repository) CreateProduct(product ds.Forecast) error {
-	return r.db.Create(product).Error
+func (r *Repository) CreateForecast(forecast ds.Forecasts) error {
+	return r.db.Create(forecast).Error
+}
+
+func (r *Repository) GetPredictionByID(id int) (*ds.Predictions, error) {
+	pred := &ds.Predictions{}
+
+	err := r.db.First(pred, "id = ?", "1").Error // find product with id = 1
+	if err != nil {
+		return nil, err
+	}
+
+	return pred, nil
+}
+
+func (r *Repository) CreatePrediction(pred ds.Predictions) error {
+	return r.db.Create(pred).Error
+}
+
+func (r *Repository) CreateUser(user ds.Users) error {
+	return r.db.Create(user).Error
+}
+
+func (r *Repository) GetUserByID(id int) (*ds.Users, error) {
+	user := &ds.Users{}
+
+	err := r.db.First(user, "id = ?", "1").Error // find product with id = 1
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

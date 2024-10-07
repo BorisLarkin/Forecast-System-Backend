@@ -17,7 +17,7 @@ func main() {
 	}
 
 	// Migrate the schema
-	err = db.AutoMigrate(&ds.Forecast{})
+	err = db.AutoMigrate(&ds.Forecasts{}, &ds.Predictions{}, &ds.Preds_Forecs{}, &ds.Users{})
 	if err != nil {
 		panic("cant migrate db")
 	}
