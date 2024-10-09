@@ -1,9 +1,2 @@
-DB_HOST = "0.0.0.0"
-
-DB_PORT = "5432"
-
-DB_NAME = "weather_db"
-
-DB_USER = "root"
-
-DB_PASS = "pgpwd"
+ServiceHost = "0.0.0.0"
+ServicePort = 80 

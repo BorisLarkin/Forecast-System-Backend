@@ -11,7 +11,11 @@ import (
 
 func main() {
 	_ = godotenv.Load()
-	db, err := gorm.Open(postgres.Open(dsn.FromEnv()), &gorm.Config{})
+	env, err := dsn.FromEnv()
+	if err != nil {
+		panic("cant migrate db")
+	}
+	db, err := gorm.Open(postgres.Open(env), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}

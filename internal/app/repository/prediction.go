@@ -1,18 +1,28 @@
 package repository
 
-import "web/internal/app/ds"
+import (
+	"strconv"
+	"web/internal/app/ds"
+)
 
-func (r *Repository) GetPredictionByID(id int) (*ds.Predictions, error) {
-	pred := &ds.Predictions{}
-
-	err := r.db.First(pred, "id = ?", "1").Error // find product with id = 1
-	if err != nil {
-		return nil, err
-	}
-
-	return pred, nil
+func (r *Repository) PredictionList() (*[]ds.Predictions, error) {
+	var Predictions []ds.Predictions
+	r.db.Find(&Predictions)
+	return &Predictions, nil
 }
 
-func (r *Repository) CreatePrediction(pred ds.Predictions) error {
-	return r.db.Create(pred).Error
+func (r *Repository) GetPredictionByID(id string) (*ds.Predictions, error) {
+	var Prediction ds.Predictions
+	intId, _ := strconv.Atoi(id)
+	r.db.Find(&Prediction, intId)
+	return &Prediction, nil
+}
+
+func (r *Repository) CreatePrediction(Prediction ds.Predictions) error {
+	return r.db.Create(Prediction).Error
+}
+
+func (r *Repository) DeletePrediction(id string) {
+	query := "UPDATE forecasts SET status='deleted' WHERE id = $1"
+	r.db.Exec(query, id)
 }
