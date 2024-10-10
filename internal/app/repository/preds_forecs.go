@@ -27,3 +27,19 @@ func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string
 	query := "DELETE FROM forecasts WHERE prediction_id = $1 and forecast_id = $2"
 	r.db.Exec(query, prediction_id, forecast_id)
 }
+
+func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.Forecasts, int, error) {
+	var prf []ds.Preds_Forecs
+	r.db.Where("prediction_id = ?", pred_id).Find(&prf)
+	var forecs []ds.Forecasts
+	len := 0
+	for i := range prf {
+		f, err := r.GetForecastByID(strconv.Itoa(prf[i].ForecastID))
+		if err != nil {
+			return nil, 0, err
+		}
+		len++
+		forecs = append(forecs, *f)
+	}
+	return &forecs, len, nil
+}

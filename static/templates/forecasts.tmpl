@@ -8,6 +8,9 @@
   </head>
   <body style="margin:0;">
     <div class=forecasts>
+      {{if .len_jnz}}
+        <span  class="empty">Здесь пусто...</span>
+      {{else}}
       {{ range .Forecasts }}
       <div class=forecast>
         <div class="forecast_bg" style="background-color: rgba({{ .Color }})"></div>
@@ -15,14 +18,14 @@
         <div class="forecast_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class="content_block">
           <div  class="card_title">{{ .Title }}</div>
-          <div  class="card_desc">{{ .Desc }}</div>
+          <div  class="card_desc">{{ .Descr }}</div>
           <button class="btn_add" onclick="location.href='http://127.0.0.1:8080/details?id={{.Id}}'">
             <div class="btn_bg"></div>
             <span  class="btn_lbl">Подробнее</span>
           </button>
         </div>
       </div>
-      {{ end }}
+      {{ end }}{{end}}
     </div>
     <span  class="forecasts_title">Типы прогнозов</span>
     <div class=header_component>

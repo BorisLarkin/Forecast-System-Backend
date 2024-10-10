@@ -1,4 +1,3 @@
 DROP TABLE forecasts CASCADE;
 DROP TABLE predictions CASCADE;
 DROP TABLE preds_forecs CASCADE;
-DROP TABLE users CASCADE;

@@ -93,3 +93,15 @@ body{
 	height:100%;
 	background-color:rgba(244.3749949336052, 244.3749949336052, 244.3749949336052, 1);
 }
+.empty { 
+	color:rgb(66, 66, 66);
+	width:100%;
+	height:auto;
+	font-family:"PT Sans Caption";
+	text-align:center;
+	font-size:30px;
+	letter-spacing:0;
+	font-weight: bold;
+	position:absolute;
+	left:0px;
+}

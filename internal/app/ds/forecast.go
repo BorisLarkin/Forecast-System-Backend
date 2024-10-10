@@ -5,7 +5,7 @@ type Forecasts struct {
 	Img_url       string `gorm:"type:varchar(255)" json:"img_url"`
 	Title         string `gorm:"type:varchar(255)" json:"title"`
 	Short         string `gorm:"type:varchar(255)" json:"short_title"`
-	Desc          string `gorm:"type:varchar(255)" json:"desc"`
+	Descr         string `gorm:"type:varchar(255)" json:"descr"`
 	Color         string `gorm:"type:varchar(255)" json:"color"`
 	Measure_type  string `gorm:"type:varchar(255)" json:"measure_type"`
 	Extended_desc string `gorm:"type:varchar(255)" json:"ext_desc"`

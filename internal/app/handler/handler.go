@@ -22,7 +22,8 @@ func NewHandler(l *logrus.Logger, r *repository.Repository) *Handler {
 func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.GET("/forecasts", h.ForecastList)
 	router.GET("/prediction/:id", h.PredictionById)
-	router.POST("/delete/:id", h.DeletePrediction)
+	router.GET("/details", h.DetailsById)
+	router.POST("/delete:id", h.DeletePrediction)
 	registerStatic(router)
 }
 
