@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Погода</title>
-    <link rel="stylesheet" type="text/css" href="./assets/forecasts.css"/>
-    <link rel="stylesheet" type="text/css" href="./assets/global.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/forecasts.css"/>
+    <link rel="stylesheet" type="text/css" href="./static/css/global.css">
   </head>
   <body style="margin:0;">
     <div class=forecasts>
@@ -25,7 +25,14 @@
       {{ end }}
     </div>
     <span  class="forecasts_title">Типы прогнозов</span>
-    {{ .Forec_header }}
+    <div class=header_component>
+      <div class="header_bg"></div>
+      <div class=logo>
+        <button class="logo_btn" onclick="location.href='http://127.0.0.1:8080/forecasts'"></button>
+        <span  class="logo_lbl">Погода</span>
+        <div class="logo_img"></div>
+      </div>
+    </div>
     <form action="/forecasts" method="GET" class=search>
               <input
                   type="text"

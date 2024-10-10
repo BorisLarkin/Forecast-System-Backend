@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <link href='https://fonts.googleapis.com/css?family=PT Sans' rel='stylesheet'>
     <title>Погода</title>
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/assets/prediction.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/assets/global.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/static/css/prediction.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/static/css/global.css">
   </head>
   <body style="margin:0;">
 <div class=prediction>
@@ -42,7 +42,14 @@
     {{ end }}
   </div>
 </div>
-{{ .Pred_header }}
+<div class=header_component>
+      <div class="header_bg"></div>
+      <div class=logo>
+        <button class="logo_btn" onclick="location.href='http://127.0.0.1:8080/forecasts'"></button>
+        <span  class="logo_lbl">Погода</span>
+        <div class="logo_img"></div>
+      </div>
+    </div>
 
 </body>
 </html>

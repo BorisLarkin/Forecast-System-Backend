@@ -20,8 +20,8 @@ func NewHandler(l *logrus.Logger, r *repository.Repository) *Handler {
 }
 
 func (h *Handler) RegisterHandler(router *gin.Engine) {
-	router.GET("/", h.ForecastList)
-	router.GET("/Prediction/:id", h.PredictionById)
+	router.GET("/forecasts", h.ForecastList)
+	router.GET("/prediction/:id", h.PredictionById)
 	router.POST("/delete/:id", h.DeletePrediction)
 	registerStatic(router)
 }
@@ -29,8 +29,6 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 func registerStatic(router *gin.Engine) {
 	router.LoadHTMLGlob("static/templates/*")
 	router.Static("/static", "./static")
-	router.Static("/css", "./static")
-	router.Static("/img", "./static")
 }
 
 func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, err error) {
