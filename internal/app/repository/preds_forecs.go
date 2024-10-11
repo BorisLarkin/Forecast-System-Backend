@@ -28,18 +28,21 @@ func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string
 	r.db.Exec(query, prediction_id, forecast_id)
 }
 
-func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.Forecasts, int, error) {
+func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.Forecasts, error) {
 	var prf []ds.Preds_Forecs
 	r.db.Where("prediction_id = ?", pred_id).Find(&prf)
 	var forecs []ds.Forecasts
-	len := 0
 	for i := range prf {
 		f, err := r.GetForecastByID(strconv.Itoa(prf[i].ForecastID))
 		if err != nil {
-			return nil, 0, err
+			return nil, err
 		}
-		len++
 		forecs = append(forecs, *f)
 	}
-	return &forecs, len, nil
+	return &forecs, nil
+}
+func (r *Repository) GetPredLen(pred_id string) int {
+	var prf []ds.Preds_Forecs
+	r.db.Where("prediction_id = ?", pred_id).Find(&prf)
+	return len(prf)
 }

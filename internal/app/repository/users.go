@@ -2,7 +2,6 @@ package repository
 
 import (
 	"strconv"
-	"strings"
 	"web/internal/app/ds"
 )
 
@@ -17,18 +16,6 @@ func (r *Repository) GetUserByID(id string) (*ds.Forecasts, error) {
 	intId, _ := strconv.Atoi(id)
 	r.db.Find(&Forecast, intId)
 	return &Forecast, nil
-}
-func (r *Repository) SearchUser(search string) (*[]ds.Users, error) {
-	var Users []ds.Users
-	r.db.Find(&Users)
-
-	var filteredUsers []ds.Users
-	for _, f := range Users {
-		if strings.Contains(strings.ToLower(f.Login), strings.ToLower(search)) {
-			filteredUsers = append(filteredUsers, f)
-		}
-	}
-	return &filteredUsers, nil
 }
 
 func (r *Repository) CreateUser(Users ds.Users) error {

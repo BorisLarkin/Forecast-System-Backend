@@ -22,3 +22,14 @@ func FromEnv() (string, error) {
 	}
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, pass, dbname), nil
 }
+
+func GetCurrentUserID() (string, error) {
+	if err := godotenv.Load(); err != nil {
+		return "", err
+	}
+	id, exists := os.LookupEnv("CURRENT_SESSION")
+	if !exists {
+		return "", fmt.Errorf("user env var not read")
+	}
+	return id, nil
+}
