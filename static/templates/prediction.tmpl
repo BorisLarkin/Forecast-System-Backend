@@ -10,6 +10,7 @@
   <body style="margin:0;">
 <div class=prediction>
   <span  class="prediction_title">Корзина прогнозов</span>
+  {{ if .Exists}}
   <div class=prediction_header>
     <div class=save_btn>
       <div class="save_bg coolfade"></div><span  class="save_lbl">Сохранить</span>
@@ -41,6 +42,9 @@
     </div>
     {{ end }}
   </div>
+  {{ else }}
+          <span  class="empty" style="top:160px">Здесь пусто...</span>
+  {{ end }}
 </div>
 <div class=header_component>
       <div class="header_bg"></div>

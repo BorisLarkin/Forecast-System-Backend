@@ -6,10 +6,10 @@ import (
 	"web/internal/app/ds"
 )
 
-func (r *Repository) ForecastList() (*[]ds.Forecasts, error) {
+func (r *Repository) ForecastList() (*[]ds.Forecasts, int, error) {
 	var Forecasts []ds.Forecasts
 	r.db.Find(&Forecasts)
-	return &Forecasts, nil
+	return &Forecasts, len(Forecasts), nil
 }
 
 func (r *Repository) GetForecastByID(id string) (*ds.Forecasts, error) {
@@ -18,7 +18,7 @@ func (r *Repository) GetForecastByID(id string) (*ds.Forecasts, error) {
 	r.db.Find(&Forecast, intId)
 	return &Forecast, nil
 }
-func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, error) {
+func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, int, error) {
 	var Forecast []ds.Forecasts
 	r.db.Find(&Forecast)
 
@@ -28,7 +28,7 @@ func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, error) {
 			filteredForecast = append(filteredForecast, f)
 		}
 	}
-	return &filteredForecast, nil
+	return &filteredForecast, len(filteredForecast), nil
 }
 
 func (r *Repository) CreateForecast(forecast ds.Forecasts) error {

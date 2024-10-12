@@ -29,7 +29,11 @@ func (r *Repository) DeletePrediction(id string) {
 
 func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	var Predictions ds.Predictions
-	if err := r.db.Where("user_id = ? and status= ?", user_id, "draft").First(&Predictions).Error; err != nil {
+	int_uid, er := strconv.Atoi(user_id)
+	if er != nil {
+		return "", er
+	}
+	if err := r.db.Where("user_id=? AND status=?", int_uid, "draft").First(&Predictions).Error; err != nil {
 		return "", err
 	}
 	aid := strconv.Itoa(Predictions.Id)

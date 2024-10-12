@@ -31,11 +31,3 @@ func registerStatic(router *gin.Engine) {
 	router.LoadHTMLGlob("static/templates/*")
 	router.Static("/static", "./static")
 }
-
-func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, err error) {
-	h.Logger.Error(err.Error())
-	ctx.JSON(errorStatusCode, gin.H{
-		"status":      "error",
-		"description": err.Error(),
-	})
-}

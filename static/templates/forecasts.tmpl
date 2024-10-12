@@ -8,7 +8,7 @@
   </head>
   <body style="margin:0;">
     <div class=forecasts>
-      {{if .len_jnz}}
+      {{if .forec_empty}}
         <span  class="empty">Здесь пусто...</span>
       {{else}}
       {{ range .Forecasts }}
@@ -43,6 +43,7 @@
                   class="value"
                   maxlength="55"
                   placeholder="Поиск..."
+                  value="{{.Search_str}}"
               />
               <button type="submit" class="search_btn" style="z-index:2; cursor:pointer;"></button> <!-- скрытая кнопка для отправки формы -->
               <img class="search_btn" src="http://127.0.0.1:9000/test/source_obj/search.svg">
@@ -51,7 +52,7 @@
       <button class="btn_prediction" onclick="location.href='http://127.0.0.1:8080/prediction/{{.Curr_pred_id}}'"></button>
       <div class="prediction_bg"></div>
       <div class="prediction_size_bg">
-        <span  class="prediction_size">{{.Curr_pred_len}}</span>
+        <span  class="prediction_size">{{.Pred_len}}</span>
       </div>
       <div class="prediction_img"></div>
     </div>
