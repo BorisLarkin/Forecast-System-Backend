@@ -19,8 +19,11 @@ func (r *Repository) GetPredForecByID(id1 string, id2 string) (*ds.Preds_Forecs,
 	return &Preds_Forecs, nil
 }
 
-func (r *Repository) CreatePreds_Forecs(Preds_Forecs ds.Preds_Forecs) error {
-	return r.db.Create(Preds_Forecs).Error
+func (r *Repository) CreatePreds_Forecs(prediction_id string, forecast_id string) error {
+	var n ds.Preds_Forecs
+	n.ForecastID, _ = strconv.Atoi(forecast_id)
+	n.PredictionID, _ = strconv.Atoi(prediction_id)
+	return r.db.Create(n).Error
 }
 
 func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string) {

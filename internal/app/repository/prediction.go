@@ -2,7 +2,9 @@ package repository
 
 import (
 	"strconv"
+	"time"
 	"web/internal/app/ds"
+	"web/internal/app/dsn"
 )
 
 func (r *Repository) PredictionList() (*[]ds.Predictions, error) {
@@ -40,6 +42,12 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	return aid, nil
 }
 
-func (r *Repository) CreateDraft(Prediction ds.Predictions) error {
-	return r.db.Create(Prediction).Error
+func (r *Repository) CreateDraft() error {
+	var n ds.Predictions
+	uid, _ := dsn.GetCurrentUserID()
+	n.UserID, _ = strconv.Atoi(uid)
+	n.Date_created = time.Now()
+	n.Status = "draft"
+
+	return r.db.Create(n).Error
 }

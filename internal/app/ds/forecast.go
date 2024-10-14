@@ -1,7 +1,7 @@
 package ds
 
 type Forecasts struct {
-	Id            uint   `json:"id" gorm:"primary_key"`
+	Id            int    `json:"id" gorm:"primary_key"`
 	Img_url       string `gorm:"type:varchar(255)" json:"img_url"`
 	Title         string `gorm:"type:varchar(255)" json:"title"`
 	Short         string `gorm:"type:varchar(255)" json:"short_title"`
