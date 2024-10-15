@@ -11,14 +11,14 @@ func (r *Repository) UserList() (*[]ds.Forecasts, error) {
 	return &Forecasts, nil
 }
 
-func (r *Repository) GetUserByID(id string) (*ds.Forecasts, error) {
-	var Forecast ds.Forecasts
+func (r *Repository) GetUserByID(id string) (*ds.Users, error) {
+	var User ds.Users
 	intId, _ := strconv.Atoi(id)
-	r.db.Find(&Forecast, intId)
-	return &Forecast, nil
+	r.db.Find(&User, intId)
+	return &User, nil
 }
 
-func (r *Repository) CreateUser(Users ds.Users) error {
+func (r *Repository) CreateUser(Users *ds.Users) error {
 	return r.db.Create(Users).Error
 }
 

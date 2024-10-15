@@ -31,7 +31,7 @@ func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, int, error)
 	return &filteredForecast, len(filteredForecast), nil
 }
 
-func (r *Repository) CreateForecast(forecast ds.Forecasts) error {
+func (r *Repository) CreateForecast(forecast *ds.Forecasts) error {
 	return r.db.Create(forecast).Error
 }
 

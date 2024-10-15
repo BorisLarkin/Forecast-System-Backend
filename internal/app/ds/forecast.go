@@ -8,5 +8,5 @@ type Forecasts struct {
 	Descr         string `gorm:"type:varchar(255)" json:"descr"`
 	Color         string `gorm:"type:varchar(255)" json:"color"`
 	Measure_type  string `gorm:"type:varchar(255)" json:"measure_type"`
-	Extended_desc string `gorm:"type:varchar(255)" json:"ext_desc"`
+	Extended_desc string `gorm:"type:varchar(1023)" json:"ext_desc"`
 }

@@ -20,8 +20,8 @@ func (r *Repository) GetPredictionByID(id string) (*ds.Predictions, error) {
 	return &Prediction, nil
 }
 
-func (r *Repository) CreatePrediction(Prediction ds.Predictions) error {
-	return r.db.Create(Prediction).Error
+func (r *Repository) CreatePrediction(Prediction_ptr *ds.Predictions) error {
+	return r.db.Create(Prediction_ptr).Error
 }
 
 func (r *Repository) DeletePrediction(id string) {
@@ -43,11 +43,8 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 }
 
 func (r *Repository) CreateDraft() error {
-	var n ds.Predictions
 	uid, _ := dsn.GetCurrentUserID()
-	n.UserID, _ = strconv.Atoi(uid)
-	n.Date_created = time.Now()
-	n.Status = "draft"
-
-	return r.db.Create(n).Error
+	intid, _ := strconv.Atoi(uid)
+	pr := ds.Predictions{UserID: intid, Date_created: time.Now(), Status: "draft"}
+	return r.CreatePrediction(&pr)
 }

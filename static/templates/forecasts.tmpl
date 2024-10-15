@@ -17,12 +17,14 @@
         <div class="forecast_img" style="background-image:url({{ .Img_url }})"></div>
         <div class="forecast_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class="content_block">
-          <div  class="card_title">{{ .Title }}</div>
+          <div  class="card_title" style="cursor: pointer; z-index:2;" onclick="window.location='http://127.0.0.1:8080/details?id={{.Id}}';">{{ .Title }}</div>
           <div  class="card_desc">{{ .Descr }}</div>
-          <button class="btn_add" onclick="location.href='http://127.0.0.1:8080/details?id={{.Id}}'">
-            <div class="btn_bg"></div>
-            <span  class="btn_lbl">Подробнее</span>
-          </button>
+          <form style="z-index:5;" action='http://127.0.0.1:8080/add?id={{.Id}}' method="post">
+            <button class="btn_add" >
+              <div class="btn_bg"></div>
+              <span  class="btn_lbl">Добавить</span>
+            </button>
+          </form>
         </div>
       </div>
       {{ end }}{{end}}

@@ -11,7 +11,7 @@ func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
-	f_id := ctx.Param("f_id")
+	f_id := ctx.Query("id")
 	var pr_id string
 	pr_id, err = h.Repository.GetUserDraftID(uid)
 	if err != nil {
@@ -30,6 +30,6 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
-	f_id := ctx.Param("f_id")
+	f_id := ctx.Query("id")
 	h.Repository.DeletePreds_Forecs(pr_id, f_id)
 }

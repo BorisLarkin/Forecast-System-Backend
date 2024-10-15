@@ -23,7 +23,7 @@ func (r *Repository) CreatePreds_Forecs(prediction_id string, forecast_id string
 	var n ds.Preds_Forecs
 	n.ForecastID, _ = strconv.Atoi(forecast_id)
 	n.PredictionID, _ = strconv.Atoi(prediction_id)
-	return r.db.Create(n).Error
+	return r.db.Create(&n).Error
 }
 
 func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string) {
