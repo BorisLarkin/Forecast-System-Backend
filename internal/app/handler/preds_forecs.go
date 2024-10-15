@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"web/internal/app/dsn"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,7 @@ func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 		pr_id, _ = h.Repository.GetUserDraftID(uid)
 	}
 	h.Repository.CreatePreds_Forecs(pr_id, f_id)
+	ctx.Redirect(http.StatusFound, "/forecasts")
 }
 
 func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {

@@ -14,7 +14,7 @@
       {{ range .Forecasts }}
       <div class=forecast>
         <div class="forecast_bg" style="background-color: rgba({{ .Color }})"></div>
-        <div class="forecast_img" style="background-image:url({{ .Img_url }})"></div>
+        <div class="forecast_img" style="background-image:url(http://127.0.0.1:9000/test/source_obj/image-{{.Id}}.png)"></div>
         <div class="forecast_fade" style="background-image:linear-gradient(0deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class="content_block">
           <div  class="card_title" style="cursor: pointer; z-index:2;" onclick="window.location='http://127.0.0.1:8080/details?id={{.Id}}';">{{ .Title }}</div>

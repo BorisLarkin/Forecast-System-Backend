@@ -253,23 +253,24 @@
 	height:40px;
 	position:absolute;
 	left:17px;
-	top:147px;
+	top:140px;
 	cursor: pointer;
 }
 .btn_bg { 
-	background-color:rgba(255, 255, 255, 0.44999998807907104);
-	width:594px;
-	height:40px;
-	position:absolute;
-	left:0px;
-	top:0px;
-	border-top-left-radius:28px;
-	border-top-right-radius:28px;
-	border-bottom-left-radius:28px;
-	border-bottom-right-radius:28px;
-}
+	background-color: rgba(255, 149, 149, 0.25);
+  	width: 594px;
+  	height: 40px;
+  	position: absolute;
+  	left: 0px;
+  	top: 0px;
+  	border-top-left-radius: 28px;
+  	border-top-right-radius: 28px;
+  	border-bottom-left-radius: 28px;
+  	border-bottom-right-radius: 28px;
+  	border: solid rgb(206, 0, 0);
+}	
 .btn_lbl { 
-	color:rgba(0, 0, 0, 1);
+	color:rgba(206, 0, 0);
 	width:594px;
 	height:40px;
 	position:absolute;
