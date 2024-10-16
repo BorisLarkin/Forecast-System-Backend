@@ -24,6 +24,7 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.GET("/prediction/:id", h.PredictionById)
 	router.GET("/details", h.DetailsById)
 	router.POST("/delete", h.DeletePrediction)
+	router.POST("/save", h.SavePrediction)
 	router.POST("/add", h.AddForecastToPred)
 	router.POST("/remove", h.DeleteForecastFromPred)
 	registerStatic(router)

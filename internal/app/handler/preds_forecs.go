@@ -34,4 +34,11 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 	}
 	f_id := ctx.Query("id")
 	h.Repository.DeletePreds_Forecs(pr_id, f_id)
+	ln := h.Repository.GetPredLen(pr_id)
+	if ln == 0 {
+		h.Repository.DeletePrediction(pr_id)
+		ctx.Redirect(http.StatusFound, "/prediction/none")
+	} else {
+		ctx.Redirect(http.StatusFound, "/prediction/"+pr_id)
+	}
 }

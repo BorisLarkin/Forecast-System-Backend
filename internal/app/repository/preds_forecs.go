@@ -27,7 +27,7 @@ func (r *Repository) CreatePreds_Forecs(prediction_id string, forecast_id string
 }
 
 func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string) {
-	query := "DELETE FROM forecasts WHERE prediction_id = $1 and forecast_id = $2"
+	query := "DELETE FROM preds_forecs WHERE prediction_id = $1 and forecast_id = $2"
 	r.db.Exec(query, prediction_id, forecast_id)
 }
 
