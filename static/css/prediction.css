@@ -16,10 +16,10 @@
 	font-weight: bold;
 }
 .prediction_header { 
-	width:1598px;
-	height:51px;
-	position:relative;
-	left:185px;
+	width: 1687px;
+  height: 51px;
+  position: relative;
+  left: 130px;
 }
 .save_btn { 
 	width:720px;
@@ -32,10 +32,10 @@
 	background-image:linear-gradient(90deg, rgba(255, 212.4999949336052, 250.75001925230026, 1) 0%,rgba(163.62499594688416, 227.58748054504395, 255, 1) 100%) ;
 }
 .save_bg { 
-	width:100%;
+	width:720px;
 	height:100%;
 	position:absolute;
-	left:0px;
+	right:10px;
 	top:0px;
 	border-top-left-radius:25px;
 	border-top-right-radius:25px;
@@ -44,10 +44,10 @@
 }
 .save_lbl { 
 	color:rgba(0, 0, 0, 1);
-	width:100%;
+	width:720px;
 	height:auto;
 	position:absolute;
-	left:0px;
+	right:10px;
 	top:15%;
 	font-family:PT Sans Caption;
 	text-align:center;
@@ -199,7 +199,7 @@
 .forecast_card_title { 
 	color:rgba(0, 0, 0, 1);
 	width:471px;
-	height:41px;
+	height:auto;
 	left:156px;
 	top:0px;
 	font-family:"PT Sans Caption";
@@ -271,15 +271,15 @@
 }	
 .btn_lbl { 
 	color:rgba(206, 0, 0);
-	width:594px;
-	height:40px;
 	position:absolute;
 	left:0px;
-	top:10%;
+	top:15%;
 	font-family:PT Sans Caption;
 	text-align:center;
 	font-size:22px;
 	letter-spacing:0;
+	width: 100%;
+  	height: auto;
 }
 .card_content { 
 	width:639px;
@@ -308,8 +308,8 @@
 }
 .desc { 
 	color:rgba(0, 0, 0, 1);
-	width:639px;
-	height:87px;
+	width: 625px;
+	height: 133px;
 	position:absolute;
 	left:0px;
 	top:41px;
@@ -375,4 +375,18 @@
   	border: none;
   	background: none;
 	border-radius: 20px;
+}
+.clear_btn{
+  position: absolute;
+  width: 400px;
+  height: 50px;
+  left: 130px;
+  top: 110px;
+  background-color: rgba(255, 149, 149, 0.25);
+  border-radius:25px;
+  border: solid rgb(206, 0, 0);
+  font-family:PT Sans Caption;
+	text-align:center;
+	font-size:22px;
+	letter-spacing:0;
 }

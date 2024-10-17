@@ -34,9 +34,9 @@ func (r *Repository) CreatePrediction(Prediction_ptr *ds.Predictions) error {
 	return r.db.Create(Prediction_ptr).Error
 }
 
-func (r *Repository) DeletePrediction(prediction_id string) {
+func (r *Repository) DeletePrediction(prediction_id string) error {
 	query := "DELETE FROM predictions WHERE id = $1"
-	r.db.Exec(query, prediction_id)
+	return r.db.Exec(query, prediction_id).Error
 }
 
 func (r *Repository) GetUserDraftID(user_id string) (string, error) {

@@ -43,13 +43,13 @@ func (h *Handler) PredictionById(ctx *gin.Context) {
 }
 
 func (h *Handler) DeletePrediction(ctx *gin.Context) {
-	id := ctx.Param("id")
+	id := ctx.Query("id")
 	h.Repository.DeletePrediction(id)
 	ctx.Redirect(http.StatusFound, "/forecasts")
 }
 
 func (h *Handler) SavePrediction(ctx *gin.Context) {
-	id := ctx.Param("id")
+	id := ctx.Query("id")
 	h.Repository.DeletePrediction(id)
 	ctx.Redirect(http.StatusFound, "/forecasts")
 }

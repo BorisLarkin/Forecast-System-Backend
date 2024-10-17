@@ -36,6 +36,6 @@ func (r *Repository) CreateForecast(forecast *ds.Forecasts) error {
 }
 
 func (r *Repository) DeleteForecast(id string) {
-	query := "DELETE FROM forecasts WHERE id = $1"
+	query := "DELETE FROM forecasts WHERE id = ?"
 	r.db.Exec(query, id)
 }
