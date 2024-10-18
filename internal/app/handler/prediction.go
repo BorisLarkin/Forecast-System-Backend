@@ -47,9 +47,16 @@ func (h *Handler) DeletePrediction(ctx *gin.Context) {
 	h.Repository.DeletePrediction(id)
 	ctx.Redirect(http.StatusFound, "/forecasts")
 }
+func (h *Handler) DeleteDraft(ctx *gin.Context) {
+	id := ctx.Query("id")
+	h.Repository.SavePrediction(id, ctx)
+	h.Repository.SetPredictionStatus(id, "deleted")
+	ctx.Redirect(http.StatusFound, "/forecasts")
+}
 
 func (h *Handler) SavePrediction(ctx *gin.Context) {
 	id := ctx.Query("id")
-	h.Repository.DeletePrediction(id)
+	h.Repository.SavePrediction(id, ctx)
+	h.Repository.SetPredictionStatus(id, "pending")
 	ctx.Redirect(http.StatusFound, "/forecasts")
 }

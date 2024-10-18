@@ -6,6 +6,8 @@ import (
 	"time"
 	"web/internal/app/ds"
 	"web/internal/app/dsn"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (r *Repository) PredictionList() (*[]ds.Predictions, error) {
@@ -63,4 +65,20 @@ func (r *Repository) CreateDraft() error {
 	}
 	pr := ds.Predictions{UserID: intid, Date_created: time.Now(), Status: "draft"}
 	return r.CreatePrediction(&pr)
+}
+
+func (r *Repository) SavePrediction(id string, ctx *gin.Context) error {
+	var Prediction ds.Predictions
+	int_id, err := strconv.Atoi(id)
+	if err != nil {
+		return err
+	}
+	r.db.Find(&Prediction, int_id)
+	Prediction.Date_formed = time.Now()
+	Prediction.Prediction_amount, _ = strconv.Atoi(ctx.PostForm("amount"))
+	Prediction.Prediction_window, _ = strconv.Atoi(ctx.PostForm("window"))
+	val := ctx.PostFormArray("values")
+	ids := ctx.PostFormArray("ids")
+	r.SaveInputs(int_id, ids, val)
+	return r.db.Save(&Prediction).Error
 }

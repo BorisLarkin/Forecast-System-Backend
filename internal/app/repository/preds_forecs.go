@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"strconv"
 	"web/internal/app/ds"
 )
@@ -48,4 +49,13 @@ func (r *Repository) GetPredLen(pred_id string) int {
 	var prf []ds.Preds_Forecs
 	r.db.Where("prediction_id = ?", pred_id).Find(&prf)
 	return len(prf)
+}
+
+func (r *Repository) SaveInputs(pr_id int, ids []string, vals []string) {
+	var pr_fc ds.Preds_Forecs
+	for i := range ids {
+		pr_fc.Input = vals[i]
+		r.db.Model(&pr_fc).Where("prediction_id = ? and forecast_id = ?", pr_id, ids[i]).Updates(&pr_fc)
+		fmt.Println(i, ids[i], vals[i])
+	}
 }

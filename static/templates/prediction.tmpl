@@ -13,16 +13,18 @@
   <span  class="prediction_title">Корзина прогнозов</span>
   {{ if .Exists}}
   <div class="prediction_header">
-      <button class="save_bg coolfade"></button>
-      <label  class="save_lbl">Сохранить</label>
+      <button type="submit" class="save_bg" style="cursor:pointer; z-index:2;">
+        <div  class="save_lbl">Сохранить</div>
+        <div class="save_bg coolfade" style="right:0px; z-index: -1;"></div>
+      </button>
     <div class="day_amount">
-      <div class="day_amount_bg"></div><input  class="day_amount_lbl">
+      <div class="day_amount_bg"></div><input name="amount" class="day_amount_lbl">
     </div>
     <span  class="pred_amount">Количество предсказаний:</span>
     <span  class="meas">измерения</span>
     <div class="calc_type">
       <div class="calc_bg"></div>
-      <input  class="calc_lbl">
+      <input name="window" class="calc_lbl">
     </div><span  class="calc_window">Окно расчета:</span>
   </div>
   <div class="forecasts">
@@ -39,13 +41,14 @@
       </div>
       <div class=measures>
           <div class="cell_bg"></div>
-          <input class="cell_lbl">
+          <input name="values" class="cell_lbl">
+          <input type="hidden" name="ids" class="cell_lbl" value="{{.Id}}">
       </div>
     </div>
     {{ end }}
   </div>
   {{ else }}
-          <span  class="empty" style="top:160px">Здесь пусто...</span>
+    <span  class="empty" style="top:160px">Здесь пусто...</span>
   {{ end }}
 </div>
 </form>
