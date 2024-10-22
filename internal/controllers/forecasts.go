@@ -20,5 +20,6 @@ func Parse_forecasts(c *gin.Context) {
 		"Forec_header":  models.HeaderDiv,
 		"Curr_pred_len": models.GetCartLen(),
 		"Curr_pred_id":  models.GetCurrPredictionId(),
+		"Search_string": search,
 	})
 }

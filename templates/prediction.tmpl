@@ -15,28 +15,28 @@
       <div class="save_bg coolfade"></div><span  class="save_lbl">Сохранить</span>
     </div>
     <div class=day_amount>
-      <div class="day_amount_bg"></div><input  class="day_amount_lbl">
+      <div class="day_amount_bg"></div><input  class="day_amount_lbl" value="{{.Prediction_to_parse.Amount}}" disabled>
     </div><span  class="pred_amount">Количество предсказаний:</span><span  class="meas">измерения</span>
     <div class=calc_type>
-      <div class="calc_bg"></div><input  class="calc_lbl">
+      <div class="calc_bg"></div><input  class="calc_lbl" value="{{.Prediction_to_parse.Window}}" disabled>
     </div><span  class="calc_window">Окно расчета:</span>
   </div>
   <div class=forecasts>
     {{ range .Forecasts_to_parse }}
     <div class=forecast>
       <div class = "forecast_card">
-        <div class="forecast_card_bg" style="background-color: rgba({{ .Color }})"></div>
-        <div class="forecast_card_img" style="background-image:url({{ .Img_url }})"></div>
-        <div class="forecast_card_fade" style="background-image:linear-gradient(90deg, rgba({{ .Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
+        <div class="forecast_card_bg" style="background-color: rgba({{ .Forecast.Color }})"></div>
+        <div class="forecast_card_img" style="background-image:url({{ .Forecast.Img_url }})"></div>
+        <div class="forecast_card_fade" style="background-image:linear-gradient(90deg, rgba({{ .Forecast.Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class=btn_add>
-          <button class="btn_det" onclick="location.href='http://127.0.0.1:8080/details?id={{.Id}}'">
+          <button class="btn_det" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Id}}'">
           <div class="btn_bg"></div><span  class="btn_lbl">Подробнее</span>
         </div>
-        <div class=card_content><span  class="forecast_card_title">{{ .Short }}</span><span  class="desc">{{ .Desc }}</span></div>
+        <div class=card_content><span  class="forecast_card_title">{{ .Forecast.Short }}</span><span  class="desc">{{ .Forecast.Desc }}</span></div>
       </div>
       <div class=measures>
           <div class="cell_bg"></div>
-          <input  class="cell_lbl">
+          <input  class="cell_lbl" value="{{.Input}}" disabled>
       </div>
     </div>
     {{ end }}

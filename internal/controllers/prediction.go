@@ -16,7 +16,7 @@ func Parseprediction(c *gin.Context) {
 		return
 	}
 	var Prediction_to_parse models.Prediction = models.GetPredictionById(pred_id)
-	var Forecasts_to_parse []models.Forecast = models.GetForecastsByPredictionId(pred_id)
+	var Forecasts_to_parse []models.Forecast_preds = models.GetForecastsByPredictionId(pred_id)
 
 	c.HTML(http.StatusOK, "prediction.tmpl", gin.H{
 		"Prediction_to_parse": Prediction_to_parse,

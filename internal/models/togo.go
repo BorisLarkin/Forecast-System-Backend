@@ -62,6 +62,8 @@ type Prediction struct {
 	Creator        string
 	Moderator      string
 	Status         string
+	Window         int
+	Amount         int
 }
 
 type Prediction_Forecasts struct {
@@ -69,6 +71,10 @@ type Prediction_Forecasts struct {
 	Forecast_id    int
 	Measures       string
 	Result         string
+}
+type Forecast_preds struct {
+	Forecast Forecast
+	Input    string
 }
 
 var Predictions []Prediction = []Prediction{
@@ -80,43 +86,27 @@ var Predictions []Prediction = []Prediction{
 		Creator:        "",
 		Moderator:      "",
 		Status:         "done",
-	},
-	{
-		Id:             1,
-		Date_created:   "",
-		Date_formed:    "",
-		Date_completed: "",
-		Creator:        "",
-		Moderator:      "",
-		Status:         "done",
-	},
-	{
-		Id:             2,
-		Date_created:   "",
-		Date_formed:    "",
-		Date_completed: "",
-		Creator:        "",
-		Moderator:      "",
-		Status:         "in-work",
+		Window:         2,
+		Amount:         3,
 	},
 }
 var Prediction_Forecasts_arr []Prediction_Forecasts = []Prediction_Forecasts{
 	{
 		Predicition_id: 0,
 		Forecast_id:    1,
-		Measures:       "",
+		Measures:       "760,754,769",
 		Result:         "",
 	},
 	{
 		Predicition_id: 0,
 		Forecast_id:    2,
-		Measures:       "",
+		Measures:       "38,21,49",
 		Result:         "",
 	},
 	{
 		Predicition_id: 0,
 		Forecast_id:    0,
-		Measures:       "",
+		Measures:       "+17,+18,+15",
 		Result:         "",
 	},
 }
@@ -137,11 +127,14 @@ func GetForecastById(id int) Forecast {
 func GetPredictionById(id int) Prediction {
 	return Predictions[slices.IndexFunc(Predictions, func(f Prediction) bool { return f.Id == id })]
 }
-func GetForecastsByPredictionId(id int) []Forecast {
-	var Fs []Forecast
+func GetForecastsByPredictionId(id int) []Forecast_preds {
+	var Fs []Forecast_preds
+	var tmp Forecast_preds
 	for i, v := range Prediction_Forecasts_arr {
 		if Prediction_Forecasts_arr[i].Predicition_id == id {
-			Fs = append(Fs, GetForecastById(v.Forecast_id))
+			tmp.Forecast = GetForecastById(v.Forecast_id)
+			tmp.Input = Prediction_Forecasts_arr[i].Measures
+			Fs = append(Fs, tmp)
 		}
 	}
 	return Fs
