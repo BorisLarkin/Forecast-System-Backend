@@ -21,7 +21,7 @@
     {{ if .Draft }}
       <div class="day_amount_bg"></div><input name="amount" class="day_amount_lbl">
     {{ else }}
-      <div class="day_amount_bg"></div><input name="amount" class="day_amount_lbl" value="{{ .Prediction.Prediction_amount }}" disabled>
+      <div class="day_amount_bg"></div><input name="amount" class="day_amount_lbl" value="{{ .Prediction.Prediction_amount }}">
     {{ end }}
     </div>
     <span  class="pred_amount">Количество предсказаний:</span>
@@ -31,7 +31,7 @@
       {{ if .Draft }}
         <input name="window" class="calc_lbl">
     {{ else }}
-      <input name="window" class="calc_lbl" value="{{.Prediction.Prediction_window}}" disabled>
+      <input name="window" class="calc_lbl" value="{{.Prediction.Prediction_window}}">
     {{ end }}
     </div><span  class="calc_window">Окно расчета:</span>
   </div>
