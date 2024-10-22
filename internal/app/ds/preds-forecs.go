@@ -9,3 +9,8 @@ type Preds_Forecs struct {
 	Input        string      `gorm:"type:varchar(255)" json:"input"`
 	Result       string      `gorm:"type:varchar(255)" json:"result"`
 }
+
+type Forecs_inputs struct {
+	Forecast Forecasts
+	Input    string
+}

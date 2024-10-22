@@ -26,12 +26,6 @@ func (h *Handler) PredictionById(ctx *gin.Context) {
 		if Prediction.Status == "draft" {
 			is_draft = true
 		}
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
 		f, _ := h.Repository.GetForecastsByID(id)
 		ctx.HTML(http.StatusOK, "prediction.tmpl", gin.H{
 			"Prediction":   Prediction,
