@@ -24,12 +24,8 @@ func (r *Repository) GetPredictionByID(id string) (*ds.Predictions, error) {
 }
 
 func (r *Repository) SetPredictionStatus(id string, status string) error {
-	var Prediction ds.Predictions
-	intId, _ := strconv.Atoi(id)
-	r.db.Find(&Prediction, intId)
-	Prediction.Status = status
-	r.db.Save(&Prediction)
-	return nil
+	query := "UPDATE predictions SET status=$1 WHERE prediction_id = $2"
+	return r.db.Exec(query, status, id).Error
 }
 
 func (r *Repository) CreatePrediction(Prediction_ptr *ds.Predictions) error {
@@ -37,7 +33,7 @@ func (r *Repository) CreatePrediction(Prediction_ptr *ds.Predictions) error {
 }
 
 func (r *Repository) DeletePrediction(prediction_id string) error {
-	query := "DELETE FROM predictions WHERE id = $1"
+	query := "DELETE FROM predictions WHERE prediction_id = $1"
 	return r.db.Exec(query, prediction_id).Error
 }
 
@@ -51,7 +47,7 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	aid := strconv.Itoa(Predictions.Id)
+	aid := strconv.Itoa(Predictions.Prediction_id)
 	return aid, nil
 }
 

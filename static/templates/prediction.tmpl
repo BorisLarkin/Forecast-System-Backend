@@ -8,12 +8,16 @@
     <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/static/css/global.css">
   </head>
   <body style="margin:0;">
-  <form method="post" action="http://127.0.0.1:8080/statuschange?operation=save&id={{.Prediction.Id}}">
+  <form method="post">
+    <button class="clear_btn" formaction="http://127.0.0.1:8080/statuschange?operation=delete&id={{.Prediction.Prediction_id}}" type="submit" style="cursor:pointer; border:none; padding:0px; z-index:2; background:none; border-radius:25px;">
+          <label class="btn_lbl" style="cursor: pointer;">Очистить корзину</label>
+          <div class="clear_btn_bg"></div>
+    </button>
+  </div>
 <div class="prediction">
   <span  class="prediction_title">Корзина прогнозов</span>
-  {{ if .Exists}}
   <div class="prediction_header">
-      <button type="submit" class="save_bg" style="cursor:pointer; z-index:2;">
+      <button type="submit" class="save_bg" style="cursor:pointer; z-index:2;" formaction="http://127.0.0.1:8080/statuschange?operation=save&id={{.Prediction.Prediction_id}}">
         <div  class="save_lbl">Сохранить</div>
         <div class="save_bg coolfade" style="right:0px; z-index: -1;"></div>
       </button>
@@ -38,9 +42,13 @@
   <div class="forecasts">
     {{ range .Pr_forecasts }}
     <div class=forecast>
-      <div class = "forecast_card" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Id}}'" style="cursor:pointer">
+      <div class = "forecast_card" onclick="location.href='http://127.0.0.1:8080/details?id={{.Forecast.Forecast_id}}'" style="cursor:pointer">
         <div class="forecast_card_bg" style="background-color: rgba({{ .Forecast.Color }})"></div>
-        <div class="forecast_card_img" style="background-image:url(http://127.0.0.1:9000/test/source_obj/image-{{.Forecast.Id}}.png)"></div>
+        {{ if eq .Forecast.Img_url ""}}
+          <div class="forecast_card_img"></div>
+        {{else}}
+          <div class="forecast_card_img" style="background-image:url({{.Forecast.Img_url}})"></div>
+        {{end}}
         <div class="forecast_card_fade" style="background-image:linear-gradient(90deg, rgba({{ .Forecast.Color }}) 0%,rgba(255, 255, 255, 0) 100%)"></div>
         <div class=card_content>
           <span  class="forecast_card_title">{{ .Forecast.Short }}</span>
@@ -54,22 +62,13 @@
           {{ else }}
             <input name="values" class="cell_lbl" value="{{.Input}}">
           {{ end }}
-          <input type="hidden" name="ids" class="cell_lbl" value="{{.Forecast.Id}}">
+          <input type="hidden" name="ids" class="cell_lbl" value="{{.Forecast.Forecast_id}}">
       </div>
     </div>
     {{ end }}
   </div>
-  {{ else }}
-    <span  class="empty" style="top:160px">Здесь пусто...</span>
-  {{ end }}
 </div>
 </form>
-  {{ if .Exists }}
-<form method="post" class="clear_btn" action="http://127.0.0.1:8080/statuschange?operation=delete&id={{.Prediction.Id}}">
-  <label class="btn_lbl">Очистить корзину</label>
-  <button type="submit" style="width:100%; height:100%; position: absolute; cursor:pointer; left:0px; top:0px; border:none; padding:0px; background:none; border-radius:25px;"></button>
-</form>
-{{ end }}
 <div class="header_component">
       <div class="header_bg"></div>
       <div class=logo>

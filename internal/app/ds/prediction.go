@@ -3,7 +3,7 @@ package ds
 import "time"
 
 type Predictions struct {
-	Id                int       `json:"id" gorm:"primary_key"`
+	Prediction_id     int       `json:"prediction_id" gorm:"primary_key"`
 	Date_created      time.Time `json:"date_created" gorm:"not null"`
 	Date_formed       time.Time `json:"date_formed"`
 	Date_completed    time.Time `json:"date_completed"`

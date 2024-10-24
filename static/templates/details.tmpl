@@ -17,7 +17,7 @@
     </div>
 <div class="detail_title">{{ .Forecast_to_det.Title }}</div>
 <div class="details">
-  <div class="img" style="background-image:url(http://127.0.0.1:9000/test/source_obj/image-{{.Forecast_to_det.Id}}.png);"></div>
+  <div class="img" style="background-image:url({{.Img_url}});"></div>
   <div class="info">
     <span  class="short">{{.Forecast_to_det.Short}}</span>
     <span  class="measure_type">{{.Forecast_to_det.Measure_type}}</span>

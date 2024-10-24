@@ -36,7 +36,7 @@
 	width:410px;
 	height:324px;
 	border-radius: 20px;
-	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
+	background-image:url(https://cdn-icons-png.flaticon.com/512/6368/6368753.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -77,6 +77,7 @@
 	gap: 10px;
 	margin-left: 8px;
 	margin-right: 5px;
+	width: 397px;
 }
 .btn_add { 
 	width:90%;

@@ -187,7 +187,7 @@
 	top:0px;
 	position: absolute;
 	border-radius: 25px;
-	background-image:url(http://127.0.0.1:9000/test/source_obj/temp.png);
+	background-image:url(https://cdn-icons-png.flaticon.com/512/6368/6368753.png);
 	background-repeat:no-repeat;
 	background-size:cover;
 }
@@ -385,11 +385,18 @@
   height: 50px;
   left: 130px;
   top: 110px;
-  background-color: rgba(255, 149, 149, 0.25);
-  border-radius:25px;
-  border: solid rgb(206, 0, 0);
   font-family:PT Sans Caption;
 	text-align:center;
 	font-size:22px;
 	letter-spacing:0;
+}
+
+.clear_btn_bg{
+	background-color: rgba(255, 149, 149, 0.25);
+	border-radius:25px;
+	border: solid rgb(206, 0, 0);
+	width:394px;
+	height:44px;
+	border-radius: 25px;
+	padding:0;
 }

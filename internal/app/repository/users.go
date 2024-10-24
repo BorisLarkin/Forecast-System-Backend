@@ -23,6 +23,6 @@ func (r *Repository) CreateUser(Users *ds.Users) error {
 }
 
 func (r *Repository) DeleteUser(id string) {
-	query := "DELETE FROM users WHERE id = $1"
+	query := "DELETE FROM users WHERE user_id = $1"
 	r.db.Exec(query, id)
 }
