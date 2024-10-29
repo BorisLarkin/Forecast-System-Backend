@@ -14,10 +14,16 @@ import (
 type Config struct {
 	ServiceHost string
 	ServicePort int
+	Minio       `yaml:"minio"`
+}
+type Minio struct {
+	User     string `yaml:"user"`
+	Pass     string `yaml:"pass"`
+	Endpoint string `yaml:"endpoint"`
 }
 
 // NewConfig Создаёт новый объект конфигурации, загружая данные из файла конфигурации
-func NewConfig(ctx *log.Logger) (*Config, error) {
+func NewConfig(log *log.Logger) (*Config, error) {
 	var err error
 
 	configName := "config"
@@ -44,6 +50,9 @@ func NewConfig(ctx *log.Logger) (*Config, error) {
 	}
 
 	log.Info("config parsed")
+	log.Info(cfg.ServiceHost)
+	log.Info(cfg.ServicePort)
+	log.Info(cfg.Minio)
 
 	return cfg, nil
 }
