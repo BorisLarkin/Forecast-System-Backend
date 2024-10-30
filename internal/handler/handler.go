@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"web/internal/app/repository"
+	"web/internal/repository"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

@@ -2,8 +2,8 @@ package pkg
 
 import (
 	"strconv"
-	"web/internal/app/config"
-	"web/internal/app/handler"
+	"web/internal/config"
+	"web/internal/handler"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

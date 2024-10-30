@@ -12,3 +12,10 @@ type Forecasts struct {
 }
 
 //http://127.0.0.1:9000/test/source_obj/image-{{.Forecast_id}}.png
+
+type ForecastsData struct {
+	Forecasts  []Forecasts
+	Filter     string
+	SearchText string
+	Status     string
+}

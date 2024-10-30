@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"web/internal/app/config"
+	"web/internal/config"
 
 	"github.com/sirupsen/logrus"
 
@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Make a new bucket called testbucket.
-	bucketName := "cnc"
+	bucketName := "test"
 	location := "eu-east-1"
 
 	err = minioClient.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{Region: location})

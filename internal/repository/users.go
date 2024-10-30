@@ -2,7 +2,7 @@ package repository
 
 import (
 	"strconv"
-	"web/internal/app/ds"
+	"web/internal/ds"
 )
 
 func (r *Repository) UserList() (*[]ds.Forecasts, error) {

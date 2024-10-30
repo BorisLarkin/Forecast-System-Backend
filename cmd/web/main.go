@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
-	"web/internal/app/config"
-	"web/internal/app/dsn"
-	"web/internal/app/handler"
-	"web/internal/app/repository"
+	"web/internal/config"
+	"web/internal/dsn"
+	"web/internal/handler"
 	"web/internal/pkg"
+	"web/internal/repository"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

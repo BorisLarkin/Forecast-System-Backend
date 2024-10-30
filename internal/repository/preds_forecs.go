@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"strconv"
-	"web/internal/app/ds"
+	"web/internal/ds"
 )
 
 func (r *Repository) Preds_forecsList() (*[]ds.Preds_Forecs, error) {

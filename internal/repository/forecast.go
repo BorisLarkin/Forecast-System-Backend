@@ -3,7 +3,7 @@ package repository
 import (
 	"strconv"
 	"strings"
-	"web/internal/app/ds"
+	"web/internal/ds"
 )
 
 func (r *Repository) ForecastList() (*[]ds.Forecasts, int, error) {

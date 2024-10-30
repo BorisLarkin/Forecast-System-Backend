@@ -10,9 +10,9 @@ type Predictions struct {
 	UserID            int       `json:"-" gorm:"not null"`
 	User              Users     `gorm:"foreignKey:UserID" json: "-" `
 	ModerID           int       `json:"-"`
-	Status            string    `gorm:"type:varchar(255); not null" json:"status"`
+	Status            string    `gorm:"type:varchar(255); check:status IN ('deleted', 'draft','pending','done','denied'); not null" json:"status"`
 	Prediction_amount int       `json:"pred_amount"`
 	Prediction_window int       `json:"pred_window"`
 }
 
-//status=deleted/draft/pending/done/error
+//status=deleted/draft/pending/done/denied

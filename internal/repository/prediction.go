@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"web/internal/app/ds"
-	"web/internal/app/dsn"
+	"web/internal/ds"
+	"web/internal/dsn"
 
 	"github.com/gin-gonic/gin"
 )

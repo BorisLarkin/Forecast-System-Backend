@@ -2,7 +2,7 @@ package handler
 
 import (
 	"net/http"
-	"web/internal/app/dsn"
+	"web/internal/dsn"
 
 	"github.com/gin-gonic/gin"
 )
