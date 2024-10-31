@@ -2,22 +2,34 @@ package minio
 
 import (
 	"log"
+	"os"
 	"web/internal/config"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"gopkg.in/yaml.v3"
 )
 
 type MinioClient struct {
 	*minio.Client
 }
 
-func NewMinioClient(cfg *config.Config) *MinioClient {
+func NewMinioClient() *MinioClient {
+	yamlFile, err := os.ReadFile("internal/config/config.yaml")
+	if err != nil {
+		log.Fatalln(err)
+	}
 
+	config := config.Config{}
+
+	err = yaml.Unmarshal(yamlFile, &config)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	useSSL := false
 
-	minioClient, err := minio.New(cfg.Minio.Endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(cfg.Minio.User, cfg.Minio.Pass, ""),
+	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.Minio.User, config.Minio.Pass, ""),
 		Secure: useSSL,
 	})
 	if err != nil {
@@ -26,4 +38,12 @@ func NewMinioClient(cfg *config.Config) *MinioClient {
 	return &MinioClient{
 		minioClient,
 	}
+}
+
+func (m *MinioClient) DeletePicture(id string) error {
+	return nil
+}
+
+func (m *MinioClient) UploadPicture(id string) error {
+	return nil
 }

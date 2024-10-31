@@ -35,7 +35,14 @@ func (r *Repository) CreateForecast(forecast *ds.Forecasts) error {
 	return r.db.Create(forecast).Error
 }
 
-func (r *Repository) DeleteForecast(id string) {
+func (r *Repository) DeleteForecast(id string) error {
 	query := "DELETE FROM forecasts WHERE forecast_id = ?"
 	r.db.Exec(query, id)
+	return nil
+}
+func (r *Repository) EditForecast(forecast *ds.Forecasts, id string) error {
+	if r.db.Model(&ds.Forecasts{}).Where("forecast_id = ?", id).Updates(&forecast).RowsAffected == 0 {
+		r.db.Create(&forecast)
+	}
+	return nil
 }
