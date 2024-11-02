@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"web/internal/config"
 	"web/internal/dsn"
 	"web/internal/handler"
@@ -25,7 +24,6 @@ func main() {
 		logger.Fatalf("Error with configuration reading: #{err}")
 	}
 	postgresString, errPost := dsn.FromEnv()
-	os.Setenv("CURRENT_SESSION", "1")
 
 	if errPost != nil {
 		logger.Fatalf("Error with reading postgres line: #{err}")

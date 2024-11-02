@@ -15,4 +15,4 @@ type Predictions struct {
 	Prediction_window int       `json:"pred_window"`
 }
 
-//status=deleted/draft/pending/done/denied
+//status=deleted/draft/pending/complete/denied

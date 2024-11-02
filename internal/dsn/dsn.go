@@ -33,3 +33,6 @@ func GetCurrentUserID() (string, error) {
 	}
 	return id, nil
 }
+func SetCurrentUserID(id string) error {
+	return os.Setenv("CURRENT_SESSION", id)
+}

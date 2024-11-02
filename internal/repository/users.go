@@ -3,6 +3,7 @@ package repository
 import (
 	"strconv"
 	"web/internal/ds"
+	"web/internal/dsn"
 )
 
 func (r *Repository) UserList() (*[]ds.Forecasts, error) {
@@ -25,4 +26,15 @@ func (r *Repository) CreateUser(Users *ds.Users) error {
 func (r *Repository) DeleteUser(id string) {
 	query := "DELETE FROM users WHERE user_id = $1"
 	r.db.Exec(query, id)
+}
+func (r *Repository) CurrentUser_IsAdmin() (bool, error) {
+	user_id, err := dsn.GetCurrentUserID()
+	if err != nil {
+		return false, err
+	}
+	user, err := r.GetUserByID(user_id)
+	if err != nil {
+		return false, err
+	}
+	return user.IsAdmin, nil
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) JSONGetForecasts(ctx *gin.Context) {
+func (h *Handler) GetForecasts(ctx *gin.Context) {
 	searchText := ctx.Query("search")
 	var pred_len int
 	var forec_empty bool
@@ -54,7 +54,7 @@ func (h *Handler) JSONGetForecasts(ctx *gin.Context) {
 		})
 	}
 }
-func (h *Handler) JSONGetForecastById(ctx *gin.Context) {
+func (h *Handler) GetForecastById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	forecast, err := h.Repository.GetForecastByID(id)
@@ -66,7 +66,7 @@ func (h *Handler) JSONGetForecastById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, forecast)
 }
 
-func (h *Handler) JSONDeleteForecast(ctx *gin.Context) {
+func (h *Handler) DeleteForecast(ctx *gin.Context) {
 	id := ctx.Param("id")
 	imageName := fmt.Sprintf("image-%d.png", id)
 	err := h.Repository.DeletePicture(id, imageName)
@@ -81,7 +81,7 @@ func (h *Handler) JSONDeleteForecast(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("Forecast (id-%d) deleted", id)})
 }
-func (h *Handler) JSONAddForecast(ctx *gin.Context) {
+func (h *Handler) AddForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
 
 	if err := ctx.BindJSON(&forecast); err != nil {
@@ -100,7 +100,7 @@ func (h *Handler) JSONAddForecast(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, forecast)
 }
 
-func (h *Handler) JSONEditForecast(ctx *gin.Context) {
+func (h *Handler) EditForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
 	id := ctx.Param("id")
 
@@ -115,7 +115,7 @@ func (h *Handler) JSONEditForecast(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, forecast)
 }
-func (h *Handler) JSONAddPicture(ctx *gin.Context) {
+func (h *Handler) AddPicture(ctx *gin.Context) {
 	forecast_id := ctx.Param("id")
 	// Получаем файл изображения из запроса
 	file, fileHeader, err := ctx.Request.FormFile("image")
