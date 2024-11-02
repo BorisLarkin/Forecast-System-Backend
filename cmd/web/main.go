@@ -32,7 +32,7 @@ func main() {
 	}
 	fmt.Println(postgresString)
 
-	rep, errRep := repository.New(postgresString, logger)
+	rep, errRep := repository.New(postgresString, logger, minioClient)
 	if errRep != nil {
 		logger.Fatalf("Error from repo: #{err}")
 	}

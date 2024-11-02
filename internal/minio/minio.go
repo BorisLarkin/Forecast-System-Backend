@@ -39,11 +39,3 @@ func NewMinioClient() *MinioClient {
 		minioClient,
 	}
 }
-
-func (m *MinioClient) DeletePicture(id string) error {
-	return nil
-}
-
-func (m *MinioClient) UploadPicture(id string) error {
-	return nil
-}

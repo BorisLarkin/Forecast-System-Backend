@@ -1,9 +1,14 @@
 package repository
 
 import (
+	"context"
+	"fmt"
+	"io"
 	"strconv"
 	"strings"
 	"web/internal/ds"
+
+	"github.com/minio/minio-go/v7"
 )
 
 func (r *Repository) ForecastList() (*[]ds.Forecasts, int, error) {
@@ -31,18 +36,63 @@ func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, int, error)
 	return &filteredForecast, len(filteredForecast), nil
 }
 
-func (r *Repository) CreateForecast(forecast *ds.Forecasts) error {
-	return r.db.Create(forecast).Error
+func (r *Repository) CreateForecast(forecast *ds.Forecasts) (int, error) {
+	err := r.db.Create(&forecast).Error
+	if err != nil {
+		return 0, fmt.Errorf("error creating forecast: %w", err)
+	}
+	return forecast.Forecast_id, nil
 }
 
 func (r *Repository) DeleteForecast(id string) error {
-	query := "DELETE FROM forecasts WHERE forecast_id = ?"
-	r.db.Exec(query, id)
+	err := r.db.Delete(&ds.Forecasts{}, id).Error
+	if err != nil {
+		return fmt.Errorf("error deleting forecast with id %s: %w", id, err)
+	}
 	return nil
 }
 func (r *Repository) EditForecast(forecast *ds.Forecasts, id string) error {
 	if r.db.Model(&ds.Forecasts{}).Where("forecast_id = ?", id).Updates(&forecast).RowsAffected == 0 {
 		r.db.Create(&forecast)
 	}
+	return nil
+}
+
+func (r *Repository) DeletePicture(id string, img string) error {
+	err := r.minioclient.RemoveObject(context.Background(), "test", img, minio.RemoveObjectOptions{})
+	if err != nil {
+		return fmt.Errorf("img deletion error")
+	}
+	return nil
+}
+
+func (r *Repository) UploadPicture(id string, imageName string, imageFile io.Reader, imageSize int64) error {
+	var forecast ds.Forecasts
+
+	// Найти чат по ID
+	if err := r.db.First(&forecast, id).Error; err != nil {
+		return fmt.Errorf("forecast (%s) not found: %w", id, err)
+	}
+
+	// Если старое изображение существует, удалить его из Minio
+	if forecast.Img_url != "" {
+		err := r.minioclient.RemoveObject(context.Background(), "test", imageName, minio.RemoveObjectOptions{})
+		if err != nil {
+			return fmt.Errorf("img delete error %s: %v", forecast.Img_url, err)
+		}
+	}
+
+	// Загрузить новое изображение в Minio
+	_, errMinio := r.minioclient.PutObject(context.Background(), "test", imageName, imageFile, imageSize, minio.PutObjectOptions{
+		ContentType: "image/png",
+	})
+
+	forecast.Img_url = fmt.Sprintf("http://127.0.0.1:9000/test/%s.png", id)
+	errDB := r.db.Save(&forecast).Error
+
+	if errMinio != nil || errDB != nil {
+		return fmt.Errorf("img upload error for forecast %s", id)
+	}
+
 	return nil
 }

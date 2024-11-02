@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
 	"web/internal/ds"
 	"web/internal/dsn"
@@ -9,51 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) ForecastList(ctx *gin.Context) {
-	forecastName := ctx.Query("search")
-	var pred_len int
-	user_id, _ := dsn.GetCurrentUserID()
-	draft_id, err := h.Repository.GetUserDraftID(user_id)
-
-	if err != nil {
-		pred_len = 0
-		draft_id = "none"
-	} else {
-		pred_len = h.Repository.GetPredLen(draft_id)
-	}
-
-	if forecastName == "" {
-		Forecasts, forec_len, err := h.Repository.ForecastList()
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		ctx.HTML(http.StatusOK, "forecasts.tmpl", gin.H{
-			"Forecasts":    Forecasts,
-			"forec_empty":  (forec_len == 0),
-			"Curr_pred_id": draft_id,
-			"Pred_len":     pred_len,
-			"Search_str":   forecastName,
-		})
-	} else {
-		filteredForecasts, forec_len, err := h.Repository.SearchForecast(forecastName)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		ctx.HTML(http.StatusOK, "forecasts.tmpl", gin.H{
-			"Forecasts":    filteredForecasts,
-			"forec_empty":  (forec_len == 0),
-			"Curr_pred_id": draft_id,
-			"Pred_len":     pred_len,
-			"Search_str":   forecastName,
-		})
-	}
-}
 func (h *Handler) JSONGetForecasts(ctx *gin.Context) {
 	searchText := ctx.Query("search")
 	var pred_len int
@@ -100,38 +55,21 @@ func (h *Handler) JSONGetForecasts(ctx *gin.Context) {
 	}
 }
 func (h *Handler) JSONGetForecastById(ctx *gin.Context) {
-	jsonData, err := ctx.GetRawData()
-	var id string
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
-	err = json.Unmarshal(jsonData, &id)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
+	id := ctx.Param("id")
+
 	forecast, err := h.Repository.GetForecastByID(id)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
+		ctx.JSON(http.StatusNotFound, err.Error())
 		return
 	}
+
 	ctx.JSON(http.StatusOK, forecast)
 }
 
 func (h *Handler) JSONDeleteForecast(ctx *gin.Context) {
-	jsonData, err := ctx.GetRawData()
-	var id string
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
-	err = json.Unmarshal(jsonData, &id)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
-	err = h.Minio.DeletePicture(id)
+	id := ctx.Param("id")
+	imageName := fmt.Sprintf("image-%d.png", id)
+	err := h.Repository.DeletePicture(id, imageName)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
 		return
@@ -141,47 +79,36 @@ func (h *Handler) JSONDeleteForecast(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
 		return
 	}
-	ctx.JSON(http.StatusOK, nil)
+	ctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("Forecast (id-%d) deleted", id)})
 }
 func (h *Handler) JSONAddForecast(ctx *gin.Context) {
-	jsonData, err := ctx.GetRawData()
 	var forecast ds.Forecasts
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+
+	if err := ctx.BindJSON(&forecast); err != nil {
+		ctx.JSON(http.StatusBadRequest, "неверные данные")
 		return
 	}
-	err = json.Unmarshal(jsonData, &forecast)
+
+	id, err := h.Repository.CreateForecast(&forecast)
+
+	forecast.Forecast_id = id
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	err = h.Repository.CreateForecast(&forecast)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
-	ctx.JSON(http.StatusOK, forecast)
+
+	ctx.JSON(http.StatusCreated, forecast)
 }
 
 func (h *Handler) JSONEditForecast(ctx *gin.Context) {
-	jsonData, err := ctx.GetRawData()
 	var forecast ds.Forecasts
-	var id string
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+	id := ctx.Param("id")
+
+	if err := ctx.BindJSON(&forecast); err != nil {
+		ctx.JSON(http.StatusBadRequest, "incorrect JSON format")
 		return
 	}
-	err = json.Unmarshal(jsonData, &forecast)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
-	err = json.Unmarshal(jsonData, &id)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		return
-	}
-	err = h.Repository.EditForecast(&forecast, id)
+	err := h.Repository.EditForecast(&forecast, id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
 		return
@@ -189,21 +116,23 @@ func (h *Handler) JSONEditForecast(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, forecast)
 }
 func (h *Handler) JSONAddPicture(ctx *gin.Context) {
-	jsonData, err := ctx.GetRawData()
-	var id string
+	forecast_id := ctx.Param("id")
+	// Получаем файл изображения из запроса
+	file, fileHeader, err := ctx.Request.FormFile("image")
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+		ctx.JSON(http.StatusBadRequest, "Failed to upload image")
 		return
 	}
-	err = json.Unmarshal(jsonData, &id)
+	defer file.Close()
+
+	imageName := fmt.Sprintf("image-%d.png", forecast_id)
+
+	// Передаем файл в репозиторий для обработки
+	err = h.Repository.UploadPicture(forecast_id, imageName, file, fileHeader.Size)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	err = h.Minio.UploadPicture(id)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
-		return
-	}
-	ctx.JSON(http.StatusOK, nil)
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Image successfully uploaded"})
 }
