@@ -1,95 +1,78 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 	"web/internal/ds"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) CreateUser(ctx *gin.Context) {
+func (h *Handler) RegisterUser(ctx *gin.Context) {
 	var input ds.Users
 
-	// Чтение JSON-запроса в структуру `input`.
 	if err := ctx.BindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, "Invalid JSON format")
 		return
 	}
 
-	// Примитивная валидация.
 	if strings.TrimSpace(input.Login) == "" || strings.TrimSpace(input.Password) == "" {
 		ctx.JSON(http.StatusBadRequest, "Login and password are required")
 		return
 	}
 
-	// Добавление нового пользователя в БД.
 	if err := h.Repository.CreateUser(&input); err != nil {
-		if err.Error() == "пользователь с таким логином уже существует" {
-			ctx.JSON(http.StatusConflict, err.Error())
-		} else {
-			ctx.JSON(http.StatusInternalServerError, err.Error())
-		}
+		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{
-		"id":           input.ID,
-		"login":        input.Login,
-		"is_moderator": input.IsModerator,
+		"id":       input.User_id,
+		"login":    input.Login,
+		"is_admin": input.IsAdmin,
 	})
 }
 
 func (h *Handler) UpdateUser(ctx *gin.Context) {
-	userID, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, "некорректный ID пользователя")
-		return
-	}
+	userID := ctx.Param("id")
 
-	// Находим пользователя по ID.
-	//user, err := repo.GetUserByID(userID)
-	//if err != nil {
-	//	c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-	//	return
-	//}
+	var input ds.Users
 
-	var input ds.User
-
-	// Читаем данные из тела запроса.
 	if err := ctx.BindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, "Invalid JSON format")
 		return
 	}
 
-	//// Проверяем, изменился ли логин, и валидируем его.
-	//if strings.TrimSpace(input.Login) != "" && input.Login != user.Login {
-	//	user.Login = input.Login
-	//} else {
-	//	c.JSON(http.StatusBadRequest, gin.H{"error": "Login is required and must be unique"})
-	//	return
-	//}
-
-	// Обновляем пользователя в базе данных.
-	newUser, err := h.Repository.UpdateUser(input, uint(userID))
+	err := h.Repository.UpdateUser(input, userID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// Возвращаем успешный ответ.
 	ctx.JSON(http.StatusOK, gin.H{
-		"id":           newUser.ID,
-		"login":        newUser.Login,
-		"is_moderator": newUser.IsModerator,
+		"id":           input.User_id,
+		"login":        input.Login,
+		"is_moderator": input.IsAdmin,
 	})
 }
 
 func (h *Handler) AuthUser(ctx *gin.Context) {
-
+	id := ctx.Param("id")
+	err := h.Repository.Auth(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	user, _ := h.Repository.GetUserByID(id)
+	ctx.JSON(http.StatusAccepted, user)
 }
 
 func (h *Handler) DeAuthUser(ctx *gin.Context) {
-
+	id := ctx.Param("id")
+	if err := h.Repository.Deauth(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Successfuly deauthed user %s", id)})
 }

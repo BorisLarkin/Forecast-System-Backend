@@ -68,7 +68,7 @@ func (h *Handler) GetForecastById(ctx *gin.Context) {
 
 func (h *Handler) DeleteForecast(ctx *gin.Context) {
 	id := ctx.Param("id")
-	imageName := fmt.Sprintf("image-%d.png", id)
+	imageName := fmt.Sprintf("image-%s.png", id)
 	err := h.Repository.DeletePicture(id, imageName)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
@@ -79,7 +79,7 @@ func (h *Handler) DeleteForecast(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
 		return
 	}
-	ctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("Forecast (id-%d) deleted", id)})
+	ctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("Forecast (id-%s) deleted", id)})
 }
 func (h *Handler) AddForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
@@ -125,7 +125,7 @@ func (h *Handler) AddPicture(ctx *gin.Context) {
 	}
 	defer file.Close()
 
-	imageName := fmt.Sprintf("image-%d.png", forecast_id)
+	imageName := fmt.Sprintf("image-%s.png", forecast_id)
 
 	// Передаем файл в репозиторий для обработки
 	err = h.Repository.UploadPicture(forecast_id, imageName, file, fileHeader.Size)

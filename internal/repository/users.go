@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"strconv"
 	"web/internal/ds"
 	"web/internal/dsn"
@@ -37,4 +38,49 @@ func (r *Repository) CurrentUser_IsAdmin() (bool, error) {
 		return false, err
 	}
 	return user.IsAdmin, nil
+}
+
+func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
+	var user ds.Users
+	intid, err := strconv.Atoi(id)
+	if err != nil {
+		return nil
+	}
+	if err := r.db.First(&user, intid).Error; err != nil {
+		return fmt.Errorf("user %d not found", intid)
+	}
+
+	if newUser.Login != "" && newUser.Password != "" {
+		user.Password = newUser.Password
+		user.Login = newUser.Login
+	} else {
+		return fmt.Errorf("cruical info empty")
+	}
+
+	if err := r.db.Save(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (r *Repository) Auth(id string) error {
+	i, err := dsn.GetCurrentUserID()
+	if i == "null" || err != nil { //theres no active running session
+		_, err := r.GetUserByID(id)
+		if err != nil {
+			return fmt.Errorf("issue with retrieving user data")
+		}
+		err = dsn.SetCurrentUserID(id)
+		if err != nil {
+			return fmt.Errorf("error starting session")
+		}
+		return nil
+	}
+	return fmt.Errorf("an already running session exists")
+}
+func (r *Repository) Deauth(id string) error {
+	i, err := dsn.GetCurrentUserID()
+	if i == "null" || err != nil {
+		return fmt.Errorf("no running session found")
+	}
+	return nil
 }

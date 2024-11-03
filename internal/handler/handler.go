@@ -39,10 +39,10 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/pr_fc/remove/:forecast_id/:prediction_id", h.DeleteForecastFromPred)
 	router.PUT("/pr_fc/edit/:message_id/:chat_id", h.EditPredForec)
 
-	router.POST("/user/register", h.UserRegister)
+	router.POST("/user/register", h.RegisterUser)
 	router.PUT("/user/update/:id", h.UpdateUser)
-	router.POST("/user/auth/:id", h.UserAuth)
-	router.POST("/user/deauth/:id", h.UserDeauth)
+	router.POST("/user/auth/:id", h.AuthUser)
+	router.POST("/user/deauth/:id", h.DeAuthUser)
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

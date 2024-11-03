@@ -9,8 +9,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) GetPredictions(ctx *gin.Context) {
+func (h *Handler) DeleteDraft(ctx *gin.Context) {
+	id := ctx.Query("id")
+	h.Repository.SavePrediction(id, ctx)
+	h.Repository.SetPredictionStatus(id, "deleted")
+	ctx.Redirect(http.StatusFound, "/forecasts")
+}
 
+func (h *Handler) SavePrediction(ctx *gin.Context) {
+	id := ctx.Query("id")
+	h.Repository.SavePrediction(id, ctx)
+	h.Repository.SetPredictionStatus(id, "pending")
+	ctx.Redirect(http.StatusFound, "/forecasts")
+}
+
+func (h *Handler) GetPredictions(ctx *gin.Context) {
 	status := ctx.Query("status")
 	startDateStr := ctx.Query("start_date")
 	endDateStr := ctx.Query("end_date")
@@ -46,7 +59,10 @@ func (h *Handler) GetPredictionById(ctx *gin.Context) {
 		return
 	}
 	forecs, err := h.Repository.GetForecastsByID(id)
-
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"id":                prediction.Prediction_id,
 		"status":            prediction.Status,
@@ -106,7 +122,7 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
-	if is_admin != true {
+	if !is_admin {
 		ctx.JSON(http.StatusConflict, errors.New("attempt to finish prediction as user"))
 	}
 	status := ctx.Query("status")

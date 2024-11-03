@@ -64,14 +64,15 @@ func (h *Handler) JSONAddForecastToPred(ctx *gin.Context) {
 func (h *Handler) EditPredForec(ctx *gin.Context) {
 	f_id := ctx.Param("forecast_id")
 	pr_id := ctx.Param("prediction_id")
+	input := ctx.Query("input")
 
-	sound, err := h.Repository.EditPredForec(uint(messageID), uint(chatID))
+	err := h.Repository.EditPredForec(f_id, pr_id, input)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, "Ошибка изменения поля 'со звуком'")
+		ctx.JSON(http.StatusInternalServerError, "Error changing input")
 		return
 	}
 
 	// Возвращаем успешный ответ.
-	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Значение успешно изменено на '%v'", sound)})
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Successful change to '%s'", input)})
 }

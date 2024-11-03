@@ -153,7 +153,7 @@ func (r *Repository) FormPrediction(pred_id string, creatorID string) error {
 	}
 
 	if prediction.Status != "draft" {
-		return errors.New("Pre-existing status error")
+		return errors.New("pre-existing status error")
 	}
 	r.SetPredictionStatus(pred_id, "pending")
 	prediction.Date_formed = time.Now()

@@ -31,6 +31,9 @@ func GetCurrentUserID() (string, error) {
 	if !exists {
 		return "", fmt.Errorf("user env var not read")
 	}
+	if id == "null" {
+		return "null", fmt.Errorf("no active user")
+	}
 	return id, nil
 }
 func SetCurrentUserID(id string) error {
