@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"web/internal/ds"
 )
 
@@ -75,6 +76,61 @@ func (r *Repository) EditPredForec(f_id string, pr_id string, input string) erro
 
 	return nil
 }
-func (r *Repository) Calculate(pr_id string, f_id string, input string) (string, error) {
+func (r *Repository) Calculate(pr_id string, f_id string, window int, amount int, input string) ([]int, error) {
+	int_arr, err := ValidateInput(input)
+	if err != nil {
+		return nil, err
+	}
+	if len(int_arr) < window {
+		return nil, fmt.Errorf("invalid window value")
+	}
+	//PREDICTION CALCULATION
+	predictions := make([]int, amount)
+	data_len := len(int_arr)
+	start, end := 0, 0
+	windowSum := 0
+	//get first window down
+	for end < amount {
+		windowSum += int_arr[end]
+		end++
+	}
 
+	delta_sums := 0                     //to find an average trend between deltas
+	windows_count := data_len - end + 1 //amount of windows
+	var delta int
+	//calculate the average sums and the trend
+	for end < data_len {
+		delta = int_arr[end] - int_arr[start]
+		delta_sums = delta_sums + delta
+		windowSum += delta
+		start++
+		end++
+	}
+	//anylize the data recieved
+	int_arr = append(int_arr, predictions...)
+	delta_trend := delta_sums / windows_count
+	i := 0
+	//~predict the future~
+	for end < len(int_arr) {
+		windowSum += delta_trend
+		int_arr[end] = windowSum - int_arr[start]
+		predictions[i] = int_arr[end]
+		i++
+		start++
+		end++
+	}
+	return predictions, nil
+}
+func ValidateInput(input string) ([]int, error) {
+	withoutsp := strings.ReplaceAll(input, " ", "")
+	splitstr := strings.SplitAfter(withoutsp, ",")
+	var result []int
+	for i := range splitstr {
+		curr, err := strconv.Atoi(splitstr[i])
+		if err != nil {
+			return nil, fmt.Errorf("invalid input")
+		}
+		result = append(result, curr)
+	}
+	return result, nil
 }
