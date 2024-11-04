@@ -127,16 +127,22 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	}
 	status := ctx.Query("status")
 	if status == "complete" {
-		//count
+		pr_fcs, err := h.Repository.CalculatePrediction(id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
 		if err := h.Repository.SetPredictionStatus(id, status); err != nil {
 			ctx.JSON(http.StatusConflict, err.Error())
 			return
 		}
+		ctx.JSON(http.StatusOK, gin.H{"status": status, "pr_fcs": pr_fcs})
 	} else if status == "denied" {
 		if err := h.Repository.SetPredictionStatus(id, status); err != nil {
 			ctx.JSON(http.StatusConflict, err.Error())
 			return
 		}
+		ctx.JSON(http.StatusOK, gin.H{"status": status})
 	} else {
 		ctx.JSON(http.StatusConflict, errors.New("attempt to finish prediction with wrong status"))
 	}

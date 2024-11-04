@@ -7,9 +7,9 @@ import (
 	"web/internal/ds"
 )
 
-func (r *Repository) Preds_forecsList() (*[]ds.Preds_Forecs, error) {
+func (r *Repository) Preds_forecsList(pr_id string) (*[]ds.Preds_Forecs, error) {
 	var Preds_Forecs []ds.Preds_Forecs
-	r.db.Find(&Preds_Forecs)
+	r.db.Where("prediction_id = ?", pr_id).Find(&Preds_Forecs)
 	return &Preds_Forecs, nil
 }
 
@@ -76,7 +76,8 @@ func (r *Repository) EditPredForec(f_id string, pr_id string, input string) erro
 
 	return nil
 }
-func (r *Repository) Calculate(pr_id string, f_id string, window int, amount int, input string) ([]int, error) {
+
+func Calculate(window int, amount int, input string) ([]int, error) {
 	int_arr, err := ValidateInput(input)
 	if err != nil {
 		return nil, err
@@ -109,17 +110,14 @@ func (r *Repository) Calculate(pr_id string, f_id string, window int, amount int
 	//anylize the data recieved
 	int_arr = append(int_arr, predictions...)
 	delta_trend := delta_sums / windows_count
-	i := 0
 	//~predict the future~
 	for end < len(int_arr) {
 		windowSum += delta_trend
 		int_arr[end] = windowSum - int_arr[start]
-		predictions[i] = int_arr[end]
-		i++
 		start++
 		end++
 	}
-	return predictions, nil
+	return int_arr[data_len:], nil
 }
 func ValidateInput(input string) ([]int, error) {
 	withoutsp := strings.ReplaceAll(input, " ", "")

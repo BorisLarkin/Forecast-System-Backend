@@ -160,3 +160,29 @@ func (r *Repository) FormPrediction(pred_id string, creatorID string) error {
 
 	return r.db.Save(&prediction).Error
 }
+func (r *Repository) CalculatePrediction(pred_id string) (*[]ds.Preds_Forecs, error) {
+	prediction, err := r.GetPredictionByID(pred_id)
+	if err != nil {
+		return nil, err
+	}
+	preds_forecs, err := r.Preds_forecsList(pred_id)
+	if err != nil {
+		return nil, err
+	}
+	//process each record
+	for i, v := range *preds_forecs {
+		output_string := ""
+		int_array, err := Calculate(prediction.Prediction_window, prediction.Prediction_amount, v.Input)
+		if err != nil {
+			return nil, fmt.Errorf("issue predicting record (%s, %d)", pred_id, i)
+		}
+		for i := range int_array { //stringify each result
+			curr_int := strconv.Itoa(int_array[i])
+			output_string += curr_int + ","
+		}
+		output_string = output_string[:len(output_string)-1] //trim the last comma
+		v.Result = output_string
+		r.db.Save(&v)
+	}
+	return preds_forecs, nil
+}
