@@ -77,10 +77,13 @@ func (r *Repository) Auth(id string) error {
 	}
 	return fmt.Errorf("an already running session exists")
 }
-func (r *Repository) Deauth(id string) error {
+func (r *Repository) Deauth() error {
 	i, err := dsn.GetCurrentUserID()
 	if i == "null" || err != nil {
 		return fmt.Errorf("no running session found")
+	}
+	if err := dsn.SetCurrentUserID("null"); err != nil {
+		return fmt.Errorf("failed to deauth the user")
 	}
 	return nil
 }

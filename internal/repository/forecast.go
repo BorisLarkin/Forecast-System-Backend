@@ -51,9 +51,10 @@ func (r *Repository) DeleteForecast(id string) error {
 	}
 	return nil
 }
-func (r *Repository) EditForecast(forecast *ds.Forecasts, id string) error {
-	if r.db.Model(&ds.Forecasts{}).Where("forecast_id = ?", id).Updates(&forecast).RowsAffected == 0 {
-		r.db.Create(&forecast)
+func (r *Repository) EditForecast(forecast *ds.Forecasts) error {
+	err := r.db.Save(&forecast).Error
+	if err != nil {
+		return fmt.Errorf("error editing forecast (%d): %w", forecast.Forecast_id, err)
 	}
 	return nil
 }

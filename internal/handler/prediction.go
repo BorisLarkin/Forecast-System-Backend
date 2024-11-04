@@ -163,3 +163,9 @@ func (h *Handler) DeletePrediction(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Status changed successfully"})
 }
+func (h *Handler) CreateDraft(ctx *gin.Context) {
+	if err := h.Repository.CreateDraft(); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "could not create draft"})
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "draft created successfully"})
+}

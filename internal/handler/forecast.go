@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"web/internal/ds"
 	"web/internal/dsn"
 
@@ -108,7 +109,13 @@ func (h *Handler) EditForecast(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, "incorrect JSON format")
 		return
 	}
-	err := h.Repository.EditForecast(&forecast, id)
+	intid, err := strconv.Atoi(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, "incorrect id format")
+		return
+	}
+	forecast.Forecast_id = intid
+	err = h.Repository.EditForecast(&forecast)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
 		return

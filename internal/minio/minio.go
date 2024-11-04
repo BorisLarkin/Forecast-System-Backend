@@ -2,34 +2,21 @@ package minio
 
 import (
 	"log"
-	"os"
 	"web/internal/config"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"gopkg.in/yaml.v3"
 )
 
 type MinioClient struct {
 	*minio.Client
 }
 
-func NewMinioClient() *MinioClient {
-	yamlFile, err := os.ReadFile("internal/config/config.yaml")
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	config := config.Config{}
-
-	err = yaml.Unmarshal(yamlFile, &config)
-	if err != nil {
-		log.Fatalln(err)
-	}
+func NewMinioClient(conf *config.Config) *MinioClient {
 	useSSL := false
 
-	minioClient, err := minio.New(config.Minio.Endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(config.Minio.User, config.Minio.Pass, ""),
+	minioClient, err := minio.New(conf.Minio.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(conf.Minio.User, conf.Minio.Pass, ""),
 		Secure: useSSL,
 	})
 	if err != nil {

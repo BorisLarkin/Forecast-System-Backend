@@ -26,7 +26,7 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/forecast/delete/:id", h.DeleteForecast)
 	router.POST("/forecast/add", h.AddForecast) //without img
 	router.PUT("/forecast/edit/:id", h.EditForecast)
-	router.POST("/forecast_to_pred", h.AddForecastToPred)
+	router.POST("/forecast_to_pred/:forecast_id", h.AddForecastToPred)
 	router.POST("/forecast/:id/add_picture", h.AddPicture)
 
 	router.GET("/predictions", h.GetPredictions)                //status&form_data filter, no deleted or drafts
@@ -36,13 +36,15 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.PUT("/prediction/edit/:id", h.EditPrediction)        //fields
 	router.PUT("/prediction/finish/:id", h.FinishPrediction)    //decline or confirm + calc
 
-	router.DELETE("/pr_fc/remove/:forecast_id/:prediction_id", h.DeleteForecastFromPred)
-	router.PUT("/pr_fc/edit/:message_id/:chat_id", h.EditPredForec)
+	router.DELETE("/pr_fc/remove/:prediction_id/:forecast_id", h.DeleteForecastFromPred)
+	router.PUT("/pr_fc/edit/:prediction_id/:forecast_id", h.EditPredForec)
 
 	router.POST("/user/register", h.RegisterUser)
 	router.PUT("/user/update/:id", h.UpdateUser)
 	router.POST("/user/auth/:id", h.AuthUser)
-	router.POST("/user/deauth/:id", h.DeAuthUser)
+	router.POST("/user/deauth", h.DeAuthUser)
+
+	router.POST("/draft", h.CreateDraft)
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

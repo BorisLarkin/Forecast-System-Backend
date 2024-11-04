@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 	"web/internal/ds"
@@ -69,10 +68,9 @@ func (h *Handler) AuthUser(ctx *gin.Context) {
 }
 
 func (h *Handler) DeAuthUser(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if err := h.Repository.Deauth(id); err != nil {
+	if err := h.Repository.Deauth(); err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Successfuly deauthed user %s", id)})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Successfuly deauthed user"})
 }

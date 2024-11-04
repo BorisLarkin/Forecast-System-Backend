@@ -18,7 +18,7 @@ func main() {
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 	conf, err := config.NewConfig(logger)
-	minioClient := minio.NewMinioClient()
+	minioClient := minio.NewMinioClient(conf)
 
 	if err != nil {
 		logger.Fatalf("Error with configuration reading: #{err}")

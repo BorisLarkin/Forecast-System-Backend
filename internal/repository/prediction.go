@@ -52,8 +52,7 @@ func (r *Repository) DeletePrediction(prediction_id string, creator_id string) e
 	if prediction.UserID != int_creator {
 		return errors.New("attempt to change unowned prediction")
 	}
-	r.SetPredictionStatus(prediction_id, "pending")
-	prediction.Date_formed = time.Now()
+	prediction.Status = "deleted"
 
 	return r.db.Save(&prediction).Error
 }
@@ -99,18 +98,17 @@ func (r *Repository) SavePrediction(id string, ctx *gin.Context) error {
 	r.SaveInputs(int_id, ids, val)
 	return r.db.Save(&Prediction).Error
 }
-func (r *Repository) GetPredictions(status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) ([]ds.Predictions, error) {
+func (r *Repository) GetPredictions(status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
 	var predictions []ds.Predictions
-
-	query := r.db.Table("predictions").
-		Select("predictions.prediction_id, predictions.status, predictions.text, predictions.date_created, predictions.date_formed, predictions.date_completed, u1.login as creator").
-		Joins("JOIN users u1 ON predictions.user_id = u1.user_id").
-		Where("predictions.status != ? AND predictions.status != ?", "deleted", "draft")
-
+	uid, err := dsn.GetCurrentUserID()
+	if err != nil {
+		return nil, err
+	}
+	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.user_id").
+		Where("predictions.status <> ? AND predictions.status <> ? AND predictions.user_id = ?", "deleted", "draft", uid)
 	if status != "" {
 		query = query.Where("predictions.status = ?", status)
 	}
-
 	if hasStartDate {
 		query = query.Where("predictions.date_formed >= ?", startDate)
 	}
@@ -122,7 +120,7 @@ func (r *Repository) GetPredictions(status string, hasStartDate, hasEndDate bool
 		return nil, err
 	}
 
-	return predictions, nil
+	return &predictions, nil
 }
 
 func (r *Repository) EditPrediction(id string, Window int, Amount int) error {

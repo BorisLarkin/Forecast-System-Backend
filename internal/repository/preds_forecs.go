@@ -13,11 +13,11 @@ func (r *Repository) Preds_forecsList(pr_id string) (*[]ds.Preds_Forecs, error) 
 	return &Preds_Forecs, nil
 }
 
-func (r *Repository) GetPredForecByID(id1 string, id2 string) (*ds.Preds_Forecs, error) {
+func (r *Repository) GetPredForecByID(pr_id string, f_id string) (*ds.Preds_Forecs, error) {
 	var Preds_Forecs ds.Preds_Forecs
-	intId1, _ := strconv.Atoi(id1)
-	intId2, _ := strconv.Atoi(id2)
-	r.db.Find(&Preds_Forecs, intId1, intId2)
+	intId1, _ := strconv.Atoi(pr_id)
+	intId2, _ := strconv.Atoi(f_id)
+	r.db.Where("prediction_id = ? and forecast_id = ?", intId1, intId2).Find(&Preds_Forecs, intId1, intId2)
 	return &Preds_Forecs, nil
 }
 
