@@ -95,7 +95,7 @@ func (h *Handler) EditPrediction(ctx *gin.Context) {
 	}
 
 	// Возвращаем успешный ответ
-	ctx.JSON(http.StatusOK, gin.H{"message": "Text updated successfully"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Prediction updated successfully"})
 }
 
 func (h *Handler) FormPrediction(ctx *gin.Context) {
@@ -121,15 +121,17 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	is_admin, err := h.Repository.CurrentUser_IsAdmin()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
+		return
 	}
 	if !is_admin {
 		ctx.JSON(http.StatusConflict, errors.New("attempt to finish prediction as user"))
+		return
 	}
 	status := ctx.Query("status")
 	if status == "complete" {
 		pr_fcs, err := h.Repository.CalculatePrediction(id)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, err)
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		if err := h.Repository.SetPredictionStatus(id, status); err != nil {
@@ -154,6 +156,7 @@ func (h *Handler) DeletePrediction(ctx *gin.Context) {
 	creatorID, err := dsn.GetCurrentUserID()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
+		return
 	}
 
 	if err := h.Repository.DeletePrediction(pr_id, creatorID); err != nil {

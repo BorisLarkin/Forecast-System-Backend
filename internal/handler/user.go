@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 	"web/internal/ds"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +15,7 @@ func (h *Handler) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	if strings.TrimSpace(input.Login) == "" || strings.TrimSpace(input.Password) == "" {
+	if input.Login == "" || input.Password == "" {
 		ctx.JSON(http.StatusBadRequest, "Login and password are required")
 		return
 	}
@@ -50,7 +49,7 @@ func (h *Handler) UpdateUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"id":           input.User_id,
+		"id":           userID,
 		"login":        input.Login,
 		"is_moderator": input.IsAdmin,
 	})

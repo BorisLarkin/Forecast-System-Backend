@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"web/internal/ds"
+
+	"github.com/sirupsen/logrus"
 )
 
 func (r *Repository) Preds_forecsList(pr_id string) (*[]ds.Preds_Forecs, error) {
@@ -28,9 +30,9 @@ func (r *Repository) CreatePreds_Forecs(prediction_id string, forecast_id string
 	return r.db.Create(&n).Error
 }
 
-func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string) {
+func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string) error {
 	query := "DELETE FROM preds_forecs WHERE prediction_id = $1 and forecast_id = $2"
-	r.db.Exec(query, prediction_id, forecast_id)
+	return r.db.Exec(query, prediction_id, forecast_id).Error
 }
 
 func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.Forecs_inputs, error) {
@@ -69,7 +71,7 @@ func (r *Repository) EditPredForec(f_id string, pr_id string, input string) erro
 	if err := r.db.Where("forecast_id = ? AND prediction_id = ?", f_id, pr_id).First(&pred_forec).Error; err != nil {
 		return err
 	}
-
+	pred_forec.Input = input
 	if err := r.db.Save(&pred_forec).Error; err != nil {
 		return err
 	}
@@ -77,7 +79,7 @@ func (r *Repository) EditPredForec(f_id string, pr_id string, input string) erro
 	return nil
 }
 
-func Calculate(window int, amount int, input string) ([]int, error) {
+func Calculate(window int, amount int, input string, log *logrus.Logger) ([]float64, error) {
 	int_arr, err := ValidateInput(input)
 	if err != nil {
 		return nil, err
@@ -86,47 +88,42 @@ func Calculate(window int, amount int, input string) ([]int, error) {
 		return nil, fmt.Errorf("invalid window value")
 	}
 	//PREDICTION CALCULATION
-	predictions := make([]int, amount)
+	predictions := make([]float64, amount)
 	data_len := len(int_arr)
 	start, end := 0, 0
-	windowSum := 0
 	//get first window down
-	for end < amount {
-		windowSum += int_arr[end]
+	for end < window {
 		end++
 	}
-
-	delta_sums := 0                     //to find an average trend between deltas
+	delta_sums := 0.0                   //to find an average trend between deltas
 	windows_count := data_len - end + 1 //amount of windows
-	var delta int
+	var delta float64
 	//calculate the average sums and the trend
 	for end < data_len {
 		delta = int_arr[end] - int_arr[start]
-		delta_sums = delta_sums + delta
-		windowSum += delta
+		delta_sums += delta
 		start++
 		end++
 	}
 	//anylize the data recieved
 	int_arr = append(int_arr, predictions...)
-	delta_trend := delta_sums / windows_count
+	delta_trend := delta_sums / float64(windows_count)
 	//~predict the future~
 	for end < len(int_arr) {
-		windowSum += delta_trend
-		int_arr[end] = windowSum - int_arr[start]
+		int_arr[end] = delta_trend + int_arr[start-1] //windowSum+d-([st]+...+[end-1])
 		start++
 		end++
 	}
 	return int_arr[data_len:], nil
 }
-func ValidateInput(input string) ([]int, error) {
+func ValidateInput(input string) ([]float64, error) {
 	withoutsp := strings.ReplaceAll(input, " ", "")
-	splitstr := strings.SplitAfter(withoutsp, ",")
-	var result []int
+	splitstr := strings.Split(withoutsp, ",")
+	var result []float64
 	for i := range splitstr {
-		curr, err := strconv.Atoi(splitstr[i])
+		curr, err := strconv.ParseFloat(splitstr[i], 64)
 		if err != nil {
-			return nil, fmt.Errorf("invalid input")
+			return nil, fmt.Errorf("invalid input %s", splitstr[i])
 		}
 		result = append(result, curr)
 	}

@@ -57,8 +57,8 @@ func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
 		return fmt.Errorf("cruical info empty")
 	}
 
-	if err := r.db.Save(user).Error; err != nil {
-		return err
+	if err := r.db.Save(user); err != nil {
+		return err.Error
 	}
 	return nil
 }

@@ -65,33 +65,36 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 	user_id, err := dsn.GetCurrentUserID()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, "no user authenticated")
+		return
 	}
 	intuid, err := strconv.Atoi(user_id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, "invalid user id")
+		return
 	}
 	pred, err := h.Repository.GetPredictionByID(pr_id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, "prediction does not exist")
+		return
+	}
 	if pred.UserID != intuid {
 		ctx.JSON(http.StatusBadRequest, "attempt to delete unowned prediction")
+		return
 	}
-	h.Repository.DeletePreds_Forecs(pr_id, f_id)
-
-	ln := h.Repository.GetPredLen(pr_id)
-
-	if err != nil {
+	if err := h.Repository.DeletePreds_Forecs(pr_id, f_id); err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
+
+	ln := h.Repository.GetPredLen(pr_id)
+
 	if ln == 0 {
 		if err := h.Repository.DeletePrediction(pr_id, user_id); err != nil {
 			ctx.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		//ctx.Redirect(http.StatusFound, "/prediction/none")
-	} else {
-		//ctx.Redirect(http.StatusFound, "/prediction/"+pr_id)
 	}
-	ctx.JSON(http.StatusOK, fmt.Errorf("pr_fc (%s, %s) deleted", f_id, pr_id))
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("pr_fc (%s, %s) deleted", f_id, pr_id)})
 }
 
 func (h *Handler) JSONAddForecastToPred(ctx *gin.Context) {
@@ -113,9 +116,14 @@ func (h *Handler) JSONAddForecastToPred(ctx *gin.Context) {
 func (h *Handler) EditPredForec(ctx *gin.Context) {
 	f_id := ctx.Param("forecast_id")
 	pr_id := ctx.Param("prediction_id")
-	input := ctx.Query("input")
-
-	err := h.Repository.EditPredForec(f_id, pr_id, input)
+	var input struct {
+		Input string `json:"input" binding:"required"`
+	}
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	err := h.Repository.EditPredForec(f_id, pr_id, input.Input)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, "Error changing input")
@@ -123,5 +131,5 @@ func (h *Handler) EditPredForec(ctx *gin.Context) {
 	}
 
 	// Возвращаем успешный ответ.
-	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Successful change to '%s'", input)})
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Successful change to '%s'", input.Input)})
 }

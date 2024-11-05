@@ -24,10 +24,9 @@ func (r *Repository) GetPredictionByID(id string) (*ds.Predictions, error) {
 	return &Prediction, nil
 }
 
-func (r *Repository) SetPredictionStatus(id string, status string) error {
+func (r *Repository) SetPredictionStatus(prediction_id string, status string) error {
 	var prediction ds.Predictions
-
-	if err := r.db.First(&prediction, id).Error; err != nil {
+	if err := r.db.Model(&ds.Predictions{}).Where("prediction_id = ?", prediction_id).First(&prediction).Error; err != nil {
 		return err
 	}
 
@@ -132,7 +131,6 @@ func (r *Repository) EditPrediction(id string, Window int, Amount int) error {
 
 	prediction.Prediction_amount = Amount
 	prediction.Prediction_window = Window
-	prediction.Date_formed = time.Now()
 
 	return r.db.Save(&prediction).Error
 }
@@ -153,7 +151,7 @@ func (r *Repository) FormPrediction(pred_id string, creatorID string) error {
 	if prediction.Status != "draft" {
 		return errors.New("pre-existing status error")
 	}
-	r.SetPredictionStatus(pred_id, "pending")
+	prediction.Status = "pending"
 	prediction.Date_formed = time.Now()
 
 	return r.db.Save(&prediction).Error
@@ -161,26 +159,27 @@ func (r *Repository) FormPrediction(pred_id string, creatorID string) error {
 func (r *Repository) CalculatePrediction(pred_id string) (*[]ds.Preds_Forecs, error) {
 	prediction, err := r.GetPredictionByID(pred_id)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cannot get prediction")
 	}
 	preds_forecs, err := r.Preds_forecsList(pred_id)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cannot get list of predictions_forecasts")
 	}
 	//process each record
 	for i, v := range *preds_forecs {
 		output_string := ""
-		int_array, err := Calculate(prediction.Prediction_window, prediction.Prediction_amount, v.Input)
+		int_array, err := Calculate(prediction.Prediction_window, prediction.Prediction_amount, v.Input, r.logger)
 		if err != nil {
-			return nil, fmt.Errorf("issue predicting record (%s, %d)", pred_id, i)
+			return nil, fmt.Errorf("issue predicting record (%s, %d): %s", pred_id, i, err)
 		}
 		for i := range int_array { //stringify each result
-			curr_int := strconv.Itoa(int_array[i])
+			curr_int := strconv.FormatFloat(int_array[i], 'f', 2, 64)
 			output_string += curr_int + ","
 		}
 		output_string = output_string[:len(output_string)-1] //trim the last comma
 		v.Result = output_string
 		r.db.Save(&v)
 	}
+	preds_forecs, _ = r.Preds_forecsList(pred_id)
 	return preds_forecs, nil
 }

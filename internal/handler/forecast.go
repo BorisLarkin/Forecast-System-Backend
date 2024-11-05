@@ -124,17 +124,16 @@ func (h *Handler) EditForecast(ctx *gin.Context) {
 }
 func (h *Handler) AddPicture(ctx *gin.Context) {
 	forecast_id := ctx.Param("id")
-	// Получаем файл изображения из запроса
+	// Get file out of the body
 	file, fileHeader, err := ctx.Request.FormFile("image")
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, "Failed to upload image")
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "failed to upload image", "error": err.Error()})
 		return
 	}
 	defer file.Close()
 
 	imageName := fmt.Sprintf("image-%s.png", forecast_id)
 
-	// Передаем файл в репозиторий для обработки
 	err = h.Repository.UploadPicture(forecast_id, imageName, file, fileHeader.Size)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
