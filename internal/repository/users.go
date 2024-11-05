@@ -15,8 +15,13 @@ func (r *Repository) UserList() (*[]ds.Forecasts, error) {
 
 func (r *Repository) GetUserByID(id string) (*ds.Users, error) {
 	var User ds.Users
-	intId, _ := strconv.Atoi(id)
-	r.db.Find(&User, intId)
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	if err := r.db.Where("user_id = ?", intId).First(&User).Error; err != nil {
+		return nil, err
+	}
 	return &User, nil
 }
 
@@ -67,7 +72,7 @@ func (r *Repository) Auth(id string) error {
 	if i == "null" || err != nil { //theres no active running session
 		_, err := r.GetUserByID(id)
 		if err != nil {
-			return fmt.Errorf("issue with retrieving user data")
+			return err
 		}
 		err = dsn.SetCurrentUserID(id)
 		if err != nil {

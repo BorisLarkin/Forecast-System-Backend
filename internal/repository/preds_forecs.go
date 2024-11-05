@@ -47,6 +47,7 @@ func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.Forecs_inputs, erro
 		}
 		tmp.Forecast = *f
 		tmp.Input = prf[i].Input
+		tmp.Result = prf[i].Result
 		forecs = append(forecs, tmp)
 	}
 	return &forecs, nil

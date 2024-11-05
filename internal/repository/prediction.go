@@ -104,7 +104,7 @@ func (r *Repository) GetPredictions(status string, hasStartDate, hasEndDate bool
 		return nil, err
 	}
 	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.user_id").
-		Where("predictions.status <> ? AND predictions.status <> ? AND predictions.user_id = ?", "deleted", "draft", uid)
+		Where("predictions.user_id = ?", uid)
 	if status != "" {
 		query = query.Where("predictions.status = ?", status)
 	}

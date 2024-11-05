@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 	"web/internal/dsn"
@@ -124,7 +125,7 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 		return
 	}
 	if !is_admin {
-		ctx.JSON(http.StatusConflict, errors.New("attempt to finish prediction as user"))
+		ctx.JSON(http.StatusConflict, fmt.Errorf("attempt to finish prediction as user").Error())
 		return
 	}
 	status := ctx.Query("status")

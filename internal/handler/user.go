@@ -59,11 +59,15 @@ func (h *Handler) AuthUser(ctx *gin.Context) {
 	id := ctx.Param("id")
 	err := h.Repository.Auth(id)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	user, _ := h.Repository.GetUserByID(id)
-	ctx.JSON(http.StatusAccepted, user)
+	user, err := h.Repository.GetUserByID(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"user": user.User_id, "login": user.Login, "is_admin": user.IsAdmin})
 }
 
 func (h *Handler) DeAuthUser(ctx *gin.Context) {

@@ -44,7 +44,7 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.POST("/user/auth/:id", h.AuthUser)
 	router.POST("/user/deauth", h.DeAuthUser)
 
-	router.POST("/draft", h.CreateDraft)
+	//router.POST("/draft", h.CreateDraft)
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

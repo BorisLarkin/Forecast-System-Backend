@@ -11,4 +11,5 @@ type Preds_Forecs struct {
 type Forecs_inputs struct {
 	Forecast Forecasts
 	Input    string
+	Result   string
 }
