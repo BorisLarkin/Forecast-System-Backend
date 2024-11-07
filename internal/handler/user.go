@@ -15,22 +15,13 @@ func (h *Handler) RegisterUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, "Invalid JSON format")
 		return
 	}
-
-	if req.Login == "" || req.Password == "" {
-		ctx.JSON(http.StatusBadRequest, "Login and password are required")
-		return
-	}
-
-	if err := h.Repository.CreateUser(&req); err != nil {
+	user, err := h.Repository.RegiterUser(&req)
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"id":       req.User_id,
-		"login":    req.Login,
-		"is_admin": req.IsAdmin,
-	})
+	ctx.JSON(http.StatusCreated, user)
 }
 
 func (h *Handler) UpdateUser(ctx *gin.Context) {
@@ -50,9 +41,9 @@ func (h *Handler) UpdateUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"id":           userID,
-		"login":        req.Login,
-		"is_moderator": req.IsAdmin,
+		"id":    userID,
+		"login": req.Login,
+		"role":  req.Role,
 	})
 }
 
@@ -82,7 +73,7 @@ func (h *Handler) LoginUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"user": user.User_id, "login": user.Login, "is_admin": user.IsAdmin})
+	ctx.JSON(http.StatusOK, gin.H{"user": user.User_id, "login": user.Login, "is_admin": user.Role})
 }
 
 func (h *Handler) LogoutUser(ctx *gin.Context) {

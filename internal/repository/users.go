@@ -36,8 +36,22 @@ func (r *Repository) GetUser(login string, pwd string) (*ds.Users, error) {
 	return &User, nil
 }
 
-func (r *Repository) CreateUser(Users *ds.Users) error {
-	return r.db.Create(Users).Error
+func (r *Repository) RegiterUser(Users *ds.Users) (*ds.Users, error) {
+	if Users.Login == "" || Users.Password == "" {
+		return nil, fmt.Errorf("login and password are required")
+	}
+	candidate, err := r.GetUserByLogin(Users.Login)
+	if err != nil {
+		return nil, err
+	}
+	if candidate.Login == Users.Login {
+		return nil, fmt.Errorf("user with such login already exists")
+	}
+	err = r.db.Table("users").Create(&Users).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user: %s", err)
+	}
+	return Users, nil
 }
 
 func (r *Repository) DeleteUser(id string) {
@@ -54,7 +68,7 @@ func (r *Repository) CurrentUser_IsAdmin() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return user.IsAdmin, nil
+	return user.Role == 3, nil
 }
 
 func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
@@ -106,4 +120,13 @@ func (r *Repository) Logout() error {
 		return fmt.Errorf("failed to deauth the user")
 	}
 	return nil
+}
+
+func (r *Repository) GetUserByLogin(login string) (*ds.Users, error) {
+	var user ds.Users
+	err := r.db.Table("users").Where("login = ?", login).Find(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
