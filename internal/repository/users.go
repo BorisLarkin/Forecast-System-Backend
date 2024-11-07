@@ -25,6 +25,17 @@ func (r *Repository) GetUserByID(id string) (*ds.Users, error) {
 	return &User, nil
 }
 
+func (r *Repository) GetUser(login string, pwd string) (*ds.Users, error) {
+	var User ds.Users
+	if login == "" || pwd == "" {
+		return nil, fmt.Errorf("empty login/password")
+	}
+	if err := r.db.Where("login = ? and password = ?", login, pwd).First(&User).Error; err != nil {
+		return nil, err
+	}
+	return &User, nil
+}
+
 func (r *Repository) CreateUser(Users *ds.Users) error {
 	return r.db.Create(Users).Error
 }
@@ -33,6 +44,7 @@ func (r *Repository) DeleteUser(id string) {
 	query := "DELETE FROM users WHERE user_id = $1"
 	r.db.Exec(query, id)
 }
+
 func (r *Repository) CurrentUser_IsAdmin() (bool, error) {
 	user_id, err := dsn.GetCurrentUserID()
 	if err != nil {
@@ -67,22 +79,25 @@ func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
 	}
 	return nil
 }
-func (r *Repository) Auth(id string) error {
+
+func (r *Repository) Login(login string, pwd string) (int, error) {
 	i, err := dsn.GetCurrentUserID()
-	if i == "null" || err != nil { //theres no active running session
-		_, err := r.GetUserByID(id)
-		if err != nil {
-			return err
-		}
-		err = dsn.SetCurrentUserID(id)
-		if err != nil {
-			return fmt.Errorf("error starting session")
-		}
-		return nil
+	if err == nil { //theres an active running session
+		return 0, fmt.Errorf("an already running session exists: %s", i)
 	}
-	return fmt.Errorf("an already running session exists")
+	user, err := r.GetUser(login, pwd)
+	if err != nil {
+		return 0, err
+	}
+	strid := strconv.Itoa(user.User_id)
+	err = dsn.SetCurrentUserID(strid)
+	if err != nil {
+		return 0, fmt.Errorf("error starting session")
+	}
+	return user.User_id, nil
 }
-func (r *Repository) Deauth() error {
+
+func (r *Repository) Logout() error {
 	i, err := dsn.GetCurrentUserID()
 	if i == "null" || err != nil {
 		return fmt.Errorf("no running session found")

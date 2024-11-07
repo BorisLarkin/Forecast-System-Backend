@@ -11,7 +11,7 @@ import (
 )
 
 func (h *Handler) GetForecasts(ctx *gin.Context) {
-	searchText := ctx.Query("search")
+	searchText := ctx.Query("forecast_name")
 	var pred_len int
 	var forec_empty bool
 	user_id, _ := dsn.GetCurrentUserID()

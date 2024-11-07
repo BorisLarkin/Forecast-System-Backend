@@ -1,27 +1,27 @@
-GET    api/forecasts/()                
-GET    api/forecast/<int:pk>/()            
-DELETE api/forecast/delete/<int:pk>/()
-POST   api/forecast/add/()             
-PUT    api/forecast/edit/<int:pk>/()      
-POST   api/forecast_to_pred/<int:forecast_id>/()
-POST   api/forecast/<int:pk>/add_picture/()
+GET api/forecasts/  
+GET api/forecast/<int:pk>/ 
+DELETE api/forecast/delete/<int:pk>/
+POST api/forecast/add/  
+PUT api/forecast/edit/<int:pk>/
+POST api/forecast_to_pred/<int:forecast_id>/
+POST api/forecast/<int:pk>/add_picture/
 
-GET    api/predictions/()           
-GET    api/prediction/<int:pk>/()        
-DELETE api/prediction/delete/<int:pk>/() 
-PUT    api/prediction/form/<int:pk>/()  
-PUT    api/prediction/edit/<int:pk>/()  
-PUT    api/prediction/finish/<int:pk>/()
+GET api/predictions/
+GET api/prediction/<int:pk>/  
+DELETE api/prediction/delete/<int:pk>/ 
+PUT api/prediction/form/<int:pk>/  
+PUT api/prediction/edit/<int:pk>/
+PUT api/prediction/finish/<int:pk>/
 
-DELETE api/pr_fc/remove/<int:prediction_id>/<int:forecast_id>/()
-PUT    api/pr_fc/edit/<int:prediction_id>/<int:forecast_id>/()
-    
-POST   api/user/register()           
-PUT    api/user/update/<int:pk>()      
-POST   api/user/auth/<int:pk>()      
-POST   api/user/deauth()           
+DELETE api/pr_fc/remove/<int:prediction_id>/<int:forecast_id>/
+PUT api/pr_fc/edit/<int:prediction_id>/<int:forecast_id>/
+ 
+POST api/user/register
+PUT api/user/update/<int:pk>
+POST api/user/auth/<int:pk> 
+POST api/user/deauth   
 
 
 <int:pk>
-    <int:forecast_id>
-        <int:prediction_id>
+ <int:forecast_id>
+  <int:prediction_id>

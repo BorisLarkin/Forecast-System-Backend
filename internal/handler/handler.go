@@ -41,10 +41,8 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 
 	router.POST("/user/register", h.RegisterUser)
 	router.PUT("/user/update/:id", h.UpdateUser)
-	router.POST("/user/auth/:id", h.AuthUser)
-	router.POST("/user/deauth", h.DeAuthUser)
-
-	//router.POST("/draft", h.CreateDraft)
+	router.POST("/user/login", h.LoginUser)
+	router.POST("/user/logout", h.LogoutUser)
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

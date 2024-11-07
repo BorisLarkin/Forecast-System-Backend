@@ -29,7 +29,7 @@ func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, int, error)
 
 	var filteredForecast []ds.Forecasts
 	for _, f := range Forecast {
-		if strings.Contains(strings.ToLower(f.Short), strings.ToLower(search)) {
+		if strings.Contains(strings.ToLower(f.Title), strings.ToLower(search)) {
 			filteredForecast = append(filteredForecast, f)
 		}
 	}
