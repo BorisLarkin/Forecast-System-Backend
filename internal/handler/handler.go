@@ -49,14 +49,3 @@ func (h *Handler) RegisterStatic(router *gin.Engine) {
 	router.LoadHTMLGlob("static/templates/*")
 	router.Static("/static", "./static")
 }
-
-func (h *Handler) HandleStatusChange(ctx *gin.Context) {
-	operation := ctx.Query("operation")
-	if operation == "delete" {
-		h.DeleteDraft(ctx)
-		return
-	}
-	if operation == "save" {
-		h.SavePrediction(ctx)
-	}
-}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"web/internal/config"
 	"web/internal/dsn"
 	"web/internal/handler"
@@ -12,6 +13,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
+
+// @title Forecast system
+// @version 1.0
+// @description Bmstu Open IT Platform
+
+// @contact.name API Support
+// @contact.url https://vk.com/b.larkin
+// @contact.email borislarkin18@mail.ru
+
+// @license.name AS IS (NO WARRANTY)
+
+// @host 127.0.0.1
+// @schemes https http
+// @BasePath /
 
 func main() {
 	logger := logrus.New()
@@ -37,6 +52,7 @@ func main() {
 
 	hand := handler.NewHandler(logger, rep, minioClient)
 	application := pkg.NewApp(conf, router, logger, hand)
+	application.Router.GET("/ping/:name", Ping)
 	application.RunApp()
 }
 func CORSMiddleware() gin.HandlerFunc {
@@ -54,4 +70,21 @@ func CORSMiddleware() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+type pingReq struct{}
+type pingResp struct {
+	Status string `json:"status"`
+}
+
+// Ping godoc
+// @Summary      Show hello text
+// @Description  very very friendly response
+// @Tags         Tests
+// @Produce      json
+// @Success      200  {object}  pingResp
+// @Router       /ping/{name} [get]
+func Ping(gCtx *gin.Context) {
+	name := gCtx.Param("name")
+	gCtx.String(http.StatusOK, "Hello %s", name)
 }
