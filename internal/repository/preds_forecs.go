@@ -6,6 +6,7 @@ import (
 	"strings"
 	"web/internal/ds"
 
+	"github.com/jinzhu/copier"
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,8 +26,10 @@ func (r *Repository) GetPredForecByID(pr_id string, f_id string) (*ds.Preds_Fore
 
 func (r *Repository) CreatePreds_Forecs(prediction_id string, forecast_id string) error {
 	var n ds.Preds_Forecs
-	n.ForecastID, _ = strconv.Atoi(forecast_id)
-	n.PredictionID, _ = strconv.Atoi(prediction_id)
+	id, _ := strconv.Atoi(forecast_id)
+	n.ForecastID = uint(id)
+	id, _ = strconv.Atoi(prediction_id)
+	n.PredictionID = uint(id)
 	return r.db.Create(&n).Error
 }
 
@@ -35,19 +38,19 @@ func (r *Repository) DeletePreds_Forecs(prediction_id string, forecast_id string
 	return r.db.Exec(query, prediction_id, forecast_id).Error
 }
 
-func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.ForecastResponse, error) {
+func (r *Repository) GetForecastsByID(pred_id string) (*[]ds.ForecastResponseWithFlags, error) {
 	var prf []ds.Preds_Forecs
 	r.db.Where("prediction_id = ?", pred_id).Find(&prf)
-	var forecs []ds.ForecastResponse
-	var tmp ds.ForecastResponse
+	var forecs []ds.ForecastResponseWithFlags
+	var tmp ds.ForecastResponseWithFlags
 	for i := range prf {
-		f, err := r.GetForecastByID(strconv.Itoa(prf[i].ForecastID))
+		f, err := r.GetForecastByID(strconv.Itoa(int(prf[i].ForecastID)))
 		if err != nil {
 			return nil, err
 		}
-		tmp.Forecast = *f
-		tmp.Input = prf[i].Input
-		tmp.Result = prf[i].Result
+		//EXPERIMENTAL CODE, MIGHT NOT WORK!!!
+		copier.Copy(&tmp, &f)
+		copier.Copy(&tmp, &prf[i])
 		forecs = append(forecs, tmp)
 	}
 	return &forecs, nil

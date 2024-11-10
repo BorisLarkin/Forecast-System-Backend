@@ -41,9 +41,43 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/login": {
+            "post": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login the specified user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.loginResp"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "handler.loginResp": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "integer"
+                },
+                "token_type": {
+                    "type": "string"
+                }
+            }
+        },
         "main.pingResp": {
             "type": "object",
             "properties": {

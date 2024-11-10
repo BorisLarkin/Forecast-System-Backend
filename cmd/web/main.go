@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	//"web/docs"
 	"web/internal/config"
 	"web/internal/dsn"
 	"web/internal/handler"
@@ -50,7 +51,7 @@ func main() {
 		logger.Fatalf("Error from repo: #{err}")
 	}
 
-	hand := handler.NewHandler(logger, rep, minioClient)
+	hand := handler.NewHandler(logger, rep, minioClient, conf)
 	application := pkg.NewApp(conf, router, logger, hand)
 	application.Router.GET("/ping/:name", Ping)
 	application.RunApp()

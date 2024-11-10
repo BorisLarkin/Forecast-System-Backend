@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
-	"strconv"
+	"time"
 	"web/internal/ds"
+	"web/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,39 +50,68 @@ func (h *Handler) UpdateUser(ctx *gin.Context) {
 	})
 }
 
-func (h *Handler) LoginUser(ctx *gin.Context) {
-	var req struct {
-		Login    string `json:"login" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}
-
-	if err := ctx.BindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, "Invalid JSON format")
-		return
-	}
-
-	if req.Login == "" || req.Password == "" {
-		ctx.JSON(http.StatusBadRequest, "Login and password are required")
-		return
-	}
-	id, err := h.Repository.Login(req.Login, req.Password)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-	userid := strconv.Itoa(id)
-	user, err := h.Repository.GetUserByID(userid)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{"user": user.User_id, "login": user.Login, "is_admin": user.Role})
-}
-
 func (h *Handler) LogoutUser(ctx *gin.Context) {
 	if err := h.Repository.Logout(); err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "Successfuly logged out"})
+}
+
+type loginReq struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
+type loginResp struct {
+	ExpiresIn   time.Duration `json:"expires_in"`
+	AccessToken string        `json:"access_token"`
+	TokenType   string        `json:"token_type"`
+}
+
+// Login godoc
+// @Summary      Login the specified user
+// @Description  very very friendly response
+// @Tags         Userss
+// @Produce      json
+// @Success      200  {object}  loginResp
+// @Router       /user/login [post]
+func (h *Handler) LoginUser(gCtx *gin.Context) {
+	req := &loginReq{}
+
+	err := json.NewDecoder(gCtx.Request.Body).Decode(req)
+	if err != nil {
+		gCtx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	user, err := h.Repository.GetUserByLogin(req.Login)
+	if err != nil {
+		gCtx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	if req.Login == user.Login && req.Password == user.Password {
+		token, err := utils.GenerateJWT(h.Config, user.User_id, ds.Role(user.Role))
+		if err != nil {
+			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("failed to generate a token"))
+			return
+		}
+		if token == nil {
+			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("token is nil"))
+			return
+		}
+		strToken, err := token.SignedString([]byte(h.Config.JWT.Token))
+
+		if err != nil {
+			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("cant create str token"))
+			return
+		}
+
+		gCtx.JSON(http.StatusOK, loginResp{
+			ExpiresIn:   h.Config.JWT.ExpiresIn,
+			AccessToken: strToken,
+			TokenType:   "Bearer",
+		})
+	}
+
+	gCtx.AbortWithStatus(http.StatusForbidden) // отдаем 403 ответ в знак того что доступ запрещен
 }

@@ -48,7 +48,7 @@ func (r *Repository) DeletePrediction(prediction_id string, creator_id string) e
 	if err != nil {
 		return err
 	}
-	if prediction.UserID != int_creator {
+	if prediction.CreatorID != int_creator {
 		return errors.New("attempt to change unowned prediction")
 	}
 	prediction.Status = "deleted"
@@ -66,7 +66,7 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	aid := strconv.Itoa(Predictions.Prediction_id)
+	aid := strconv.Itoa(int(Predictions.Prediction_id))
 	return aid, nil
 }
 
@@ -78,7 +78,7 @@ func (r *Repository) CreateDraft() error {
 	if err == nil {
 		return fmt.Errorf("draft exists")
 	}
-	pr := ds.Predictions{UserID: intid, Date_created: time.Now(), Status: "draft"}
+	pr := ds.Predictions{CreatorID: intid, Date_created: time.Now(), Status: "draft"}
 	return r.CreatePrediction(&pr)
 }
 
@@ -144,7 +144,7 @@ func (r *Repository) FormPrediction(pred_id string, creatorID string) error {
 	if err != nil {
 		return err
 	}
-	if prediction.UserID != int_creator {
+	if prediction.CreatorID != int_creator {
 		return errors.New("attempt to change unowned prediction")
 	}
 

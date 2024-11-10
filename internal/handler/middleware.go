@@ -1,63 +1,49 @@
 package handler
 
 import (
-	"errors"
+	"log"
 	"net/http"
-	"os"
 	"strings"
+	"web/internal/ds"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
-func (h *Handler) WithAuthCheck(ctx *gin.Context) {
-	// Извлечение токена из заголовка Authorization
-	authHeader := ctx.GetHeader("Authorization")
-	if authHeader == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Отсутствует токен"})
-		ctx.Abort()
-		return
-	}
+const jwtPrefix = "Bearer "
 
-	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context) {
+	return func(gCtx *gin.Context) {
+		jwtStr := gCtx.GetHeader("Authorization")
+		if !strings.HasPrefix(jwtStr, jwtPrefix) { // если нет префикса то нас дурят!
+			gCtx.AbortWithStatus(http.StatusForbidden) // отдаем что нет доступа
 
-	// Парсинг и валидация токена
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("неверный метод подписи")
+			return // завершаем обработку
 		}
-		return []byte(os.Getenv("JWT_KEY")), nil // Используем тот же секретный ключ
-	})
 
-	if err != nil || !token.Valid {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Недействительный токен"})
-		ctx.Abort()
-		return
+		// отрезаем префикс
+		jwtStr = jwtStr[len(jwtPrefix):]
+
+		token, err := jwt.ParseWithClaims(jwtStr, &ds.JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return []byte(h.Config.JWT.Token), nil
+		})
+		if err != nil {
+			gCtx.AbortWithStatus(http.StatusForbidden)
+			log.Println(err)
+
+			return
+		}
+
+		myClaims := token.Claims.(*ds.JWTClaims)
+
+		for _, oneOfAssignedRole := range assignedRoles {
+			if myClaims.Role == oneOfAssignedRole {
+				gCtx.AbortWithStatus(http.StatusForbidden)
+				log.Printf("role %s is not assigned in %s", myClaims.Role, assignedRoles)
+				return
+			}
+		}
 	}
-
-	// Извлечение userID из токена
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Ошибка обработки токена"})
-		ctx.Abort()
-		return
-	}
-
-	userID := uint(claims["userID"].(float64))
-	isModerator := claims["isModerator"].(bool)
-
-	// Проверка сессии в Redis
-	redisToken, err := h.Repository.GetSession(ctx.Request.Context(), userID)
-	if err != nil || redisToken != tokenString {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Сессия не найдена или истекла"})
-		ctx.Abort()
-		return
-	}
-
-	// Передаем userID в контекст
-	ctx.Set("userID", userID)
-	ctx.Set("isModerator", isModerator)
-	ctx.Next()
 }
 
 func CORSMiddleware() gin.HandlerFunc {

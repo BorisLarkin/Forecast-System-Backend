@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  handler.loginResp:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      token_type:
+        type: string
+    type: object
   main.pingResp:
     properties:
       status:
@@ -30,6 +39,19 @@ paths:
       summary: Show hello text
       tags:
       - Tests
+  /user/login:
+    post:
+      description: very very friendly response
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.loginResp'
+      summary: Login the specified user
+      tags:
+      - Users
 schemes:
 - https
 - http

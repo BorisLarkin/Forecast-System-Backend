@@ -116,7 +116,7 @@ func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
 	return nil
 }
 
-func (r *Repository) Login(login string, pwd string) (int, error) {
+func (r *Repository) Login(login string, pwd string) (uint, error) {
 	i, err := dsn.GetCurrentUserID()
 	if err == nil { //theres an active running session
 		return 0, fmt.Errorf("an already running session exists: %s", i)
@@ -125,7 +125,7 @@ func (r *Repository) Login(login string, pwd string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	strid := strconv.Itoa(user.User_id)
+	strid := strconv.Itoa(int(user.User_id))
 	err = dsn.SetCurrentUserID(strid)
 	if err != nil {
 		return 0, fmt.Errorf("error starting session")

@@ -2,7 +2,9 @@ package config
 
 import (
 	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -15,11 +17,18 @@ type Config struct {
 	ServiceHost string
 	ServicePort int
 	Minio       `yaml:"minio"`
+	JWT
 }
 type Minio struct {
 	User     string `yaml:"user"`
 	Pass     string `yaml:"pass"`
 	Endpoint string `yaml:"endpoint"`
+}
+
+type JWT struct {
+	Token         string            `yaml:"token"`
+	SigningMethod jwt.SigningMethod `yaml:"signing-method"`
+	ExpiresIn     time.Duration     `yaml:"expires-in"`
 }
 
 // NewConfig Создаёт новый объект конфигурации, загружая данные из файла конфигурации

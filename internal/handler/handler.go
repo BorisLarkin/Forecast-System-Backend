@@ -1,26 +1,34 @@
 package handler
 
 import (
+	"web/internal/config"
 	"web/internal/minio"
 	"web/internal/repository"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Handler struct {
 	Logger     *logrus.Logger
 	Repository *repository.Repository
+	Config     *config.Config
 }
 
-func NewHandler(l *logrus.Logger, r *repository.Repository, m *minio.MinioClient) *Handler {
+func NewHandler(l *logrus.Logger, r *repository.Repository, m *minio.MinioClient, c *config.Config) *Handler {
 	return &Handler{
 		Logger:     l,
 		Repository: r,
+		Config:     c,
 	}
 }
 
 func (h *Handler) RegisterHandler(router *gin.Engine) {
+	//set up swagger to see all the methods in the handlers
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	router.GET("/forecasts", h.GetForecasts)
 	router.GET("/forecast/:id", h.GetForecastById)
 	router.DELETE("/forecast/delete/:id", h.DeleteForecast)
