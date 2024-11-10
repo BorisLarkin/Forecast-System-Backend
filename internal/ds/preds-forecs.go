@@ -1,15 +1,16 @@
 package ds
 
 type Preds_Forecs struct {
-	Preds_forecs_id int    `json:"preds_forecs_id" gorm:"primaryKey;auto_increment:false"`
-	PredictionID    int    `json:"prediction_id" gorm:"not null; uniqueIndex: pr_fc"`
-	ForecastID      int    `json:"forecast_id" gorm:"not null; uniqueIndex: pr_fc"`
+	Preds_forecs_id uint   `json:"preds_forecs_id" gorm:"primaryKey;auto_increment:false"`
+	PredictionID    uint   `json:"prediction_id" gorm:"not null; uniqueIndex: pr_fc"`
+	ForecastID      uint   `json:"forecast_id" gorm:"not null; uniqueIndex: pr_fc"`
 	Input           string `gorm:"type:varchar(255)" json:"input"`
 	Result          string `gorm:"type:varchar(255)" json:"result"`
+
+	Prediction Predictions `gorm:"foreignKey:PredictionID"`
+	Forecast   Forecasts   `gorm:"foreignKey:ForecastID"`
 }
 
-type Forecs_inputs struct {
-	Forecast Forecasts
-	Input    string
-	Result   string
+type UpdatePred_ForecInput struct {
+	Input string `json:"input" binding:"required"`
 }

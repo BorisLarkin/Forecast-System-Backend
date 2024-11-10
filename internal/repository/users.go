@@ -1,11 +1,33 @@
 package repository
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"strconv"
+	"time"
 	"web/internal/ds"
 	"web/internal/dsn"
+
+	"github.com/go-redis/redis/v8"
 )
+
+func (r *Repository) SaveSession(ctx context.Context, userID uint, token string, expiration time.Duration) error {
+	err := r.redisClient.Set(ctx, fmt.Sprintf("session:%d", userID), token, expiration).Err()
+	return err
+}
+
+func (r *Repository) GetSession(ctx context.Context, userID uint) (string, error) {
+	token, err := r.redisClient.Get(ctx, fmt.Sprintf("session:%d", userID)).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", errors.New("session not found")
+	}
+	return token, err
+}
+
+func (r *Repository) DeleteSession(ctx context.Context, userID uint) error {
+	return r.redisClient.Del(ctx, fmt.Sprintf("session:%d", userID)).Err()
+}
 
 func (r *Repository) UserList() (*[]ds.Forecasts, error) {
 	var Forecasts []ds.Forecasts

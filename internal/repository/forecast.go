@@ -36,7 +36,7 @@ func (r *Repository) SearchForecast(search string) (*[]ds.Forecasts, int, error)
 	return &filteredForecast, len(filteredForecast), nil
 }
 
-func (r *Repository) CreateForecast(forecast *ds.Forecasts) (int, error) {
+func (r *Repository) CreateForecast(forecast *ds.Forecasts) (uint, error) {
 	err := r.db.Create(&forecast).Error
 	if err != nil {
 		return 0, fmt.Errorf("error creating forecast: %w", err)

@@ -27,7 +27,7 @@ func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, "cannot get the prediction")
 		return
 	}
-	if prediction.UserID != uidint || prediction.Status != "draft" {
+	if prediction.CreatorID != uidint || prediction.Status != "draft" {
 		ctx.JSON(http.StatusBadRequest, "denied permission to edit the prediction")
 		return
 	}
@@ -77,7 +77,7 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, "prediction does not exist")
 		return
 	}
-	if pred.UserID != intuid {
+	if pred.CreatorID != intuid {
 		ctx.JSON(http.StatusBadRequest, "attempt to delete unowned prediction")
 		return
 	}

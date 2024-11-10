@@ -72,8 +72,8 @@ func (h *Handler) GetPredictionById(ctx *gin.Context) {
 		"Date_created":      prediction.Date_created,
 		"Date_formed":       prediction.Date_formed,
 		"Date_completed":    prediction.Date_completed,
-		"Creator":           prediction.UserID,
-		"Moderator":         prediction.ModerID,
+		"Creator":           prediction.Creator,
+		"Moderator":         prediction.Moder,
 		"forecasts":         forecs,
 	})
 }

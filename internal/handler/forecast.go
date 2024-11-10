@@ -114,7 +114,7 @@ func (h *Handler) EditForecast(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, "incorrect id format")
 		return
 	}
-	forecast.Forecast_id = intid
+	forecast.Forecast_id = uint(intid)
 	err = h.Repository.EditForecast(&forecast)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
