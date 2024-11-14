@@ -1,16 +1,23 @@
 package handler
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 	"time"
 	"web/internal/ds"
+	redis_api "web/internal/redis-api"
 	"web/internal/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
+/*
 func (h *Handler) RegisterUser(ctx *gin.Context) {
 	var req ds.Users
 
@@ -26,6 +33,7 @@ func (h *Handler) RegisterUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, user)
 }
+*/
 
 func (h *Handler) UpdateUser(ctx *gin.Context) {
 	userID := ctx.Param("id")
@@ -50,14 +58,15 @@ func (h *Handler) UpdateUser(ctx *gin.Context) {
 	})
 }
 
-func (h *Handler) LogoutUser(ctx *gin.Context) {
-	if err := h.Repository.Logout(); err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
-		return
+/*
+	func (h *Handler) LogoutUser(ctx *gin.Context) {
+		if err := h.Repository.Logout(); err != nil {
+			ctx.JSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"message": "Successfuly logged out"})
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Successfuly logged out"})
-}
-
+*/
 type loginReq struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
@@ -114,4 +123,86 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 	}
 
 	gCtx.AbortWithStatus(http.StatusForbidden) // отдаем 403 ответ в знак того что доступ запрещен
+}
+
+type registerReq struct {
+	Login string `json:"login"`
+	Pass  string `json:"pass"`
+}
+
+type registerResp struct {
+	Ok bool `json:"ok"`
+}
+
+func (h *Handler) Register(gCtx *gin.Context) {
+	req := &registerReq{}
+
+	err := json.NewDecoder(gCtx.Request.Body).Decode(req)
+	if err != nil {
+		gCtx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	if req.Pass == "" {
+		gCtx.AbortWithError(http.StatusBadRequest, fmt.Errorf("pass is empty"))
+		return
+	}
+
+	if req.Login == "" {
+		gCtx.AbortWithError(http.StatusBadRequest, fmt.Errorf("login is empty"))
+		return
+	}
+
+	err = h.Repository.RegisterUser(&ds.Users{
+		Role:     int(ds.User),
+		Login:    req.Login,
+		Password: generateHashString(req.Pass), // пароли делаем в хешированном виде и далее будем сравнивать хеши, чтобы их не угнали с базой вместе
+	})
+	if err != nil {
+		gCtx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	gCtx.JSON(http.StatusOK, &registerResp{
+		Ok: true,
+	})
+}
+
+func generateHashString(s string) string {
+	h := sha1.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func (h *Handler) Logout(gCtx *gin.Context) {
+	// получаем заголовок
+	jwtStr := gCtx.GetHeader("Authorization")
+	if !strings.HasPrefix(jwtStr, jwtPrefix) { // если нет префикса то нас дурят!
+		gCtx.AbortWithStatus(http.StatusBadRequest) // отдаем что нет доступа
+
+		return // завершаем обработку
+	}
+
+	// отрезаем префикс
+	jwtStr = jwtStr[len(jwtPrefix):]
+
+	_, err := jwt.ParseWithClaims(jwtStr, &ds.JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(h.Config.JWT.Token), nil
+	})
+	if err != nil {
+		gCtx.AbortWithError(http.StatusBadRequest, err)
+		log.Println(err)
+
+		return
+	}
+
+	// сохраняем в блеклист редиса
+	err = redis_api.WriteJWTToBlacklist(h.Repository.RedisClient, gCtx.Request.Context(), jwtStr, h.Config.JWT.ExpiresIn)
+	if err != nil {
+		gCtx.AbortWithError(http.StatusInternalServerError, err)
+
+		return
+	}
+
+	gCtx.Status(http.StatusOK)
 }

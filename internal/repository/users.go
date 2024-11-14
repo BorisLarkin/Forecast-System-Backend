@@ -13,12 +13,12 @@ import (
 )
 
 func (r *Repository) SaveSession(ctx context.Context, userID uint, token string, expiration time.Duration) error {
-	err := r.redisClient.Set(ctx, fmt.Sprintf("session:%d", userID), token, expiration).Err()
+	err := r.RedisClient.Set(ctx, fmt.Sprintf("session:%d", userID), token, expiration).Err()
 	return err
 }
 
 func (r *Repository) GetSession(ctx context.Context, userID uint) (string, error) {
-	token, err := r.redisClient.Get(ctx, fmt.Sprintf("session:%d", userID)).Result()
+	token, err := r.RedisClient.Get(ctx, fmt.Sprintf("session:%d", userID)).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", errors.New("session not found")
 	}
@@ -26,7 +26,7 @@ func (r *Repository) GetSession(ctx context.Context, userID uint) (string, error
 }
 
 func (r *Repository) DeleteSession(ctx context.Context, userID uint) error {
-	return r.redisClient.Del(ctx, fmt.Sprintf("session:%d", userID)).Err()
+	return r.RedisClient.Del(ctx, fmt.Sprintf("session:%d", userID)).Err()
 }
 
 func (r *Repository) UserList() (*[]ds.Forecasts, error) {
@@ -58,22 +58,22 @@ func (r *Repository) GetUser(login string, pwd string) (*ds.Users, error) {
 	return &User, nil
 }
 
-func (r *Repository) RegiterUser(Users *ds.Users) (*ds.Users, error) {
+func (r *Repository) RegisterUser(Users *ds.Users) error {
 	if Users.Login == "" || Users.Password == "" {
-		return nil, fmt.Errorf("login and password are required")
+		return fmt.Errorf("login and password are required")
 	}
 	candidate, err := r.GetUserByLogin(Users.Login)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if candidate.Login == Users.Login {
-		return nil, fmt.Errorf("user with such login already exists")
+		return fmt.Errorf("user with such login already exists")
 	}
 	err = r.db.Table("users").Create(&Users).Error
 	if err != nil {
-		return nil, fmt.Errorf("failed to create user: %s", err)
+		return fmt.Errorf("failed to create user: %s", err)
 	}
-	return Users, nil
+	return nil
 }
 
 func (r *Repository) DeleteUser(id string) {

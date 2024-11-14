@@ -47,10 +47,10 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/pr_fc/remove/:prediction_id/:forecast_id", h.DeleteForecastFromPred)
 	router.PUT("/pr_fc/edit/:prediction_id/:forecast_id", h.EditPredForec)
 
-	router.POST("/user/register", h.RegisterUser)
+	router.POST("/user/register", h.Register)
 	router.PUT("/user/update/:id", h.UpdateUser)
 	router.POST("/user/login", h.LoginUser)
-	router.POST("/user/logout", h.LogoutUser)
+	router.POST("/user/logout", h.Logout)
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

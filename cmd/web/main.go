@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"net/http"
+
 	//"web/docs"
 	"web/internal/config"
-	"web/internal/dsn"
 	"web/internal/handler"
 	"web/internal/minio"
 	"web/internal/pkg"
+	redis_api "web/internal/redis-api"
 	"web/internal/repository"
 
 	"github.com/gin-gonic/gin"
@@ -39,14 +40,23 @@ func main() {
 	if err != nil {
 		logger.Fatalf("Error with configuration reading: #{err}")
 	}
-	postgresString, errPost := dsn.FromEnv()
-
-	if errPost != nil {
-		logger.Fatalf("Error with reading postgres line: #{err}")
+	host := conf.Postgresql.DB_Host
+	port := conf.Postgresql.DB_Port
+	user := conf.Postgresql.DB_User
+	pass := conf.Postgresql.DB_Pass
+	dbname := conf.Postgresql.DB_Name
+	if host == "" || port == "" || user == "" || pass == "" || dbname == "" {
+		logger.Fatalf("Database config is broken")
 	}
+	postgresString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, pass, dbname)
 	fmt.Println(postgresString)
 
-	rep, errRep := repository.New(postgresString, logger, minioClient)
+	redisClient, err := redis_api.New(conf.Redis)
+	if err != nil {
+		logger.Fatalf("Error creating redis: #{err}")
+	}
+
+	rep, errRep := repository.New(postgresString, logger, minioClient, redisClient)
 	if errRep != nil {
 		logger.Fatalf("Error from repo: #{err}")
 	}
