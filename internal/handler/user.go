@@ -104,22 +104,17 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("failed to generate a token"))
 			return
 		}
-		if token == nil {
+		if token == "" {
 			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("token is nil"))
-			return
-		}
-		strToken, err := token.SignedString([]byte(h.Config.JWT.Token))
-
-		if err != nil {
-			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("cant create str token"))
 			return
 		}
 
 		gCtx.JSON(http.StatusOK, loginResp{
-			ExpiresIn:   h.Config.JWT.ExpiresIn,
-			AccessToken: strToken,
+			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn.Hours()),
+			AccessToken: token,
 			TokenType:   "Bearer",
 		})
+		return
 	}
 
 	gCtx.AbortWithStatus(http.StatusForbidden) // отдаем 403 ответ в знак того что доступ запрещен
@@ -187,7 +182,7 @@ func (h *Handler) Logout(gCtx *gin.Context) {
 	jwtStr = jwtStr[len(jwtPrefix):]
 
 	_, err := jwt.ParseWithClaims(jwtStr, &ds.JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(h.Config.JWT.Token), nil
+		return []byte(h.Config.JWT.Key), nil
 	})
 	if err != nil {
 		gCtx.AbortWithError(http.StatusBadRequest, err)

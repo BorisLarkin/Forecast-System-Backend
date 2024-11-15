@@ -41,7 +41,7 @@ func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context)
 		}
 
 		token, err := jwt.ParseWithClaims(jwtStr, &ds.JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
-			return []byte(h.Config.JWT.Token), nil
+			return []byte(h.Config.JWT.Key), nil
 		})
 		if err != nil {
 			gCtx.AbortWithStatus(http.StatusForbidden)
@@ -77,23 +77,4 @@ func CORSMiddleware() gin.HandlerFunc {
 
 		c.Next()
 	}
-}
-
-func (h *Handler) ModeratorMiddleware(ctx *gin.Context) {
-	_, exists := ctx.Get("userID")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "user not authed"})
-		ctx.Abort()
-		return
-	}
-
-	isModerator := ctx.MustGet("isModerator").(bool)
-
-	if !isModerator {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "permission denied"})
-		ctx.Abort()
-		return
-	}
-
-	ctx.Next()
 }

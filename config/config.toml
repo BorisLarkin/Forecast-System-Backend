@@ -1,4 +1,3 @@
-[Service]
 ServiceHost = "0.0.0.0"
 ServicePort = 8080
 
@@ -10,14 +9,17 @@ endpoint = "127.0.0.1:9000"
 [redis]
 DialTimeout = "10s"
 ReadTimeout = "10s"
-REDIS_HOST=0.0.0.0
+REDIS_HOST="0.0.0.0"
 REDIS_PORT=6379
 REDIS_USER="borizzler"
 REDIS_PASSWORD="redis123"
 
 [postgresql]
-DB_HOST=0.0.0.0
+DB_HOST="0.0.0.0"
 DB_PORT=5432
-DB_NAME=weather_db
-DB_USER=root
-DB_PASS=pgpwd
+DB_NAME="weather_db"
+DB_USER="root"
+DB_PASS="pgpwd"
+
+[JWT]
+Key = "RecallAllYourMind"
