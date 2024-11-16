@@ -30,8 +30,8 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	//set up swagger to see all the methods in the handlers
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.GET("/forecasts", h.WithAuthCheck(ds.Guest, ds.Admin, ds.Moderator, ds.User), h.GetForecasts)
-	router.GET("/forecast/:id", h.WithAuthCheck(ds.Guest, ds.Admin, ds.Moderator, ds.User), h.GetForecastById)
+	router.GET("/forecasts", h.GetForecasts)
+	router.GET("/forecast/:id", h.GetForecastById)
 	router.DELETE("/forecast/delete/:id", h.WithAuthCheck(ds.Admin), h.DeleteForecast)
 	router.POST("/forecast/add", h.WithAuthCheck(ds.Admin), h.AddForecast) //without img
 	router.PUT("/forecast/edit/:id", h.WithAuthCheck(ds.Admin), h.EditForecast)
@@ -48,10 +48,10 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/pr_fc/remove/:prediction_id/:forecast_id", h.WithAuthCheck(ds.Admin, ds.Moderator, ds.User), h.DeleteForecastFromPred)
 	router.PUT("/pr_fc/edit/:prediction_id/:forecast_id", h.WithAuthCheck(ds.Admin, ds.Moderator, ds.User), h.EditPredForec)
 
-	router.POST("/user/register", h.WithAuthCheck(ds.Admin, ds.Moderator), h.Register)
+	router.POST("/user/register", h.Register)
 	router.PUT("/user/update/:id", h.WithAuthCheck(ds.Admin), h.UpdateUser)
-	router.POST("/user/login", h.LoginUser)                                                           //can proceed anyway
-	router.POST("/user/logout", h.WithAuthCheck(ds.Admin, ds.Moderator, ds.User, ds.Guest), h.Logout) //have to have any role
+	router.POST("/user/login", h.LoginUser)                                                 //can proceed anyway
+	router.POST("/user/logout", h.WithAuthCheck(ds.Admin, ds.Moderator, ds.User), h.Logout) //have to have any role
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

@@ -7,7 +7,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-const servicePrefix = "awesome_service." // наш префикс сервиса
+const servicePrefix = "forecast_service." // наш префикс сервиса
 
 type Client struct {
 	cfg    config.Redis

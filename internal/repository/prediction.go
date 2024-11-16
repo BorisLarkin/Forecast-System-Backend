@@ -61,9 +61,9 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	if er != nil {
 		return "", er
 	}
-	err := r.db.Where("user_id=? AND status=?", int_uid, "draft").First(&Predictions).Error
-	if err != nil {
-		return "", err
+
+	if err := r.db.Where("user_id=? AND status=?", int_uid, "draft").First(&Predictions); err != nil {
+		return "", fmt.Errorf("no prediction draft associated with user found")
 	}
 	aid := strconv.Itoa(int(Predictions.Prediction_id))
 	return aid, nil

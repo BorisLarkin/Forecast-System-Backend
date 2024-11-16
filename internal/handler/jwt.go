@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"web/internal/ds"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,9 @@ type Payload struct {
 
 func (h *Handler) GetTokenPayload(gCtx *gin.Context) (*Payload, error) {
 	jwtStr := gCtx.GetHeader("Authorization")
-
+	if len(jwtStr) < len(jwtPrefix) {
+		return nil, fmt.Errorf("no valid auth header provided")
+	}
 	// отрезаем префикс
 	jwtStr = jwtStr[len(jwtPrefix):]
 

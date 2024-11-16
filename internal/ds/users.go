@@ -21,8 +21,7 @@ type UserRegisterReq struct {
 type Role int
 
 const (
-	Guest Role = iota
-	User
+	User Role = iota
 	Moderator
 	Admin
 )

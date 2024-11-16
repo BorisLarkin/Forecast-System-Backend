@@ -13,17 +13,20 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 	searchText := ctx.Query("forecast_name")
 	var pred_len int
 	var forec_empty bool
+	var draft_id string
 	payload, err := h.GetTokenPayload(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
-	}
-	uid := strconv.Itoa(int(payload.Uid))
-	draft_id, err := h.Repository.GetUserDraftID(uid)
 	if err != nil {
 		pred_len = 0
 		draft_id = "none"
 	} else {
-		pred_len = h.Repository.GetPredLen(draft_id)
+		uid := strconv.Itoa(int(payload.Uid))
+		draft_id, err = h.Repository.GetUserDraftID(uid)
+		if err != nil {
+			pred_len = 0
+			draft_id = "none"
+		} else {
+			pred_len = h.Repository.GetPredLen(draft_id)
+		}
 	}
 
 	if searchText == "" {
@@ -36,10 +39,10 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 		}
 		forec_empty = (forec_len == 0)
 		ctx.JSON(http.StatusOK, gin.H{
-			"Forecasts":   Forecasts,
-			"forec_empty": forec_empty,
-			"pred_len":    pred_len,
-			"draft_id":    draft_id,
+			"Forecasts":      Forecasts,
+			"forec_empty":    forec_empty,
+			"prediction_len": pred_len,
+			"prediction_id":  draft_id,
 		})
 	} else {
 		filteredForecasts, forec_len, err := h.Repository.SearchForecast(searchText)
@@ -51,10 +54,10 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 		}
 		forec_empty = (forec_len == 0)
 		ctx.JSON(http.StatusOK, gin.H{
-			"Forecasts":   filteredForecasts,
-			"forec_empty": forec_empty,
-			"pred_len":    pred_len,
-			"draft_id":    draft_id,
+			"Forecasts":      filteredForecasts,
+			"forec_empty":    forec_empty,
+			"prediction_len": pred_len,
+			"prediction_id":  draft_id,
 		})
 	}
 }

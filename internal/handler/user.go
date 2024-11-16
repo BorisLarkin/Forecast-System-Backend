@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"crypto/sha1"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -121,8 +119,8 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 }
 
 type registerReq struct {
-	Login string `json:"login"`
-	Pass  string `json:"pass"`
+	Login    string `json:"login"`
+	Password string `json:"password"`
 }
 
 type registerResp struct {
@@ -138,7 +136,7 @@ func (h *Handler) Register(gCtx *gin.Context) {
 		return
 	}
 
-	if req.Pass == "" {
+	if req.Password == "" {
 		gCtx.AbortWithError(http.StatusBadRequest, fmt.Errorf("pass is empty"))
 		return
 	}
@@ -151,7 +149,7 @@ func (h *Handler) Register(gCtx *gin.Context) {
 	err = h.Repository.RegisterUser(&ds.Users{
 		Role:     int(ds.User),
 		Login:    req.Login,
-		Password: generateHashString(req.Pass), // пароли делаем в хешированном виде и далее будем сравнивать хеши, чтобы их не угнали с базой вместе
+		Password: req.Password, // пароли делаем в хешированном виде и далее будем сравнивать хеши, чтобы их не угнали с базой вместе
 	})
 	if err != nil {
 		gCtx.AbortWithError(http.StatusInternalServerError, err)
@@ -161,12 +159,6 @@ func (h *Handler) Register(gCtx *gin.Context) {
 	gCtx.JSON(http.StatusOK, &registerResp{
 		Ok: true,
 	})
-}
-
-func generateHashString(s string) string {
-	h := sha1.New()
-	h.Write([]byte(s))
-	return hex.EncodeToString(h.Sum(nil))
 }
 
 func (h *Handler) Logout(gCtx *gin.Context) {
