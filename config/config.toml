@@ -11,8 +11,8 @@ DialTimeout = "10s"
 ReadTimeout = "10s"
 REDIS_HOST="0.0.0.0"
 REDIS_PORT=6379
-REDIS_USER="borizzler"
-REDIS_PASSWORD="redis123"
+REDIS_USER="default"
+REDIS_PASSWORD=""
 
 [postgresql]
 DB_HOST="0.0.0.0"

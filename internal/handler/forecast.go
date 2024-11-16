@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"web/internal/ds"
-	"web/internal/dsn"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,8 +13,12 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 	searchText := ctx.Query("forecast_name")
 	var pred_len int
 	var forec_empty bool
-	user_id, _ := dsn.GetCurrentUserID()
-	draft_id, err := h.Repository.GetUserDraftID(user_id)
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+	}
+	uid := strconv.Itoa(int(payload.Uid))
+	draft_id, err := h.Repository.GetUserDraftID(uid)
 	if err != nil {
 		pred_len = 0
 		draft_id = "none"

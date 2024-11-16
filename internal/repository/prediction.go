@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 	"web/internal/ds"
-	"web/internal/dsn"
 
 	"github.com/gin-gonic/gin"
 )
@@ -70,9 +69,8 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	return aid, nil
 }
 
-func (r *Repository) CreateDraft() error {
+func (r *Repository) CreateDraft(uid string) error {
 	var Prediction ds.Predictions
-	uid, _ := dsn.GetCurrentUserID()
 	intid, _ := strconv.Atoi(uid)
 	err := r.db.Where("user_id=? AND status=?", intid, "draft").First(&Prediction).Error
 	if err == nil {
@@ -97,12 +95,9 @@ func (r *Repository) SavePrediction(id string, ctx *gin.Context) error {
 	r.SaveInputs(int_id, ids, val)
 	return r.db.Save(&Prediction).Error
 }
-func (r *Repository) GetPredictions(status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
+func (r *Repository) GetPredictions(uid string, status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
 	var predictions []ds.Predictions
-	uid, err := dsn.GetCurrentUserID()
-	if err != nil {
-		return nil, err
-	}
+
 	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.user_id").
 		Where("predictions.user_id = ?", uid)
 	if status != "" {

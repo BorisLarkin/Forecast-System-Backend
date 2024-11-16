@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -35,8 +36,7 @@ func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context)
 			return
 		}
 		if !errors.Is(err, redis.Nil) { // значит что это не ошибка отсуствия - внутренняя ошибка
-			gCtx.AbortWithError(http.StatusInternalServerError, err)
-
+			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("redis internal: %s", err))
 			return
 		}
 
@@ -54,11 +54,11 @@ func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context)
 
 		for _, oneOfAssignedRole := range assignedRoles {
 			if myClaims.Role == oneOfAssignedRole {
-				gCtx.AbortWithStatus(http.StatusForbidden)
-				log.Printf("role %s is not assigned in %s", myClaims.Role, assignedRoles)
 				return
 			}
 		}
+		gCtx.AbortWithStatus(http.StatusForbidden)
+		log.Printf("role %d is not assigned in %s", myClaims.Role, assignedRoles)
 	}
 }
 

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
-	"web/internal/dsn"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +25,11 @@ func (h *Handler) SavePrediction(ctx *gin.Context) {
 }
 
 func (h *Handler) GetPredictions(ctx *gin.Context) {
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+	}
+
 	status := ctx.Query("status")
 	startDateStr := ctx.Query("start_date")
 	endDateStr := ctx.Query("end_date")
@@ -40,8 +45,8 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, "Invalid end date format")
 		return
 	}
-
-	preds, err := h.Repository.GetPredictions(status, startDateStr != "", endDateStr != "", startDate, endDate)
+	uid_string := strconv.Itoa(int(payload.Uid))
+	preds, err := h.Repository.GetPredictions(uid_string, status, startDateStr != "", endDateStr != "", startDate, endDate)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -52,7 +57,7 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 }
 
 func (h *Handler) GetPredictionById(ctx *gin.Context) {
-	id := ctx.Param("id") // Получаем ID сообщения из URL
+	id := ctx.Param("id")
 
 	prediction, err := h.Repository.GetPredictionByID(id)
 	if err != nil {
@@ -101,8 +106,11 @@ func (h *Handler) EditPrediction(ctx *gin.Context) {
 
 func (h *Handler) FormPrediction(ctx *gin.Context) {
 	id := ctx.Param("id")
-
-	creatorID, err := dsn.GetCurrentUserID()
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+	}
+	creatorID := strconv.Itoa(int(payload.Uid))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -118,17 +126,8 @@ func (h *Handler) FormPrediction(ctx *gin.Context) {
 
 func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	id := ctx.Param("id")
-
-	is_admin, err := h.Repository.CurrentUser_IsAdmin()
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
-		return
-	}
-	if !is_admin {
-		ctx.JSON(http.StatusConflict, fmt.Errorf("attempt to finish prediction as user").Error())
-		return
-	}
 	status := ctx.Query("status")
+
 	if status == "complete" {
 		pr_fcs, err := h.Repository.CalculatePrediction(id)
 		if err != nil {
@@ -153,8 +152,11 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 
 func (h *Handler) DeletePrediction(ctx *gin.Context) {
 	pr_id := ctx.Param("id")
-
-	creatorID, err := dsn.GetCurrentUserID()
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+	}
+	creatorID := strconv.Itoa(int(payload.Uid))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
@@ -168,7 +170,12 @@ func (h *Handler) DeletePrediction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Status changed successfully"})
 }
 func (h *Handler) CreateDraft(ctx *gin.Context) {
-	if err := h.Repository.CreateDraft(); err != nil {
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+	}
+	creatorID := strconv.Itoa(int(payload.Uid))
+	if err := h.Repository.CreateDraft(creatorID); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "could not create draft"})
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "draft created successfully"})
