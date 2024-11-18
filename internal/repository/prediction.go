@@ -61,9 +61,9 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 	if er != nil {
 		return "", er
 	}
-
-	if err := r.db.Where("user_id=? AND status=?", int_uid, "draft").First(&Predictions); err != nil {
-		return "", fmt.Errorf("no prediction draft associated with user found")
+	err := r.db.Where("creator_id=? AND status=?", int_uid, "draft").First(&Predictions).Error
+	if err != nil {
+		return "", err
 	}
 	aid := strconv.Itoa(int(Predictions.Prediction_id))
 	return aid, nil
@@ -72,7 +72,7 @@ func (r *Repository) GetUserDraftID(user_id string) (string, error) {
 func (r *Repository) CreateDraft(uid string) error {
 	var Prediction ds.Predictions
 	intid, _ := strconv.Atoi(uid)
-	err := r.db.Where("user_id=? AND status=?", intid, "draft").First(&Prediction).Error
+	err := r.db.Where("creator_id=? AND status=?", intid, "draft").First(&Prediction).Error
 	if err == nil {
 		return fmt.Errorf("draft exists")
 	}
@@ -95,11 +95,13 @@ func (r *Repository) SavePrediction(id string, ctx *gin.Context) error {
 	r.SaveInputs(int_id, ids, val)
 	return r.db.Save(&Prediction).Error
 }
-func (r *Repository) GetPredictions(uid string, status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
+func (r *Repository) GetPredictions(uid string, role ds.Role, status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
 	var predictions []ds.Predictions
 
-	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.user_id").
-		Where("predictions.user_id = ?", uid)
+	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.user_id")
+	if role != ds.Moderator {
+		query = query.Where("predictions.creator_id = ?", uid)
+	}
 	if status != "" {
 		query = query.Where("predictions.status = ?", status)
 	}

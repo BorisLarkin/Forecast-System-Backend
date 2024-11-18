@@ -1,12 +1,220 @@
 basePath: /
 definitions:
+  ds.ForecastRequest:
+    properties:
+      color:
+        type: string
+      descr:
+        type: string
+      ext_desc:
+        type: string
+      image:
+        type: string
+      measure_type:
+        type: string
+      short_title:
+        type: string
+      title:
+        type: string
+    type: object
+  ds.ForecastResponse:
+    properties:
+      color:
+        type: string
+      descr:
+        type: string
+      extended_desc:
+        type: string
+      id:
+        type: integer
+      img_url:
+        type: string
+      measure_type:
+        type: string
+      short:
+        type: string
+      title:
+        type: string
+    type: object
+  ds.ForecastResponseWithFlags:
+    properties:
+      color:
+        type: string
+      descr:
+        type: string
+      ext_desc:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      input:
+        type: boolean
+      measure_type:
+        type: string
+      result:
+        type: boolean
+      short_title:
+        type: string
+      title:
+        type: string
+    type: object
+  ds.Forecasts:
+    properties:
+      color:
+        type: string
+      descr:
+        type: string
+      ext_desc:
+        type: string
+      forecast_id:
+        type: integer
+      image:
+        type: string
+      measure_type:
+        type: string
+      short_title:
+        type: string
+      title:
+        type: string
+    type: object
+  ds.GetForecastsResponse:
+    properties:
+      forecasts:
+        items:
+          $ref: '#/definitions/ds.Forecasts'
+        type: array
+      forecasts_empty:
+        type: boolean
+      predicction_id:
+        type: string
+      prediction_size:
+        type: integer
+    type: object
+  ds.PredictionDetail:
+    properties:
+      creator:
+        $ref: '#/definitions/ds.Users'
+      date_created:
+        type: string
+      date_finished:
+        type: string
+      date_formed:
+        type: string
+      forecasts:
+        items:
+          $ref: '#/definitions/ds.ForecastResponseWithFlags'
+        type: array
+      id:
+        type: integer
+      moderator:
+        type: integer
+      prediction_amount:
+        type: integer
+      prediction_window:
+        type: integer
+      status:
+        type: string
+    type: object
+  ds.Predictions:
+    properties:
+      date_completed:
+        type: string
+      date_created:
+        type: string
+      date_formed:
+        type: string
+      prediction_amount:
+        type: integer
+      prediction_id:
+        type: integer
+      prediction_window:
+        type: integer
+      status:
+        type: string
+    type: object
+  ds.Role:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Guest
+    - User
+    - Moderator
+  ds.UpdatePred_ForecInput:
+    properties:
+      input:
+        type: string
+    required:
+    - input
+    type: object
+  ds.Users:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+      role:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  handler.EditPredReq:
+    properties:
+      prediction_amount:
+        type: integer
+      prediction_window:
+        type: integer
+    required:
+    - prediction_amount
+    - prediction_window
+    type: object
+  handler.loginReq:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
   handler.loginResp:
     properties:
       access_token:
         type: string
       expires_in:
-        type: integer
+        type: string
       token_type:
+        type: string
+    type: object
+  handler.registerReq:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  handler.registerResp:
+    properties:
+      ok:
+        type: boolean
+    type: object
+  handler.updateReq:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+      role:
+        $ref: '#/definitions/ds.Role'
+    type: object
+  handler.updateResp:
+    properties:
+      login:
+        type: string
+      role:
+        $ref: '#/definitions/ds.Role'
+      uid:
         type: string
     type: object
   main.pingResp:
@@ -26,6 +234,166 @@ info:
   title: Forecast system
   version: "1.0"
 paths:
+  /forecast/{id}:
+    get:
+      description: very very friendly response
+      parameters:
+      - description: Forecast ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.ForecastResponse'
+        "404":
+          description: Not Found
+      summary: Get a specified forecast by its ID
+      tags:
+      - Forecasts
+  /forecast/{if}/add_picture:
+    post:
+      consumes:
+      - multipart/form-data
+      description: very very friendly response
+      parameters:
+      - description: New image for the forecast
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Forecast ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Add image to specified forecast
+      tags:
+      - Forecasts
+  /forecast/add:
+    post:
+      consumes:
+      - application/json
+      description: very very friendly response
+      parameters:
+      - description: New forecast data
+        in: body
+        name: forecast
+        required: true
+        schema:
+          $ref: '#/definitions/ds.ForecastRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.ForecastRequest'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ds.Forecasts'
+      summary: Add forecast to the list
+      tags:
+      - Forecasts
+  /forecast/delete/{id}:
+    delete:
+      description: very very friendly response
+      parameters:
+      - description: Forecast ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Delete a specified forecast by its ID
+      tags:
+      - Forecasts
+  /forecast/edit/{id}:
+    post:
+      consumes:
+      - application/json
+      description: very very friendly response
+      parameters:
+      - description: Forecast ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New forecast data
+        in: body
+        name: forecast
+        required: true
+        schema:
+          $ref: '#/definitions/ds.ForecastRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.ForecastRequest'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ds.Forecasts'
+      summary: Edit forecast
+      tags:
+      - Forecasts
+  /forecast_to_pred/{forecast_id}:
+    post:
+      description: If there`s no draft found, a new draft is to be created.
+      parameters:
+      - description: Forecast ID
+        in: path
+        name: forecast_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Add forecast to current user`s draft prediction
+      tags:
+      - Preds_Forecs
+  /forecasts:
+    get:
+      description: very very friendly response
+      parameters:
+      - description: name filter
+        in: query
+        name: searchText
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.GetForecastsResponse'
+        "500":
+          description: Internal Server Error
+      summary: Show all available forecasts filtered by name
+      tags:
+      - Forecasts
   /ping/{name}:
     get:
       description: very very friendly response
@@ -39,9 +407,212 @@ paths:
       summary: Show hello text
       tags:
       - Tests
+  /pr_fc/edit/{prediction_id}/{forecast_id}:
+    delete:
+      description: An error is returned in cases of unauthorized actions being attempted
+      parameters:
+      - description: Forecast ID
+        in: path
+        name: forecast_id
+        required: true
+        type: integer
+      - description: Prediction ID
+        in: path
+        name: prediction_id
+        required: true
+        type: integer
+      - description: New data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UpdatePred_ForecInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Edit forecast`s input data for specified prediction
+      tags:
+      - Preds_Forecs
+  /pr_fc/remove/{prediction_id}/{forecast_id}:
+    delete:
+      description: An error is returned in cases of unauthorized actions being attempted
+      parameters:
+      - description: Forecast ID
+        in: path
+        name: forecast_id
+        required: true
+        type: integer
+      - description: Prediction ID
+        in: path
+        name: prediction_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Delete forecast from specified prediction
+      tags:
+      - Preds_Forecs
+  /prediction/{id}:
+    get:
+      description: very very friendly response
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.PredictionDetail'
+        "403":
+          description: Forbidden
+      summary: Display a prediction and its forecasts
+      tags:
+      - Predictions
+  /prediction/delete/{id}:
+    delete:
+      description: Method sets prediction`s status to "deleted" without actually removing
+        it from the db model
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Delete specified prediction
+      tags:
+      - Predictions
+  /prediction/edit/{id}:
+    put:
+      consumes:
+      - application/json
+      description: very very friendly response
+      parameters:
+      - description: New prediction data
+        in: body
+        name: prediction
+        required: true
+        schema:
+          $ref: '#/definitions/handler.EditPredReq'
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Edit specified prediction`s prediction amount & window
+      tags:
+      - Predictions
+  /prediction/finish/{id}:
+    put:
+      description: 'Can be ended with statuses: ["denied", "completed"]'
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status to be set
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "409":
+          description: Conflict
+      summary: Finish specified prediction
+      tags:
+      - Predictions
+  /prediction/form/{id}:
+    put:
+      description: very very friendly response
+      parameters:
+      - description: Prediction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Form specified prediction
+      tags:
+      - Predictions
+  /predictions:
+    get:
+      description: very very friendly response
+      parameters:
+      - description: Prediction status
+        in: query
+        name: status
+        type: string
+      - description: 'Earliest date created filter: YYYY-Mon-DD'
+        in: query
+        name: start_date
+        type: string
+      - description: 'Latest date created filter: YYYY-Mon-DD'
+        in: query
+        name: end_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Predictions'
+            type: array
+        "400":
+          description: Bad Request
+      summary: Show all predictions made for current user
+      tags:
+      - Predictions
   /user/login:
     post:
+      consumes:
+      - application/json
       description: very very friendly response
+      parameters:
+      - description: user data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.loginReq'
       produces:
       - application/json
       responses:
@@ -49,7 +620,75 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.loginResp'
+        "403":
+          description: Forbidden
       summary: Login the specified user
+      tags:
+      - Users
+  /user/logout:
+    post:
+      description: very very friendly response
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Logout the current user
+      tags:
+      - Users
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: very very friendly response
+      parameters:
+      - description: New user data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.registerReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.registerResp'
+        "400":
+          description: Bad Request
+      summary: Register the specified user
+      tags:
+      - Users
+  /user/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: very very friendly response
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New user data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.updateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.updateResp'
+        "500":
+          description: Internal Server Error
+      summary: Update the specified user
       tags:
       - Users
 schemes:

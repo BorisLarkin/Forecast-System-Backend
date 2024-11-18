@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetForecasts godoc
+// @Summary      Show all available forecasts filtered by name
+// @Description  very very friendly response
+// @Tags         Forecasts
+// @Produce      json
+// @Param searchText query string false "name filter"
+// @Success      200  {object}  ds.GetForecastsResponse
+// @Failure      500
+// @Router       /forecasts [get]
 func (h *Handler) GetForecasts(ctx *gin.Context) {
 	searchText := ctx.Query("forecast_name")
 	var pred_len int
@@ -38,11 +47,11 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 			return
 		}
 		forec_empty = (forec_len == 0)
-		ctx.JSON(http.StatusOK, gin.H{
-			"Forecasts":      Forecasts,
-			"forec_empty":    forec_empty,
-			"prediction_len": pred_len,
-			"prediction_id":  draft_id,
+		ctx.JSON(http.StatusOK, ds.GetForecastsResponse{
+			Forecasts:      Forecasts,
+			DraftID:        draft_id,
+			DraftSize:      pred_len,
+			ForecastsEmpty: forec_empty,
 		})
 	} else {
 		filteredForecasts, forec_len, err := h.Repository.SearchForecast(searchText)
@@ -53,14 +62,24 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 			return
 		}
 		forec_empty = (forec_len == 0)
-		ctx.JSON(http.StatusOK, gin.H{
-			"Forecasts":      filteredForecasts,
-			"forec_empty":    forec_empty,
-			"prediction_len": pred_len,
-			"prediction_id":  draft_id,
+		ctx.JSON(http.StatusOK, ds.GetForecastsResponse{
+			Forecasts:      filteredForecasts,
+			DraftID:        draft_id,
+			DraftSize:      pred_len,
+			ForecastsEmpty: forec_empty,
 		})
 	}
 }
+
+// GetForecastByID godoc
+// @Summary      Get a specified forecast by its ID
+// @Description  very very friendly response
+// @Tags         Forecasts
+// @Produce      json
+// @Param        id path int true "Forecast ID"
+// @Success      200  {object}  ds.ForecastResponse
+// @Failure      404
+// @Router       /forecast/{id} [get]
 func (h *Handler) GetForecastById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -73,6 +92,15 @@ func (h *Handler) GetForecastById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, forecast)
 }
 
+// DeleteForecast godoc
+// @Summary      Delete a specified forecast by its ID
+// @Description  very very friendly response
+// @Tags         Forecasts
+// @Produce      json
+// @Param        id path int true "Forecast ID"
+// @Success      200
+// @Failure      400
+// @Router       /forecast/delete/{id} [delete]
 func (h *Handler) DeleteForecast(ctx *gin.Context) {
 	id := ctx.Param("id")
 	imageName := fmt.Sprintf("image-%s.png", id)
@@ -86,8 +114,19 @@ func (h *Handler) DeleteForecast(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error: ": err})
 		return
 	}
-	ctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("Forecast (id-%s) deleted", id)})
+	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Forecast (id-%s) deleted", id)})
 }
+
+// AddForecast godoc
+// @Summary      Add forecast to the list
+// @Description  very very friendly response
+// @Tags         Forecasts
+// @Accept       json
+// @Produce      json
+// @Param        forecast body ds.ForecastRequest true "New forecast data"
+// @Success      200  {object}  ds.ForecastRequest
+// @Failure      500  {object}  ds.Forecasts
+// @Router       /forecast/add [post]
 func (h *Handler) AddForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
 
@@ -107,6 +146,17 @@ func (h *Handler) AddForecast(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, forecast)
 }
 
+// EditForecast godoc
+// @Summary      Edit forecast
+// @Description  very very friendly response
+// @Tags         Forecasts
+// @Accept       json
+// @Produce      json
+// @Param id path int true "Forecast ID"
+// @Param        forecast body ds.ForecastRequest true "New forecast data"
+// @Success      200  {object}  ds.ForecastRequest
+// @Failure      500  {object}  ds.Forecasts
+// @Router       /forecast/edit/{id} [post]
 func (h *Handler) EditForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
 	id := ctx.Param("id")
@@ -128,6 +178,17 @@ func (h *Handler) EditForecast(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, forecast)
 }
+
+// AddImageToForecast godoc
+// @Summary      Add image to specified forecast
+// @Description  very very friendly response
+// @Tags         Forecasts
+// @Accept multipart/form-data
+// @Param image formData file true "New image for the forecast"
+// @Param id path int true "Forecast ID"
+// @Success      200
+// @Failure      500
+// @Router       /forecast/{if}/add_picture [post]
 func (h *Handler) AddPicture(ctx *gin.Context) {
 	forecast_id := ctx.Param("id")
 	// Get file out of the body

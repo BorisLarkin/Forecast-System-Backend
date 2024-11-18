@@ -15,73 +15,76 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-/*
-func (h *Handler) RegisterUser(ctx *gin.Context) {
-	var req ds.Users
-
-	if err := ctx.BindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, "Invalid JSON format")
-		return
-	}
-	user, err := h.Repository.RegiterUser(&req)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	ctx.JSON(http.StatusCreated, user)
+type updateReq struct {
+	Login    string  `json:"login"`
+	Role     ds.Role `json:"role"`
+	Password string  `json:"password"`
 }
-*/
 
+type updateResp struct {
+	Uid   string  `json:"uid"`
+	Login string  `json:"login"`
+	Role  ds.Role `json:"role"`
+}
+
+// Update godoc
+// @Summary      Update the specified user
+// @Description  very very friendly response
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Param        id path int true "User ID"
+// @Param        user body updateReq true "New user data"
+// @Success      200  {object}  updateResp
+// @Failure      500
+// @Router       /user/update/{id} [put]
 func (h *Handler) UpdateUser(ctx *gin.Context) {
 	userID := ctx.Param("id")
 
-	var req ds.Users
+	var updateReq updateReq
 
-	if err := ctx.BindJSON(&req); err != nil {
+	if err := ctx.BindJSON(&updateReq); err != nil {
 		ctx.JSON(http.StatusBadRequest, "Invalid JSON format")
 		return
 	}
-
-	err := h.Repository.UpdateUser(req, userID)
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, fmt.Errorf("error retrieving token payload: %s", err))
+		return
+	}
+	err = h.Repository.UpdateUser(ds.Users{Login: updateReq.Login, Password: updateReq.Password, Role: int(updateReq.Role)}, userID, payload.Uid, payload.Role)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":    userID,
-		"login": req.Login,
-		"role":  req.Role,
+	ctx.JSON(http.StatusOK, updateResp{
+		Uid:   userID,
+		Login: updateReq.Login,
+		Role:  ds.Role(updateReq.Role),
 	})
 }
 
-/*
-	func (h *Handler) LogoutUser(ctx *gin.Context) {
-		if err := h.Repository.Logout(); err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
-			return
-		}
-		ctx.JSON(http.StatusOK, gin.H{"message": "Successfuly logged out"})
-	}
-*/
 type loginReq struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
 
 type loginResp struct {
-	ExpiresIn   time.Duration `json:"expires_in"`
-	AccessToken string        `json:"access_token"`
-	TokenType   string        `json:"token_type"`
+	ExpiresIn   string `json:"expires_in"`
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
 }
 
 // Login godoc
 // @Summary      Login the specified user
 // @Description  very very friendly response
-// @Tags         Userss
+// @Tags         Users
+// @Accept       json
 // @Produce      json
-// @Success      200  {object}  loginResp
+// @Param        user body loginReq true "user data"
+// @Success      200  {object} loginResp
+// @Failure      403
 // @Router       /user/login [post]
 func (h *Handler) LoginUser(gCtx *gin.Context) {
 	req := &loginReq{}
@@ -108,7 +111,7 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 		}
 
 		gCtx.JSON(http.StatusOK, loginResp{
-			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn.Hours()),
+			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn.Hours()).String(),
 			AccessToken: token,
 			TokenType:   "Bearer",
 		})
@@ -127,6 +130,16 @@ type registerResp struct {
 	Ok bool `json:"ok"`
 }
 
+// Register godoc
+// @Summary      Register the specified user
+// @Description  very very friendly response
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Param        user body registerReq true "New user data"
+// @Success      200  {object}  registerResp
+// @Failure      400
+// @Router       /user/register [post]
 func (h *Handler) Register(gCtx *gin.Context) {
 	req := &registerReq{}
 
@@ -161,6 +174,14 @@ func (h *Handler) Register(gCtx *gin.Context) {
 	})
 }
 
+// Logout godoc
+// @Summary      Logout the current user
+// @Description  very very friendly response
+// @Tags         Users
+// @Produce      json
+// @Success      200
+// @Failure      500
+// @Router       /user/logout [post]
 func (h *Handler) Logout(gCtx *gin.Context) {
 	// получаем заголовок
 	jwtStr := gCtx.GetHeader("Authorization")

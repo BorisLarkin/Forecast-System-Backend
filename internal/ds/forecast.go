@@ -13,13 +13,6 @@ type Forecasts struct {
 
 //http://127.0.0.1:9000/test/image-{{.Forecast_id}}.png
 
-type ForecastsData struct {
-	Forecasts  []Forecasts
-	Filter     string
-	SearchText string
-	Status     string
-}
-
 type ForecastRequest struct {
 	Title         string `json:"title"`
 	Short         string `json:"short_title"`
@@ -31,9 +24,10 @@ type ForecastRequest struct {
 }
 
 type GetForecastsResponse struct {
-	Forecasts []ForecastResponse `json:"forecasts"`
-	DraftID   int                `json:"draft_ID"`
-	DraftSize int                `json:"draft_size"`
+	Forecasts      *[]Forecasts `json:"forecasts"`
+	DraftID        string       `json:"predicction_id"`
+	DraftSize      int          `json:"prediction_size"`
+	ForecastsEmpty bool         `json:"forecasts_empty"`
 }
 
 type ForecastResponse struct {

@@ -1,0 +1,22 @@
+// GetForecasts godoc
+// @Summary      Show all available forecasts filtered by name
+// @Description  very very friendly response
+// @Tags         Predictions
+// @Accept       json
+// @Produce      json
+// @Param        id path int true "Prediction ID"
+// @Param        prediction body predictionReq true "New prediction data"
+// @Success      200  {object}  predictionResp
+// @Failure      500
+// @Router       /user/update/{id} [put]
+
+// @Param id path int true "ID чата"
+// @Param status query string false "Статус сообщения"
+// @Param chat body ds.ChatRequest true "Обновленные данные чата"
+
+// @Accept multipart/form-data
+// @Param image formData file true "Новое изображение для чата"
+
+// @Param status query string false "Статус сообщения"
+// @Param start_date query string false "Начальная дата в формате YYYY-MM-DD"
+// @Param end_date query string false "Конечная дата в формате YYYY-MM-DD"

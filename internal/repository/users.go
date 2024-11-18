@@ -89,7 +89,7 @@ func (r *Repository) User_IsAdmin(uid string) (bool, error) {
 	return user.Role == 3, nil
 }
 
-func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
+func (r *Repository) UpdateUser(newUser ds.Users, id string, caller_id uint, caller_role ds.Role) error {
 	var user ds.Users
 	intid, err := strconv.Atoi(id)
 	if err != nil {
@@ -97,6 +97,10 @@ func (r *Repository) UpdateUser(newUser ds.Users, id string) error {
 	}
 	if err := r.db.First(&user, intid).Error; err != nil {
 		return fmt.Errorf("user %d not found", intid)
+	}
+
+	if user.User_id != caller_id && caller_role != ds.Moderator {
+		return fmt.Errorf("attempt to alter unlinked user")
 	}
 
 	if newUser.Login != "" && newUser.Password != "" {

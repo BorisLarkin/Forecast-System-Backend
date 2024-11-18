@@ -7,21 +7,10 @@ type Users struct {
 	Role     int    `json:"role" gorm:"type:integer; not null"`
 }
 
-type UserRespReq struct {
-	Login    string `json:"login"`
-	Password string `json:"password"`
-}
-
-type UserRegisterReq struct {
-	Login          string `json:"login"`
-	Password       string `json:"password"`
-	RepeatPassword string `json:"repeat_password"`
-}
-
 type Role int
 
 const (
-	User Role = iota
+	Guest Role = iota
+	User
 	Moderator
-	Admin
 )

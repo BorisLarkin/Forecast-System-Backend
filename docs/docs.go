@@ -22,6 +22,250 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/forecast/add": {
+            "post": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Forecasts"
+                ],
+                "summary": "Add forecast to the list",
+                "parameters": [
+                    {
+                        "description": "New forecast data",
+                        "name": "forecast",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.ForecastRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.ForecastRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ds.Forecasts"
+                        }
+                    }
+                }
+            }
+        },
+        "/forecast/delete/{id}": {
+            "delete": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Forecasts"
+                ],
+                "summary": "Delete a specified forecast by its ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/forecast/edit/{id}": {
+            "post": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Forecasts"
+                ],
+                "summary": "Edit forecast",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "New forecast data",
+                        "name": "forecast",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.ForecastRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.ForecastRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ds.Forecasts"
+                        }
+                    }
+                }
+            }
+        },
+        "/forecast/{id}": {
+            "get": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Forecasts"
+                ],
+                "summary": "Get a specified forecast by its ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.ForecastResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/forecast/{if}/add_picture": {
+            "post": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Forecasts"
+                ],
+                "summary": "Add image to specified forecast",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "New image for the forecast",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/forecast_to_pred/{forecast_id}": {
+            "post": {
+                "description": "If there` + "`" + `s no draft found, a new draft is to be created.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Preds_Forecs"
+                ],
+                "summary": "Add forecast to current user` + "`" + `s draft prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "forecast_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/forecasts": {
+            "get": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Forecasts"
+                ],
+                "summary": "Show all available forecasts filtered by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name filter",
+                        "name": "searchText",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.GetForecastsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/ping/{name}": {
             "get": {
                 "description": "very very friendly response",
@@ -42,7 +286,337 @@ const docTemplate = `{
                 }
             }
         },
+        "/pr_fc/edit/{prediction_id}/{forecast_id}": {
+            "delete": {
+                "description": "An error is returned in cases of unauthorized actions being attempted",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Preds_Forecs"
+                ],
+                "summary": "Edit forecast` + "`" + `s input data for specified prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "forecast_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "prediction_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "New data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.UpdatePred_ForecInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/pr_fc/remove/{prediction_id}/{forecast_id}": {
+            "delete": {
+                "description": "An error is returned in cases of unauthorized actions being attempted",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Preds_Forecs"
+                ],
+                "summary": "Delete forecast from specified prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "forecast_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "prediction_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/prediction/delete/{id}": {
+            "delete": {
+                "description": "Method sets prediction` + "`" + `s status to \"deleted\" without actually removing it from the db model",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Delete specified prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/prediction/edit/{id}": {
+            "put": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Edit specified prediction` + "`" + `s prediction amount \u0026 window",
+                "parameters": [
+                    {
+                        "description": "New prediction data",
+                        "name": "prediction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.EditPredReq"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/prediction/finish/{id}": {
+            "put": {
+                "description": "Can be ended with statuses: [\"denied\", \"completed\"]",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Finish specified prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status to be set",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/prediction/form/{id}": {
+            "put": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Form specified prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/prediction/{id}": {
+            "get": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Display a prediction and its forecasts",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prediction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionDetail"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/predictions": {
+            "get": {
+                "description": "very very friendly response",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Show all predictions made for current user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Prediction status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Earliest date created filter: YYYY-Mon-DD",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Latest date created filter: YYYY-Mon-DD",
+                        "name": "end_date",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Predictions"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
         "/user/login": {
+            "post": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login the specified user",
+                "parameters": [
+                    {
+                        "description": "user data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.loginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.loginResp"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
             "post": {
                 "description": "very very friendly response",
                 "produces": [
@@ -51,19 +625,370 @@ const docTemplate = `{
                 "tags": [
                     "Users"
                 ],
-                "summary": "Login the specified user",
+                "summary": "Logout the current user",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register the specified user",
+                "parameters": [
+                    {
+                        "description": "New user data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.registerReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handler.loginResp"
+                            "$ref": "#/definitions/handler.registerResp"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/user/update/{id}": {
+            "put": {
+                "description": "very very friendly response",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update the specified user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "New user data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.updateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.updateResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
         }
     },
     "definitions": {
+        "ds.ForecastRequest": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "descr": {
+                    "type": "string"
+                },
+                "ext_desc": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "measure_type": {
+                    "type": "string"
+                },
+                "short_title": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.ForecastResponse": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "descr": {
+                    "type": "string"
+                },
+                "extended_desc": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "img_url": {
+                    "type": "string"
+                },
+                "measure_type": {
+                    "type": "string"
+                },
+                "short": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.ForecastResponseWithFlags": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "descr": {
+                    "type": "string"
+                },
+                "ext_desc": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "input": {
+                    "type": "boolean"
+                },
+                "measure_type": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "boolean"
+                },
+                "short_title": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.Forecasts": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "descr": {
+                    "type": "string"
+                },
+                "ext_desc": {
+                    "type": "string"
+                },
+                "forecast_id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "measure_type": {
+                    "type": "string"
+                },
+                "short_title": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.GetForecastsResponse": {
+            "type": "object",
+            "properties": {
+                "forecasts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ds.Forecasts"
+                    }
+                },
+                "forecasts_empty": {
+                    "type": "boolean"
+                },
+                "predicction_id": {
+                    "type": "string"
+                },
+                "prediction_size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ds.PredictionDetail": {
+            "type": "object",
+            "properties": {
+                "creator": {
+                    "$ref": "#/definitions/ds.Users"
+                },
+                "date_created": {
+                    "type": "string"
+                },
+                "date_finished": {
+                    "type": "string"
+                },
+                "date_formed": {
+                    "type": "string"
+                },
+                "forecasts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ds.ForecastResponseWithFlags"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "moderator": {
+                    "type": "integer"
+                },
+                "prediction_amount": {
+                    "type": "integer"
+                },
+                "prediction_window": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.Predictions": {
+            "type": "object",
+            "properties": {
+                "date_completed": {
+                    "type": "string"
+                },
+                "date_created": {
+                    "type": "string"
+                },
+                "date_formed": {
+                    "type": "string"
+                },
+                "prediction_amount": {
+                    "type": "integer"
+                },
+                "prediction_id": {
+                    "type": "integer"
+                },
+                "prediction_window": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.Role": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "Guest",
+                "User",
+                "Moderator"
+            ]
+        },
+        "ds.UpdatePred_ForecInput": {
+            "type": "object",
+            "required": [
+                "input"
+            ],
+            "properties": {
+                "input": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.Users": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handler.EditPredReq": {
+            "type": "object",
+            "required": [
+                "prediction_amount",
+                "prediction_window"
+            ],
+            "properties": {
+                "prediction_amount": {
+                    "type": "integer"
+                },
+                "prediction_window": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handler.loginReq": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "handler.loginResp": {
             "type": "object",
             "properties": {
@@ -71,9 +996,56 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "expires_in": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "token_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.registerReq": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.registerResp": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "handler.updateReq": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/ds.Role"
+                }
+            }
+        },
+        "handler.updateResp": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/ds.Role"
+                },
+                "uid": {
                     "type": "string"
                 }
             }

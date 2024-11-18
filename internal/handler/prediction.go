@@ -6,24 +6,22 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"web/internal/ds"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) DeleteDraft(ctx *gin.Context) {
-	id := ctx.Query("id")
-	h.Repository.SavePrediction(id, ctx)
-	h.Repository.SetPredictionStatus(id, "deleted")
-	ctx.Redirect(http.StatusFound, "/forecasts")
-}
-
-func (h *Handler) SavePrediction(ctx *gin.Context) {
-	id := ctx.Query("id")
-	h.Repository.SavePrediction(id, ctx)
-	h.Repository.SetPredictionStatus(id, "pending")
-	ctx.Redirect(http.StatusFound, "/forecasts")
-}
-
+// GetPredictions godoc
+// @Summary      Show all predictions made for current user
+// @Description  very very friendly response
+// @Tags         Predictions
+// @Produce      json
+// @Param status query string false "Prediction status"
+// @Param start_date query string false "Earliest date created filter: YYYY-Mon-DD"
+// @Param end_date query string false "Latest date created filter: YYYY-Mon-DD"
+// @Success      200  {object}  []ds.Predictions
+// @Failure      400
+// @Router       /predictions [get]
 func (h *Handler) GetPredictions(ctx *gin.Context) {
 	payload, err := h.GetTokenPayload(ctx)
 	if err != nil {
@@ -46,16 +44,24 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 		return
 	}
 	uid_string := strconv.Itoa(int(payload.Uid))
-	preds, err := h.Repository.GetPredictions(uid_string, status, startDateStr != "", endDateStr != "", startDate, endDate)
+	preds, err := h.Repository.GetPredictions(uid_string, payload.Role, status, startDateStr != "", endDateStr != "", startDate, endDate)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// Возвращаем результат клиенту
 	ctx.JSON(http.StatusOK, preds)
 }
 
+// GetPredictionByID godoc
+// @Summary      Display a prediction and its forecasts
+// @Description  very very friendly response
+// @Tags         Predictions
+// @Produce      json
+// @Param        id path int true "Prediction ID"
+// @Success      200  {object}  ds.PredictionDetail
+// @Failure      403
+// @Router       /prediction/{id} [get]
 func (h *Handler) GetPredictionById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -64,57 +70,96 @@ func (h *Handler) GetPredictionById(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+		return
+	}
+	if prediction.CreatorID != int(payload.Uid) && payload.Role != ds.Moderator {
+		ctx.JSON(http.StatusForbidden, fmt.Errorf("attempt to view unowned prediction"))
+		return
+	}
 	forecs, err := h.Repository.GetForecastsByID(id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":                prediction.Prediction_id,
-		"status":            prediction.Status,
-		"Prediction_amount": prediction.Prediction_amount,
-		"Prediction_window": prediction.Prediction_window,
-		"Date_created":      prediction.Date_created,
-		"Date_formed":       prediction.Date_formed,
-		"Date_completed":    prediction.Date_completed,
-		"Creator":           prediction.Creator,
-		"Moderator":         prediction.Moder,
-		"forecasts":         forecs,
+	ctx.JSON(http.StatusOK, ds.PredictionDetail{
+		ID:                prediction.Prediction_id,
+		Status:            prediction.Status,
+		Prediction_amount: prediction.Prediction_amount,
+		Prediction_window: prediction.Prediction_window,
+		DateCreated:       prediction.Date_created,
+		DateFormed:        prediction.Date_formed,
+		DateFinished:      prediction.Date_completed,
+		Creator:           prediction.Creator,
+		Moderator:         prediction.ModerID,
+		Forecasts:         forecs,
 	})
 }
 
+type EditPredReq struct {
+	Amount int `json:"prediction_amount" binding:"required"`
+	Window int `json:"prediction_window" binding:"required"`
+}
+
+// EditPrediction godoc
+// @Summary      Edit specified prediction`s prediction amount & window
+// @Description  very very friendly response
+// @Tags         Predictions
+// @Accept       json
+// @Produce      json
+// @Param        prediction body EditPredReq true "New prediction data"
+// @Param        id path int true "Prediction ID"
+// @Success      200
+// @Failure      403
+// @Router       /prediction/edit/{id} [put]
 func (h *Handler) EditPrediction(ctx *gin.Context) {
 	id := ctx.Param("id")
-
-	var input struct {
-		Amount int `json:"prediction_amount" binding:"required"`
-		Window int `json:"prediction_window" binding:"required"`
-	}
-
+	var input EditPredReq
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
+	}
+
+	prediction, err := h.Repository.GetPredictionByID(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	payload, err := h.GetTokenPayload(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
+		return
+	}
+	if prediction.CreatorID != int(payload.Uid) && payload.Role != ds.Moderator {
+		ctx.JSON(http.StatusForbidden, fmt.Errorf("attempt to view unowned prediction"))
 	}
 	if err := h.Repository.EditPrediction(id, input.Window, input.Amount); err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// Возвращаем успешный ответ
 	ctx.JSON(http.StatusOK, gin.H{"message": "Prediction updated successfully"})
 }
 
+// FormPrediction godoc
+// @Summary      Form specified prediction
+// @Description  very very friendly response
+// @Tags         Predictions
+// @Produce      json
+// @Param        id path int true "Prediction ID"
+// @Success      200
+// @Failure      403
+// @Router       /prediction/form/{id} [put]
 func (h *Handler) FormPrediction(ctx *gin.Context) {
 	id := ctx.Param("id")
 	payload, err := h.GetTokenPayload(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
-	}
-	creatorID := strconv.Itoa(int(payload.Uid))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+	creatorID := strconv.Itoa(int(payload.Uid))
 
 	if err := h.Repository.FormPrediction(id, creatorID); err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
@@ -124,6 +169,16 @@ func (h *Handler) FormPrediction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Status changed"})
 }
 
+// FinishPrediction godoc
+// @Summary      Finish specified prediction
+// @Description  Can be ended with statuses: ["denied", "completed"]
+// @Tags         Predictions
+// @Produce      json
+// @Param        id path int true "Prediction ID"
+// @Param status query string false "Status to be set"
+// @Success      200
+// @Failure      409
+// @Router       /prediction/finish/{id} [put]
 func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	id := ctx.Param("id")
 	status := ctx.Query("status")
@@ -150,6 +205,15 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	}
 }
 
+// DeletePrediction godoc
+// @Summary      Delete specified prediction
+// @Description  Method sets prediction`s status to "deleted" without actually removing it from the db model
+// @Tags         Predictions
+// @Produce      json
+// @Param        id path int true "Prediction ID"
+// @Success      200
+// @Failure      403
+// @Router       /prediction/delete/{id} [delete]
 func (h *Handler) DeletePrediction(ctx *gin.Context) {
 	pr_id := ctx.Param("id")
 	payload, err := h.GetTokenPayload(ctx)
@@ -169,6 +233,8 @@ func (h *Handler) DeletePrediction(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Status changed successfully"})
 }
+
+// nil
 func (h *Handler) CreateDraft(ctx *gin.Context) {
 	payload, err := h.GetTokenPayload(ctx)
 	if err != nil {

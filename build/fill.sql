@@ -16,4 +16,4 @@ INSERT INTO forecasts (forecast_id, title, short, descr, color, measure_type, ex
     'http://127.0.0.1:9000/test/image-3.png');
 
     INSERT INTO users (login, password, role) VALUES
-    ('borizzler','123',3)
+    ('borizzler','123',2)
