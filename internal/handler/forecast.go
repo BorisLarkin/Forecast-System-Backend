@@ -156,7 +156,7 @@ func (h *Handler) AddForecast(ctx *gin.Context) {
 // @Param        forecast body ds.ForecastRequest true "New forecast data"
 // @Success      200  {object}  ds.ForecastRequest
 // @Failure      500  {object}  ds.Forecasts
-// @Router       /forecast/edit/{id} [post]
+// @Router       /forecast/edit/{id} [put]
 func (h *Handler) EditForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
 	id := ctx.Param("id")

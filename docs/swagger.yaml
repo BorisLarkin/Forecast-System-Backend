@@ -173,6 +173,8 @@ definitions:
     type: object
   handler.loginReq:
     properties:
+      guest:
+        type: boolean
       login:
         type: string
       password:
@@ -215,11 +217,6 @@ definitions:
       role:
         $ref: '#/definitions/ds.Role'
       uid:
-        type: string
-    type: object
-  main.pingResp:
-    properties:
-      status:
         type: string
     type: object
 host: 127.0.0.1
@@ -325,7 +322,7 @@ paths:
       tags:
       - Forecasts
   /forecast/edit/{id}:
-    post:
+    put:
       consumes:
       - application/json
       description: very very friendly response
@@ -394,21 +391,8 @@ paths:
       summary: Show all available forecasts filtered by name
       tags:
       - Forecasts
-  /ping/{name}:
-    get:
-      description: very very friendly response
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/main.pingResp'
-      summary: Show hello text
-      tags:
-      - Tests
   /pr_fc/edit/{prediction_id}/{forecast_id}:
-    delete:
+    put:
       description: An error is returned in cases of unauthorized actions being attempted
       parameters:
       - description: Forecast ID

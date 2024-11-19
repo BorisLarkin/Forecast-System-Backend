@@ -92,7 +92,7 @@ const docTemplate = `{
             }
         },
         "/forecast/edit/{id}": {
-            "post": {
+            "put": {
                 "description": "very very friendly response",
                 "consumes": [
                     "application/json"
@@ -266,28 +266,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/ping/{name}": {
-            "get": {
-                "description": "very very friendly response",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tests"
-                ],
-                "summary": "Show hello text",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/main.pingResp"
-                        }
-                    }
-                }
-            }
-        },
         "/pr_fc/edit/{prediction_id}/{forecast_id}": {
-            "delete": {
+            "put": {
                 "description": "An error is returned in cases of unauthorized actions being attempted",
                 "produces": [
                     "application/json"
@@ -981,6 +961,9 @@ const docTemplate = `{
         "handler.loginReq": {
             "type": "object",
             "properties": {
+                "guest": {
+                    "type": "boolean"
+                },
                 "login": {
                     "type": "string"
                 },
@@ -1046,14 +1029,6 @@ const docTemplate = `{
                     "$ref": "#/definitions/ds.Role"
                 },
                 "uid": {
-                    "type": "string"
-                }
-            }
-        },
-        "main.pingResp": {
-            "type": "object",
-            "properties": {
-                "status": {
                     "type": "string"
                 }
             }

@@ -153,7 +153,7 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 // @Param        input body ds.UpdatePred_ForecInput true "New data"
 // @Success      200
 // @Failure      400
-// @Router       /pr_fc/edit/{prediction_id}/{forecast_id} [delete]
+// @Router       /pr_fc/edit/{prediction_id}/{forecast_id} [put]
 func (h *Handler) EditPredForec(ctx *gin.Context) {
 	f_id := ctx.Param("forecast_id")
 	pr_id := ctx.Param("prediction_id")

@@ -44,7 +44,7 @@ func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context)
 			return []byte(h.Config.JWT.Key), nil
 		})
 		if err != nil {
-			gCtx.AbortWithStatus(http.StatusForbidden)
+			gCtx.AbortWithStatus(http.StatusInternalServerError)
 			log.Println(err)
 
 			return
@@ -58,7 +58,7 @@ func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context)
 			}
 		}
 		gCtx.AbortWithStatus(http.StatusForbidden)
-		log.Printf("role %d is not assigned in %s", myClaims.Role, assignedRoles)
+		h.Logger.Printf("role %d is not assigned in %s", myClaims.Role, assignedRoles)
 	}
 }
 

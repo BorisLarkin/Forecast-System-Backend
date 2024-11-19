@@ -68,6 +68,7 @@ func (h *Handler) UpdateUser(ctx *gin.Context) {
 type loginReq struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
+	As_guest bool   `json:"guest"`
 }
 
 type loginResp struct {
@@ -93,6 +94,25 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 	if err != nil {
 		gCtx.AbortWithError(http.StatusBadRequest, err)
 		return
+	}
+	if req.As_guest {
+		token, err := utils.GenerateJWT(h.Config, 0, ds.Role(ds.Guest))
+		if err != nil {
+			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("failed to generate a token"))
+			return
+		}
+		if token == "" {
+			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("token is nil"))
+			return
+		}
+
+		gCtx.JSON(http.StatusOK, loginResp{
+			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn.Hours()).String(),
+			AccessToken: token,
+			TokenType:   "Bearer",
+		})
+		return
+
 	}
 	user, err := h.Repository.GetUserByLogin(req.Login)
 	if err != nil {

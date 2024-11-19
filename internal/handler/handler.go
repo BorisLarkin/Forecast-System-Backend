@@ -48,7 +48,7 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/pr_fc/remove/:prediction_id/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.DeleteForecastFromPred)
 	router.PUT("/pr_fc/edit/:prediction_id/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.EditPredForec)
 
-	router.POST("/user/register", h.Register)
+	router.POST("/user/register", h.WithAuthCheck(ds.Guest), h.Register)
 	router.PUT("/user/update/:id", h.WithAuthCheck(ds.Moderator, ds.User), h.UpdateUser) //Check id
 	router.POST("/user/login", h.LoginUser)                                              //can proceed anyway
 	router.POST("/user/logout", h.WithAuthCheck(ds.Moderator, ds.User, ds.Guest), h.Logout)
