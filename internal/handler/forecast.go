@@ -33,10 +33,10 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 		}
 		forec_empty = (forec_len == 0)
 		ctx.JSON(http.StatusOK, gin.H{
-			"Forecasts":   Forecasts,
-			"forec_empty": forec_empty,
-			"pred_len":    pred_len,
-			"draft_id":    draft_id,
+			"Forecasts":       Forecasts,
+			"forec_empty":     forec_empty,
+			"prediction_size": pred_len,
+			"prediction_id":   draft_id,
 		})
 	} else {
 		filteredForecasts, forec_len, err := h.Repository.SearchForecast(searchText)
@@ -48,10 +48,10 @@ func (h *Handler) GetForecasts(ctx *gin.Context) {
 		}
 		forec_empty = (forec_len == 0)
 		ctx.JSON(http.StatusOK, gin.H{
-			"Forecasts":   filteredForecasts,
-			"forec_empty": forec_empty,
-			"pred_len":    pred_len,
-			"draft_id":    draft_id,
+			"Forecasts":       filteredForecasts,
+			"forec_empty":     forec_empty,
+			"prediction_size": pred_len,
+			"prediction_id":   draft_id,
 		})
 	}
 }
