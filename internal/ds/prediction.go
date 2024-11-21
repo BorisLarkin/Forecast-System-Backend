@@ -17,15 +17,7 @@ type Predictions struct {
 	Prediction_window int       `json:"prediction_window"`
 }
 
-type PredictionDetail struct {
-	ID                uint                         `json:"id"`
-	Status            string                       `json:"status"`
-	DateCreated       time.Time                    `json:"date_created"`
-	DateFormed        time.Time                    `json:"date_formed,omitempty"`
-	DateFinished      time.Time                    `json:"date_finished,omitempty"`
-	Prediction_amount int                          `json:"prediction_amount"`
-	Prediction_window int                          `json:"prediction_window"`
-	Creator           Users                        `json:"creator"`
-	Moderator         int                          `json:"moderator,omitempty"`
-	Forecasts         *[]ForecastResponseWithFlags `json:"forecasts"`
+type PredictionWithForecasts struct {
+	Prediction Predictions                  `json:"prediction"`
+	Forecasts  *[]ForecastResponseWithFlags `json:"forecasts"`
 }

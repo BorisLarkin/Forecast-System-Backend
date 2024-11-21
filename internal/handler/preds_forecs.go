@@ -15,7 +15,7 @@ import (
 // @Tags         Preds_Forecs
 // @Produce      json
 // @Param        forecast_id path int true "Forecast ID"
-// @Success      200
+// @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      500
 // @Router       /forecast_to_pred/{forecast_id} [post]
 func (h *Handler) AddForecastToPred(ctx *gin.Context) {
@@ -47,7 +47,15 @@ func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, "cannot create the record")
 		return
 	}
-	ctx.JSON(http.StatusOK, fmt.Sprintf("added forecast %s to prediction %s", f_id, pr_id))
+	forecs, err := h.Repository.GetForecastsByID(pr_id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, ds.PredictionWithForecasts{
+		Prediction: *prediction,
+		Forecasts:  forecs,
+	})
 }
 
 /*
@@ -151,7 +159,7 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 // @Param        forecast_id path int true "Forecast ID"
 // @Param        prediction_id path int true "Prediction ID"
 // @Param        input body ds.UpdatePred_ForecInput true "New data"
-// @Success      200
+// @Success      200 {object}  ds.Preds_Forecs
 // @Failure      400
 // @Router       /pr_fc/edit/{prediction_id}/{forecast_id} [put]
 func (h *Handler) EditPredForec(ctx *gin.Context) {
@@ -176,12 +184,12 @@ func (h *Handler) EditPredForec(ctx *gin.Context) {
 		ctx.JSON(http.StatusForbidden, "attempt to delete unowned prediction")
 		return
 	}
-
-	if err := h.Repository.EditPredForec(f_id, pr_id, input.Input); err != nil {
+	pr_fc, err := h.Repository.EditPredForec(f_id, pr_id, input.Input)
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, "Error changing input")
 		return
 	}
 
 	// Возвращаем успешный ответ.
-	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Successful change to '%s'", input.Input)})
+	ctx.JSON(http.StatusOK, &pr_fc)
 }

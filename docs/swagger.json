@@ -1,6 +1,5 @@
 {
     "schemes": [
-        "https",
         "http"
     ],
     "swagger": "2.0",
@@ -17,7 +16,7 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1",
+    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
         "/forecast/add": {
@@ -225,7 +224,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -301,7 +303,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.Preds_Forecs"
+                        }
                     },
                     "400": {
                         "description": "Bad Request"
@@ -407,7 +412,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "403": {
                         "description": "Forbidden"
@@ -442,7 +450,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "409": {
                         "description": "Conflict"
@@ -471,7 +482,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "403": {
                         "description": "Forbidden"
@@ -502,7 +516,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ds.PredictionDetail"
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
                         }
                     },
                     "403": {
@@ -771,13 +785,13 @@
                     "type": "string"
                 },
                 "input": {
-                    "type": "boolean"
+                    "type": "string"
                 },
                 "measure_type": {
                     "type": "string"
                 },
                 "result": {
-                    "type": "boolean"
+                    "type": "string"
                 },
                 "short_title": {
                     "type": "string"
@@ -836,41 +850,17 @@
                 }
             }
         },
-        "ds.PredictionDetail": {
+        "ds.PredictionWithForecasts": {
             "type": "object",
             "properties": {
-                "creator": {
-                    "$ref": "#/definitions/ds.Users"
-                },
-                "date_created": {
-                    "type": "string"
-                },
-                "date_finished": {
-                    "type": "string"
-                },
-                "date_formed": {
-                    "type": "string"
-                },
                 "forecasts": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ds.ForecastResponseWithFlags"
                     }
                 },
-                "id": {
-                    "type": "integer"
-                },
-                "moderator": {
-                    "type": "integer"
-                },
-                "prediction_amount": {
-                    "type": "integer"
-                },
-                "prediction_window": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
+                "prediction": {
+                    "$ref": "#/definitions/ds.Predictions"
                 }
             }
         },
@@ -900,6 +890,32 @@
                 }
             }
         },
+        "ds.Preds_Forecs": {
+            "type": "object",
+            "properties": {
+                "forecast": {
+                    "$ref": "#/definitions/ds.Forecasts"
+                },
+                "forecast_id": {
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "prediction": {
+                    "$ref": "#/definitions/ds.Predictions"
+                },
+                "prediction_id": {
+                    "type": "integer"
+                },
+                "preds_forecs_id": {
+                    "type": "integer"
+                },
+                "result": {
+                    "type": "string"
+                }
+            }
+        },
         "ds.Role": {
             "type": "integer",
             "enum": [
@@ -921,23 +937,6 @@
             "properties": {
                 "input": {
                     "type": "string"
-                }
-            }
-        },
-        "ds.Users": {
-            "type": "object",
-            "properties": {
-                "login": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
-                },
-                "user_id": {
-                    "type": "integer"
                 }
             }
         },

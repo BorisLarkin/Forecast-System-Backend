@@ -59,7 +59,7 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 // @Tags         Predictions
 // @Produce      json
 // @Param        id path int true "Prediction ID"
-// @Success      200  {object}  ds.PredictionDetail
+// @Success      200  {object}  ds.PredictionWithForecasts
 // @Failure      403
 // @Router       /prediction/{id} [get]
 func (h *Handler) GetPredictionById(ctx *gin.Context) {
@@ -84,17 +84,9 @@ func (h *Handler) GetPredictionById(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, ds.PredictionDetail{
-		ID:                prediction.Prediction_id,
-		Status:            prediction.Status,
-		Prediction_amount: prediction.Prediction_amount,
-		Prediction_window: prediction.Prediction_window,
-		DateCreated:       prediction.Date_created,
-		DateFormed:        prediction.Date_formed,
-		DateFinished:      prediction.Date_completed,
-		Creator:           prediction.Creator,
-		Moderator:         prediction.ModerID,
-		Forecasts:         forecs,
+	ctx.JSON(http.StatusOK, ds.PredictionWithForecasts{
+		Prediction: *prediction,
+		Forecasts:  forecs,
 	})
 }
 
@@ -111,7 +103,7 @@ type EditPredReq struct {
 // @Produce      json
 // @Param        prediction body EditPredReq true "New prediction data"
 // @Param        id path int true "Prediction ID"
-// @Success      200
+// @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      403
 // @Router       /prediction/edit/{id} [put]
 func (h *Handler) EditPrediction(ctx *gin.Context) {
@@ -135,12 +127,16 @@ func (h *Handler) EditPrediction(ctx *gin.Context) {
 	if prediction.CreatorID != int(payload.Uid) && payload.Role != ds.Moderator {
 		ctx.JSON(http.StatusForbidden, fmt.Errorf("attempt to view unowned prediction"))
 	}
-	if err := h.Repository.EditPrediction(id, input.Window, input.Amount); err != nil {
+	pred, err := h.Repository.EditPrediction(id, input.Window, input.Amount)
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "Prediction updated successfully"})
+	forecs, _ := h.Repository.GetForecastsByID(string(pred.Prediction_id))
+	ctx.JSON(http.StatusOK, ds.PredictionWithForecasts{
+		Prediction: *pred,
+		Forecasts:  forecs,
+	})
 }
 
 // FormPrediction godoc
@@ -149,7 +145,7 @@ func (h *Handler) EditPrediction(ctx *gin.Context) {
 // @Tags         Predictions
 // @Produce      json
 // @Param        id path int true "Prediction ID"
-// @Success      200
+// @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      403
 // @Router       /prediction/form/{id} [put]
 func (h *Handler) FormPrediction(ctx *gin.Context) {
@@ -165,8 +161,12 @@ func (h *Handler) FormPrediction(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "Status changed"})
+	pred, _ := h.Repository.GetPredictionByID(id)
+	forecs, _ := h.Repository.GetForecastsByID(id)
+	ctx.JSON(http.StatusOK, ds.PredictionWithForecasts{
+		Prediction: *pred,
+		Forecasts:  forecs,
+	})
 }
 
 // FinishPrediction godoc
@@ -176,30 +176,40 @@ func (h *Handler) FormPrediction(ctx *gin.Context) {
 // @Produce      json
 // @Param        id path int true "Prediction ID"
 // @Param status query string false "Status to be set"
-// @Success      200
+// @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      409
 // @Router       /prediction/finish/{id} [put]
 func (h *Handler) FinishPrediction(ctx *gin.Context) {
 	id := ctx.Param("id")
 	status := ctx.Query("status")
 
-	if status == "complete" {
-		pr_fcs, err := h.Repository.CalculatePrediction(id)
+	if status == "completed" {
+		_, err := h.Repository.CalculatePrediction(id)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		if err := h.Repository.SetPredictionStatus(id, status); err != nil {
+		if err := h.Repository.SetPredictionStatus(id, "done"); err != nil {
 			ctx.JSON(http.StatusConflict, err.Error())
 			return
 		}
-		ctx.JSON(http.StatusOK, gin.H{"status": status, "pr_fcs": pr_fcs})
+		pred, _ := h.Repository.GetPredictionByID(id)
+		forecs, _ := h.Repository.GetForecastsByID(id)
+		ctx.JSON(http.StatusOK, ds.PredictionWithForecasts{
+			Prediction: *pred,
+			Forecasts:  forecs,
+		})
 	} else if status == "denied" {
 		if err := h.Repository.SetPredictionStatus(id, status); err != nil {
 			ctx.JSON(http.StatusConflict, err.Error())
 			return
 		}
-		ctx.JSON(http.StatusOK, gin.H{"status": status})
+		pred, _ := h.Repository.GetPredictionByID(id)
+		forecs, _ := h.Repository.GetForecastsByID(id)
+		ctx.JSON(http.StatusOK, ds.PredictionWithForecasts{
+			Prediction: *pred,
+			Forecasts:  forecs,
+		})
 	} else {
 		ctx.JSON(http.StatusConflict, errors.New("attempt to finish prediction with wrong status"))
 	}

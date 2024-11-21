@@ -227,7 +227,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -303,7 +306,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.Preds_Forecs"
+                        }
                     },
                     "400": {
                         "description": "Bad Request"
@@ -409,7 +415,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "403": {
                         "description": "Forbidden"
@@ -444,7 +453,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "409": {
                         "description": "Conflict"
@@ -473,7 +485,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
                     },
                     "403": {
                         "description": "Forbidden"
@@ -504,7 +519,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ds.PredictionDetail"
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
                         }
                     },
                     "403": {
@@ -773,13 +788,13 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "input": {
-                    "type": "boolean"
+                    "type": "string"
                 },
                 "measure_type": {
                     "type": "string"
                 },
                 "result": {
-                    "type": "boolean"
+                    "type": "string"
                 },
                 "short_title": {
                     "type": "string"
@@ -838,41 +853,17 @@ const docTemplate = `{
                 }
             }
         },
-        "ds.PredictionDetail": {
+        "ds.PredictionWithForecasts": {
             "type": "object",
             "properties": {
-                "creator": {
-                    "$ref": "#/definitions/ds.Users"
-                },
-                "date_created": {
-                    "type": "string"
-                },
-                "date_finished": {
-                    "type": "string"
-                },
-                "date_formed": {
-                    "type": "string"
-                },
                 "forecasts": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ds.ForecastResponseWithFlags"
                     }
                 },
-                "id": {
-                    "type": "integer"
-                },
-                "moderator": {
-                    "type": "integer"
-                },
-                "prediction_amount": {
-                    "type": "integer"
-                },
-                "prediction_window": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
+                "prediction": {
+                    "$ref": "#/definitions/ds.Predictions"
                 }
             }
         },
@@ -902,6 +893,32 @@ const docTemplate = `{
                 }
             }
         },
+        "ds.Preds_Forecs": {
+            "type": "object",
+            "properties": {
+                "forecast": {
+                    "$ref": "#/definitions/ds.Forecasts"
+                },
+                "forecast_id": {
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "prediction": {
+                    "$ref": "#/definitions/ds.Predictions"
+                },
+                "prediction_id": {
+                    "type": "integer"
+                },
+                "preds_forecs_id": {
+                    "type": "integer"
+                },
+                "result": {
+                    "type": "string"
+                }
+            }
+        },
         "ds.Role": {
             "type": "integer",
             "enum": [
@@ -923,23 +940,6 @@ const docTemplate = `{
             "properties": {
                 "input": {
                     "type": "string"
-                }
-            }
-        },
-        "ds.Users": {
-            "type": "object",
-            "properties": {
-                "login": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
-                },
-                "user_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1039,9 +1039,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1",
+	Host:             "localhost:8080",
 	BasePath:         "/",
-	Schemes:          []string{"https", "http"},
+	Schemes:          []string{"http"},
 	Title:            "Forecast system",
 	Description:      "Bmstu Open IT Platform",
 	InfoInstanceName: "swagger",

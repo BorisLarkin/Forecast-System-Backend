@@ -21,5 +21,3 @@ func CheckJWTInBlacklist(c *redis.Client, ctx context.Context, jwtStr string) er
 	return c.Get(ctx, getJWTKey(jwtStr)).Err()
 	// если токена нет, то вернется ошибка not exists
 }
-
-//func GetJWTPayload(c *redis.Client, ctx context.Context, )

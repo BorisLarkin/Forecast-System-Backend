@@ -6,6 +6,8 @@ import (
 	"web/internal/minio"
 	"web/internal/repository"
 
+	_ "web/docs"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"

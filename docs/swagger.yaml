@@ -49,11 +49,11 @@ definitions:
       image:
         type: string
       input:
-        type: boolean
+        type: string
       measure_type:
         type: string
       result:
-        type: boolean
+        type: string
       short_title:
         type: string
       title:
@@ -91,30 +91,14 @@ definitions:
       prediction_size:
         type: integer
     type: object
-  ds.PredictionDetail:
+  ds.PredictionWithForecasts:
     properties:
-      creator:
-        $ref: '#/definitions/ds.Users'
-      date_created:
-        type: string
-      date_finished:
-        type: string
-      date_formed:
-        type: string
       forecasts:
         items:
           $ref: '#/definitions/ds.ForecastResponseWithFlags'
         type: array
-      id:
-        type: integer
-      moderator:
-        type: integer
-      prediction_amount:
-        type: integer
-      prediction_window:
-        type: integer
-      status:
-        type: string
+      prediction:
+        $ref: '#/definitions/ds.Predictions'
     type: object
   ds.Predictions:
     properties:
@@ -133,6 +117,23 @@ definitions:
       status:
         type: string
     type: object
+  ds.Preds_Forecs:
+    properties:
+      forecast:
+        $ref: '#/definitions/ds.Forecasts'
+      forecast_id:
+        type: integer
+      input:
+        type: string
+      prediction:
+        $ref: '#/definitions/ds.Predictions'
+      prediction_id:
+        type: integer
+      preds_forecs_id:
+        type: integer
+      result:
+        type: string
+    type: object
   ds.Role:
     enum:
     - 0
@@ -149,17 +150,6 @@ definitions:
         type: string
     required:
     - input
-    type: object
-  ds.Users:
-    properties:
-      login:
-        type: string
-      password:
-        type: string
-      role:
-        type: integer
-      user_id:
-        type: integer
     type: object
   handler.EditPredReq:
     properties:
@@ -219,7 +209,7 @@ definitions:
       uid:
         type: string
     type: object
-host: 127.0.0.1
+host: localhost:8080
 info:
   contact:
     email: borislarkin18@mail.ru
@@ -366,6 +356,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/ds.PredictionWithForecasts'
         "500":
           description: Internal Server Error
       summary: Add forecast to current user`s draft prediction
@@ -416,6 +408,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/ds.Preds_Forecs'
         "400":
           description: Bad Request
       summary: Edit forecast`s input data for specified prediction
@@ -460,7 +454,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ds.PredictionDetail'
+            $ref: '#/definitions/ds.PredictionWithForecasts'
         "403":
           description: Forbidden
       summary: Display a prediction and its forecasts
@@ -508,6 +502,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/ds.PredictionWithForecasts'
         "403":
           description: Forbidden
       summary: Edit specified prediction`s prediction amount & window
@@ -531,6 +527,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/ds.PredictionWithForecasts'
         "409":
           description: Conflict
       summary: Finish specified prediction
@@ -550,6 +548,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/ds.PredictionWithForecasts'
         "403":
           description: Forbidden
       summary: Form specified prediction
@@ -676,6 +676,5 @@ paths:
       tags:
       - Users
 schemes:
-- https
 - http
 swagger: "2.0"

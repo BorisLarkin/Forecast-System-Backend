@@ -69,18 +69,18 @@ func (r *Repository) SaveInputs(pr_id int, ids []string, vals []string) {
 		fmt.Println(i, ids[i], vals[i])
 	}
 }
-func (r *Repository) EditPredForec(f_id string, pr_id string, input string) error {
+func (r *Repository) EditPredForec(f_id string, pr_id string, input string) (*ds.Preds_Forecs, error) {
 	var pred_forec ds.Preds_Forecs
 
 	if err := r.db.Where("forecast_id = ? AND prediction_id = ?", f_id, pr_id).First(&pred_forec).Error; err != nil {
-		return err
+		return nil, err
 	}
 	pred_forec.Input = input
 	if err := r.db.Save(&pred_forec).Error; err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &pred_forec, nil
 }
 
 func Calculate(window int, amount int, input string, log *logrus.Logger) ([]float64, error) {

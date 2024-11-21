@@ -26,8 +26,8 @@ import (
 
 // @license.name AS IS (NO WARRANTY)
 
-// @host 127.0.0.1
-// @schemes https http
+// @host localhost:8080
+// @schemes http
 // @BasePath /
 
 func main() {
@@ -67,6 +67,7 @@ func main() {
 	hand := handler.NewHandler(logger, rep, minioClient, conf)
 	application := pkg.NewApp(conf, router, logger, hand)
 	application.Router.GET("/ping/:name", Ping)
+	
 	application.RunApp()
 }
 

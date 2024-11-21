@@ -42,7 +42,7 @@ type ForecastResponse struct {
 }
 
 type ForecastResponseWithFlags struct {
-	ID            uint   `json:"id"`
+	Forecast_id   uint   `json:"id"`
 	Title         string `json:"title"`
 	Short         string `json:"short_title"`
 	Descr         string `json:"descr"`
@@ -50,6 +50,6 @@ type ForecastResponseWithFlags struct {
 	Img_url       string `json:"image"`
 	Measure_type  string `json:"measure_type"`
 	Extended_desc string `json:"ext_desc"`
-	Input         bool   `json:"input"`
-	Result        bool   `json:"result"`
+	Input         string `json:"input"`
+	Result        string `json:"result"`
 }

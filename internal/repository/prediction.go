@@ -98,7 +98,7 @@ func (r *Repository) SavePrediction(id string, ctx *gin.Context) error {
 func (r *Repository) GetPredictions(uid string, role ds.Role, status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
 	var predictions []ds.Predictions
 
-	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.user_id")
+	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.creator_id")
 	if role != ds.Moderator {
 		query = query.Where("predictions.creator_id = ?", uid)
 	}
@@ -119,18 +119,19 @@ func (r *Repository) GetPredictions(uid string, role ds.Role, status string, has
 	return &predictions, nil
 }
 
-func (r *Repository) EditPrediction(id string, Window int, Amount int) error {
+func (r *Repository) EditPrediction(id string, Window int, Amount int) (*ds.Predictions, error) {
 	var prediction ds.Predictions
 
 	if err := r.db.First(&prediction, id).Error; err != nil {
-		return err
+		return nil, err
 	}
 
 	prediction.Prediction_amount = Amount
 	prediction.Prediction_window = Window
-
-	return r.db.Save(&prediction).Error
+	err := r.db.Save(&prediction).Error
+	return &prediction, err
 }
+
 func (r *Repository) FormPrediction(pred_id string, creatorID string) error {
 	var prediction ds.Predictions
 
