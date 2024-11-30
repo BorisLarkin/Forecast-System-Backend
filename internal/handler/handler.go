@@ -32,11 +32,11 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	//set up swagger to see all the methods in the handlers
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.GET("/forecasts", h.WithAuthCheck(ds.Guest, ds.User, ds.Moderator), h.GetForecasts)
-	router.GET("/forecast/:id", h.WithAuthCheck(ds.Guest, ds.User, ds.Moderator), h.GetForecastById)
+	router.GET("/forecasts", h.GetForecasts)
+	router.GET("/forecast/:id", h.GetForecastById)
 	router.DELETE("/forecast/delete/:id", h.WithAuthCheck(ds.Moderator), h.DeleteForecast)
 	router.POST("/forecast/add", h.WithAuthCheck(ds.Moderator), h.AddForecast) //without img
-	router.PUT("/forecast/edit/:id", h.WithAuthCheck(ds.Moderator), h.EditForecast)
+	router.PUT("/forecast/edit/:id", h.WithAuthCheck(ds.User, ds.Moderator), h.EditForecast)
 	router.POST("/forecast_to_pred/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.AddForecastToPred)
 	router.POST("/forecast/:id/add_picture", h.WithAuthCheck(ds.Moderator), h.AddPicture)
 
@@ -50,7 +50,7 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/pr_fc/remove/:prediction_id/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.DeleteForecastFromPred)
 	router.PUT("/pr_fc/edit/:prediction_id/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.EditPredForec)
 
-	router.POST("/user/register", h.WithAuthCheck(ds.Guest), h.Register)
+	router.POST("/user/register", h.Register)
 	router.PUT("/user/update/:id", h.WithAuthCheck(ds.Moderator, ds.User), h.UpdateUser) //Check id
 	router.POST("/user/login", h.LoginUser)                                              //can proceed anyway
 	router.POST("/user/logout", h.WithAuthCheck(ds.Moderator, ds.User, ds.Guest), h.Logout)

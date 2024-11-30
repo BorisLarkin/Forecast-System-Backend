@@ -25,7 +25,7 @@ type ForecastRequest struct {
 
 type GetForecastsResponse struct {
 	Forecasts      *[]Forecasts `json:"forecasts"`
-	DraftID        string       `json:"predicction_id"`
+	DraftID        string       `json:"prediction_id"`
 	DraftSize      int          `json:"prediction_size"`
 	ForecastsEmpty bool         `json:"forecasts_empty"`
 }
