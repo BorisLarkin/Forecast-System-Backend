@@ -55,8 +55,3 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.POST("/user/login", h.LoginUser)                                              //can proceed anyway
 	router.POST("/user/logout", h.WithAuthCheck(ds.Moderator, ds.User, ds.Guest), h.Logout)
 }
-
-func (h *Handler) RegisterStatic(router *gin.Engine) {
-	router.LoadHTMLGlob("static/templates/*")
-	router.Static("/static", "./static")
-}
