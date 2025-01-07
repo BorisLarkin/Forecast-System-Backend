@@ -199,7 +199,7 @@ func (h *Handler) AddPicture(ctx *gin.Context) {
 	}
 	defer file.Close()
 
-	imageName := fmt.Sprintf("image-%s.png", forecast_id)
+	imageName := fmt.Sprintf("%s.png", forecast_id)
 
 	err = h.Repository.UploadPicture(forecast_id, imageName, file, fileHeader.Size)
 	if err != nil {

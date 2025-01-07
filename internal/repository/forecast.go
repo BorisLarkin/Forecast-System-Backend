@@ -70,7 +70,7 @@ func (r *Repository) DeletePicture(id string, img string) error {
 func (r *Repository) UploadPicture(id string, imageName string, imageFile io.Reader, imageSize int64) error {
 	var forecast ds.Forecasts
 
-	// Найти чат по ID
+	// Найти прогноз по ID
 	if err := r.db.First(&forecast, id).Error; err != nil {
 		return fmt.Errorf("forecast (%s) not found: %w", id, err)
 	}
@@ -88,7 +88,7 @@ func (r *Repository) UploadPicture(id string, imageName string, imageFile io.Rea
 		ContentType: "image/png",
 	})
 
-	forecast.Img_url = fmt.Sprintf("http://127.0.0.1:9000/test/image-%s.png", id)
+	forecast.Img_url = fmt.Sprintf("http://127.0.0.1:9000/test/%s.png", id)
 	errDB := r.db.Save(&forecast).Error
 
 	if errMinio != nil || errDB != nil {
