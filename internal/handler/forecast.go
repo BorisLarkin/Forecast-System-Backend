@@ -188,7 +188,7 @@ func (h *Handler) EditForecast(ctx *gin.Context) {
 // @Param id path int true "Forecast ID"
 // @Success      200
 // @Failure      500
-// @Router       /forecast/{if}/add_picture [post]
+// @Router       /forecast/{id}/add_picture [post]
 func (h *Handler) AddPicture(ctx *gin.Context) {
 	forecast_id := ctx.Param("id")
 	// Get file out of the body

@@ -86,7 +86,7 @@ definitions:
         type: array
       forecasts_empty:
         type: boolean
-      predicction_id:
+      prediction_id:
         type: string
       prediction_size:
         type: integer
@@ -242,7 +242,7 @@ paths:
       summary: Get a specified forecast by its ID
       tags:
       - Forecasts
-  /forecast/{if}/add_picture:
+  /forecast/{id}/add_picture:
     post:
       consumes:
       - multipart/form-data

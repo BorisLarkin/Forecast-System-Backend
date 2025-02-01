@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	//"web/docs"
 	"web/internal/config"
 	"web/internal/handler"
 	"web/internal/minio"
@@ -19,13 +18,10 @@ import (
 // @title Forecast system
 // @version 1.0
 // @description Bmstu Open IT Platform
-
 // @contact.name API Support
 // @contact.url https://vk.com/b.larkin
 // @contact.email borislarkin18@mail.ru
-
 // @license.name AS IS (NO WARRANTY)
-
 // @host localhost:8080
 // @schemes http
 // @BasePath /
@@ -67,7 +63,7 @@ func main() {
 	hand := handler.NewHandler(logger, rep, minioClient, conf)
 	application := pkg.NewApp(conf, router, logger, hand)
 	application.Router.GET("/ping/:name", Ping)
-	
+
 	application.RunApp()
 }
 

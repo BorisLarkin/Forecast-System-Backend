@@ -170,7 +170,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/forecast/{if}/add_picture": {
+        "/forecast/{id}/add_picture": {
             "post": {
                 "description": "very very friendly response",
                 "consumes": [
@@ -845,7 +845,7 @@ const docTemplate = `{
                 "forecasts_empty": {
                     "type": "boolean"
                 },
-                "predicction_id": {
+                "prediction_id": {
                     "type": "string"
                 },
                 "prediction_size": {
