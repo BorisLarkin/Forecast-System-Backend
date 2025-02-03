@@ -18,6 +18,6 @@ type Predictions struct {
 }
 
 type PredictionWithForecasts struct {
-	Prediction Predictions                  `json:"prediction"`
-	Forecasts  *[]ForecastResponseWithFlags `json:"forecasts"`
+	Prediction Predictions                  `json:"prediction" binding:"required"`
+	Forecasts  *[]ForecastResponseWithFlags `json:"forecasts" binding:"required"`
 }

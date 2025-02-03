@@ -19,6 +19,7 @@ import (
 // @Param status query string false "Prediction status"
 // @Param start_date query string false "Earliest date created filter: YYYY-Mon-DD"
 // @Param end_date query string false "Latest date created filter: YYYY-Mon-DD"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200  {object}  []ds.Predictions
 // @Failure      400
 // @Router       /predictions [get]
@@ -59,6 +60,7 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 // @Tags         Predictions
 // @Produce      json
 // @Param        id path int true "Prediction ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200  {object}  ds.PredictionWithForecasts
 // @Failure      403
 // @Router       /prediction/{id} [get]
@@ -103,6 +105,7 @@ type EditPredReq struct {
 // @Produce      json
 // @Param        prediction body EditPredReq true "New prediction data"
 // @Param        id path int true "Prediction ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      403
 // @Router       /prediction/edit/{id} [put]
@@ -145,6 +148,7 @@ func (h *Handler) EditPrediction(ctx *gin.Context) {
 // @Tags         Predictions
 // @Produce      json
 // @Param        id path int true "Prediction ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      403
 // @Router       /prediction/form/{id} [put]
@@ -176,6 +180,7 @@ func (h *Handler) FormPrediction(ctx *gin.Context) {
 // @Produce      json
 // @Param        id path int true "Prediction ID"
 // @Param status query string false "Status to be set"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200 {object}  ds.PredictionWithForecasts
 // @Failure      409
 // @Router       /prediction/finish/{id} [put]
@@ -221,6 +226,7 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 // @Tags         Predictions
 // @Produce      json
 // @Param        id path int true "Prediction ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200
 // @Failure      403
 // @Router       /prediction/delete/{id} [delete]

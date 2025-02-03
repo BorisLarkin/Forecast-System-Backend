@@ -14,7 +14,7 @@ import (
 // @Description  very very friendly response
 // @Tags         Forecasts
 // @Produce      json
-// @Param searchText query string false "name filter"
+// @Param forecast_name query string false "name filter"
 // @Success      200  {object}  ds.GetForecastsResponse
 // @Failure      500
 // @Router       /forecasts [get]
@@ -98,6 +98,7 @@ func (h *Handler) GetForecastById(ctx *gin.Context) {
 // @Tags         Forecasts
 // @Produce      json
 // @Param        id path int true "Forecast ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200
 // @Failure      400
 // @Router       /forecast/delete/{id} [delete]
@@ -124,6 +125,7 @@ func (h *Handler) DeleteForecast(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        forecast body ds.ForecastRequest true "New forecast data"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200  {object}  ds.ForecastRequest
 // @Failure      500  {object}  ds.Forecasts
 // @Router       /forecast/add [post]
@@ -154,6 +156,7 @@ func (h *Handler) AddForecast(ctx *gin.Context) {
 // @Produce      json
 // @Param id path int true "Forecast ID"
 // @Param        forecast body ds.ForecastRequest true "New forecast data"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200  {object}  ds.ForecastRequest
 // @Failure      500  {object}  ds.Forecasts
 // @Router       /forecast/edit/{id} [put]
@@ -186,6 +189,7 @@ func (h *Handler) EditForecast(ctx *gin.Context) {
 // @Accept multipart/form-data
 // @Param image formData file true "New image for the forecast"
 // @Param id path int true "Forecast ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200
 // @Failure      500
 // @Router       /forecast/{id}/add_picture [post]

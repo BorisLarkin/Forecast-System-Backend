@@ -37,7 +37,7 @@ func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.DELETE("/forecast/delete/:id", h.WithAuthCheck(ds.Moderator), h.DeleteForecast)
 	router.POST("/forecast/add", h.WithAuthCheck(ds.Moderator), h.AddForecast) //without img
 	router.PUT("/forecast/edit/:id", h.WithAuthCheck(ds.User, ds.Moderator), h.EditForecast)
-	router.POST("/forecast_to_pred/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.AddForecastToPred)
+	router.POST("/forecast/to_pred/:forecast_id", h.WithAuthCheck(ds.Moderator, ds.User), h.AddForecastToPred)
 	router.POST("/forecast/:id/add_picture", h.WithAuthCheck(ds.Moderator), h.AddPicture)
 
 	router.GET("/predictions", h.WithAuthCheck(ds.Moderator, ds.User), h.GetPredictions)                //status&form_data filter, no deleted or drafts

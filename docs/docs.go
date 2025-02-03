@@ -44,6 +44,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ds.ForecastRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -78,6 +85,13 @@ const docTemplate = `{
                         "description": "Forecast ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -120,6 +134,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ds.ForecastRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -134,6 +155,45 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ds.Forecasts"
                         }
+                    }
+                }
+            }
+        },
+        "/forecast/to_pred/{forecast_id}": {
+            "post": {
+                "description": "If there` + "`" + `s no draft found, a new draft is to be created.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Preds_Forecs"
+                ],
+                "summary": "Add forecast to current user` + "`" + `s draft prediction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Forecast ID",
+                        "name": "forecast_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.PredictionWithForecasts"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -194,43 +254,18 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/forecast_to_pred/{forecast_id}": {
-            "post": {
-                "description": "If there` + "`" + `s no draft found, a new draft is to be created.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Preds_Forecs"
-                ],
-                "summary": "Add forecast to current user` + "`" + `s draft prediction",
-                "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Forecast ID",
-                        "name": "forecast_id",
-                        "in": "path",
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ds.PredictionWithForecasts"
-                        }
+                        "description": "OK"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -252,7 +287,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "name filter",
-                        "name": "searchText",
+                        "name": "forecast_name",
                         "in": "query"
                     }
                 ],
@@ -302,6 +337,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ds.UpdatePred_ForecInput"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -341,6 +383,13 @@ const docTemplate = `{
                         "name": "prediction_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -369,6 +418,13 @@ const docTemplate = `{
                         "description": "Prediction ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -411,6 +467,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -449,6 +512,13 @@ const docTemplate = `{
                         "description": "Status to be set",
                         "name": "status",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -481,6 +551,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -512,6 +589,13 @@ const docTemplate = `{
                         "description": "Prediction ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -556,6 +640,13 @@ const docTemplate = `{
                         "description": "Latest date created filter: YYYY-Mon-DD",
                         "name": "end_date",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -621,6 +712,15 @@ const docTemplate = `{
                     "Users"
                 ],
                 "summary": "Logout the current user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -697,6 +797,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/handler.updateReq"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Auth Bearer token header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -716,6 +823,14 @@ const docTemplate = `{
     "definitions": {
         "ds.ForecastRequest": {
             "type": "object",
+            "required": [
+                "color",
+                "descr",
+                "ext_desc",
+                "measure_type",
+                "short_title",
+                "title"
+            ],
             "properties": {
                 "color": {
                     "type": "string"
@@ -742,35 +857,16 @@ const docTemplate = `{
         },
         "ds.ForecastResponse": {
             "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "descr": {
-                    "type": "string"
-                },
-                "extended_desc": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "img_url": {
-                    "type": "string"
-                },
-                "measure_type": {
-                    "type": "string"
-                },
-                "short": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "ds.ForecastResponseWithFlags": {
-            "type": "object",
+            "required": [
+                "color",
+                "descr",
+                "ext_desc",
+                "forecast_id",
+                "image",
+                "measure_type",
+                "short_title",
+                "title"
+            ],
             "properties": {
                 "color": {
                     "type": "string"
@@ -781,7 +877,48 @@ const docTemplate = `{
                 "ext_desc": {
                     "type": "string"
                 },
-                "id": {
+                "forecast_id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "measure_type": {
+                    "type": "string"
+                },
+                "short_title": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.ForecastResponseWithFlags": {
+            "type": "object",
+            "required": [
+                "color",
+                "descr",
+                "ext_desc",
+                "forecast_id",
+                "image",
+                "input",
+                "measure_type",
+                "result",
+                "short_title",
+                "title"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "descr": {
+                    "type": "string"
+                },
+                "ext_desc": {
+                    "type": "string"
+                },
+                "forecast_id": {
                     "type": "integer"
                 },
                 "image": {
@@ -806,6 +943,15 @@ const docTemplate = `{
         },
         "ds.Forecasts": {
             "type": "object",
+            "required": [
+                "color",
+                "descr",
+                "ext_desc",
+                "forecast_id",
+                "measure_type",
+                "short_title",
+                "title"
+            ],
             "properties": {
                 "color": {
                     "type": "string"
@@ -835,6 +981,11 @@ const docTemplate = `{
         },
         "ds.GetForecastsResponse": {
             "type": "object",
+            "required": [
+                "forecasts",
+                "prediction_id",
+                "prediction_size"
+            ],
             "properties": {
                 "forecasts": {
                     "type": "array",
@@ -855,6 +1006,10 @@ const docTemplate = `{
         },
         "ds.PredictionWithForecasts": {
             "type": "object",
+            "required": [
+                "forecasts",
+                "prediction"
+            ],
             "properties": {
                 "forecasts": {
                     "type": "array",
@@ -895,6 +1050,11 @@ const docTemplate = `{
         },
         "ds.Preds_Forecs": {
             "type": "object",
+            "required": [
+                "forecast_id",
+                "prediction_id",
+                "preds_forecs_id"
+            ],
             "properties": {
                 "forecast": {
                     "$ref": "#/definitions/ds.Forecasts"
@@ -960,6 +1120,11 @@ const docTemplate = `{
         },
         "handler.loginReq": {
             "type": "object",
+            "required": [
+                "guest",
+                "login",
+                "password"
+            ],
             "properties": {
                 "guest": {
                     "type": "boolean"
@@ -974,12 +1139,25 @@ const docTemplate = `{
         },
         "handler.loginResp": {
             "type": "object",
+            "required": [
+                "access_token",
+                "expires_in",
+                "login",
+                "role",
+                "token_type"
+            ],
             "properties": {
                 "access_token": {
                     "type": "string"
                 },
                 "expires_in": {
                     "type": "string"
+                },
+                "login": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
                 },
                 "token_type": {
                     "type": "string"
@@ -988,6 +1166,10 @@ const docTemplate = `{
         },
         "handler.registerReq": {
             "type": "object",
+            "required": [
+                "login",
+                "password"
+            ],
             "properties": {
                 "login": {
                     "type": "string"
@@ -999,6 +1181,9 @@ const docTemplate = `{
         },
         "handler.registerResp": {
             "type": "object",
+            "required": [
+                "ok"
+            ],
             "properties": {
                 "ok": {
                     "type": "boolean"
@@ -1007,6 +1192,11 @@ const docTemplate = `{
         },
         "handler.updateReq": {
             "type": "object",
+            "required": [
+                "login",
+                "password",
+                "role"
+            ],
             "properties": {
                 "login": {
                     "type": "string"
@@ -1021,6 +1211,11 @@ const docTemplate = `{
         },
         "handler.updateResp": {
             "type": "object",
+            "required": [
+                "login",
+                "role",
+                "uid"
+            ],
             "properties": {
                 "login": {
                     "type": "string"

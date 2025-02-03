@@ -16,6 +16,13 @@ import (
 
 const jwtPrefix = "Bearer "
 
+// WithAuthCheck godoc
+// @Summary      Check JWT
+// @Tags         Middleware
+// @Produce      json
+// @Param        Authorization header string true "Auth Bearer token header"
+// @Success      200
+// @Failure      403
 func (h *Handler) WithAuthCheck(assignedRoles ...ds.Role) func(ctx *gin.Context) {
 	return func(gCtx *gin.Context) {
 		jwtStr := gCtx.GetHeader("Authorization")

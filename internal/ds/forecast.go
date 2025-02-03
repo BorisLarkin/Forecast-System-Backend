@@ -1,55 +1,53 @@
 package ds
 
 type Forecasts struct {
-	Forecast_id   uint   `json:"forecast_id" gorm:"primary_key"`
-	Title         string `gorm:"type:varchar(100); uniqueIndex; not null" json:"title"`
-	Short         string `gorm:"type:varchar(50); uniqueIndex; not null" json:"short_title"`
-	Descr         string `gorm:"type:varchar(255)" json:"descr"`
-	Color         string `gorm:"type:varchar(50)" json:"color"`
+	Forecast_id   uint   `json:"forecast_id" gorm:"primary_key" binding:"required"`
+	Title         string `gorm:"type:varchar(100); uniqueIndex; not null" json:"title" binding:"required"`
+	Short         string `gorm:"type:varchar(50); uniqueIndex; not null" json:"short_title" binding:"required"`
+	Descr         string `gorm:"type:varchar(255)" json:"descr" binding:"required"`
+	Color         string `gorm:"type:varchar(50)" json:"color" binding:"required"`
 	Img_url       string `gorm:"type:varchar(255)" json:"image"`
-	Measure_type  string `gorm:"type:varchar(80); not null" json:"measure_type"`
-	Extended_desc string `gorm:"type:varchar(1024)" json:"ext_desc"`
+	Measure_type  string `gorm:"type:varchar(80); not null" json:"measure_type" binding:"required"`
+	Extended_desc string `gorm:"type:varchar(1024)" json:"ext_desc" binding:"required"`
 }
 
-//http://127.0.0.1:9000/test/image-{{.Forecast_id}}.png
-
 type ForecastRequest struct {
-	Title         string `json:"title"`
-	Short         string `json:"short_title"`
-	Descr         string `json:"descr"`
-	Color         string `json:"color"`
+	Title         string `json:"title" binding:"required"`
+	Short         string `json:"short_title" binding:"required"`
+	Descr         string `json:"descr" binding:"required"`
+	Color         string `json:"color" binding:"required"`
 	Img_url       string `json:"image"`
-	Measure_type  string `json:"measure_type"`
-	Extended_desc string `json:"ext_desc"`
+	Measure_type  string `json:"measure_type" binding:"required"`
+	Extended_desc string `json:"ext_desc" binding:"required"`
 }
 
 type GetForecastsResponse struct {
-	Forecasts      *[]Forecasts `json:"forecasts"`
-	DraftID        string       `json:"prediction_id"`
-	DraftSize      int          `json:"prediction_size"`
+	Forecasts      *[]Forecasts `json:"forecasts" binding:"required"`
+	DraftID        string       `json:"prediction_id" binding:"required"`
+	DraftSize      int          `json:"prediction_size" binding:"required"`
 	ForecastsEmpty bool         `json:"forecasts_empty"`
 }
 
 type ForecastResponse struct {
-	ID            uint
-	Title         string
-	Short         string
-	Descr         string
-	Color         string
-	Img_url       string
-	Measure_type  string
-	Extended_desc string
+	ID            uint   `json:"forecast_id" binding:"required"`
+	Title         string `json:"title" binding:"required"`
+	Short         string `json:"short_title" binding:"required"`
+	Descr         string `json:"descr" binding:"required"`
+	Color         string `json:"color" binding:"required"`
+	Img_url       string `json:"image" binding:"required"`
+	Measure_type  string `json:"measure_type" binding:"required"`
+	Extended_desc string `json:"ext_desc" binding:"required"`
 }
 
 type ForecastResponseWithFlags struct {
-	Forecast_id   uint   `json:"id"`
-	Title         string `json:"title"`
-	Short         string `json:"short_title"`
-	Descr         string `json:"descr"`
-	Color         string `json:"color"`
-	Img_url       string `json:"image"`
-	Measure_type  string `json:"measure_type"`
-	Extended_desc string `json:"ext_desc"`
-	Input         string `json:"input"`
-	Result        string `json:"result"`
+	Forecast_id   uint   `json:"forecast_id" binding:"required"`
+	Title         string `json:"title" binding:"required"`
+	Short         string `json:"short_title" binding:"required"`
+	Descr         string `json:"descr" binding:"required"`
+	Color         string `json:"color" binding:"required"`
+	Img_url       string `json:"image" binding:"required"`
+	Measure_type  string `json:"measure_type" binding:"required"`
+	Extended_desc string `json:"ext_desc" binding:"required"`
+	Input         string `json:"input" binding:"required"`
+	Result        string `json:"result" binding:"required"`
 }

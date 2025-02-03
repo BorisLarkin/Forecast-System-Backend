@@ -16,8 +16,9 @@ import (
 // @Produce      json
 // @Param        forecast_id path int true "Forecast ID"
 // @Success      200 {object}  ds.PredictionWithForecasts
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Failure      500
-// @Router       /forecast_to_pred/{forecast_id} [post]
+// @Router       /forecast/to_pred/{forecast_id} [post]
 func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 	payload, err := h.GetTokenPayload(ctx)
 	if err != nil {
@@ -58,35 +59,6 @@ func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 	})
 }
 
-/*
-	func (h *Handler) AddForecastToDraft(ctx *gin.Context) {
-		payload, err := h.GetTokenPayload(ctx)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
-			return
-		}
-		uid := strconv.Itoa(int(payload.Uid))
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, "cannot get user id")
-			return
-		}
-		f_id := ctx.Query("id")
-		var pr_id string
-		pr_id, err = h.Repository.GetUserDraftID(uid)
-		if err != nil {
-			h.Repository.CreateDraft(uid)
-			pr_id, _ = h.Repository.GetUserDraftID(uid)
-		}
-		if err := h.Repository.CreatePreds_Forecs(pr_id, f_id); err != nil {
-			ctx.JSON(http.StatusInternalServerError, "cannot create the record")
-			return
-		}
-		pf, _ := h.Repository.GetPredForecByID(pr_id, f_id)
-		ctx.JSON(http.StatusOK, pf)
-		//ctx.Redirect(http.StatusFound, "/forecasts")
-	}
-*/
-
 // DeleteForecastFromPred godoc
 // @Summary      Delete forecast from specified prediction
 // @Description  An error is returned in cases of unauthorized actions being attempted
@@ -94,6 +66,7 @@ func (h *Handler) AddForecastToPred(ctx *gin.Context) {
 // @Produce      json
 // @Param        forecast_id path int true "Forecast ID"
 // @Param        prediction_id path int true "Prediction ID"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200
 // @Failure      400
 // @Router       /pr_fc/remove/{prediction_id}/{forecast_id} [delete]
@@ -131,26 +104,6 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("pr_fc (%s, %s) deleted", f_id, pr_id)})
 }
 
-/*
-	func (h *Handler) JSONAddForecastToPred(ctx *gin.Context) {
-		payload, err := h.GetTokenPayload(ctx)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, fmt.Errorf("error retrieving token payload: %s", err))
-		}
-		uid := strconv.Itoa(int(payload.Uid))
-
-		f_id := ctx.Query("id")
-		var pr_id string
-		pr_id, err = h.Repository.GetUserDraftID(uid)
-		if err != nil {
-			h.Repository.CreateDraft(uid)
-			pr_id, _ = h.Repository.GetUserDraftID(uid)
-		}
-		h.Repository.CreatePreds_Forecs(pr_id, f_id)
-		ctx.Redirect(304, "/forecasts")
-	}
-*/
-
 // EditPredForec godoc
 // @Summary      Edit forecast`s input data for specified prediction
 // @Description  An error is returned in cases of unauthorized actions being attempted
@@ -159,6 +112,7 @@ func (h *Handler) DeleteForecastFromPred(ctx *gin.Context) {
 // @Param        forecast_id path int true "Forecast ID"
 // @Param        prediction_id path int true "Prediction ID"
 // @Param        input body ds.UpdatePred_ForecInput true "New data"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200 {object}  ds.Preds_Forecs
 // @Failure      400
 // @Router       /pr_fc/edit/{prediction_id}/{forecast_id} [put]

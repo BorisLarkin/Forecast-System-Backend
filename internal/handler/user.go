@@ -16,15 +16,15 @@ import (
 )
 
 type updateReq struct {
-	Login    string  `json:"login"`
-	Role     ds.Role `json:"role"`
-	Password string  `json:"password"`
+	Login    string  `json:"login" binding:"required"`
+	Role     ds.Role `json:"role" binding:"required"`
+	Password string  `json:"password" binding:"required"`
 }
 
 type updateResp struct {
-	Uid   string  `json:"uid"`
-	Login string  `json:"login"`
-	Role  ds.Role `json:"role"`
+	Uid   string  `json:"uid" binding:"required"`
+	Login string  `json:"login" binding:"required"`
+	Role  ds.Role `json:"role" binding:"required"`
 }
 
 // Update godoc
@@ -35,6 +35,7 @@ type updateResp struct {
 // @Produce      json
 // @Param        id path int true "User ID"
 // @Param        user body updateReq true "New user data"
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200  {object}  updateResp
 // @Failure      500
 // @Router       /user/update/{id} [put]
@@ -66,15 +67,17 @@ func (h *Handler) UpdateUser(ctx *gin.Context) {
 }
 
 type loginReq struct {
-	Login    string `json:"login"`
-	Password string `json:"password"`
-	As_guest bool   `json:"guest"`
+	Login    string `json:"login" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Guest    bool   `json:"guest" binding:"required"`
 }
 
 type loginResp struct {
-	ExpiresIn   string `json:"expires_in"`
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"`
+	Login       string `json:"login" binding:"required"`
+	Role        int    `json:"role" binding:"required"`
+	ExpiresIn   string `json:"expires_in" binding:"required"`
+	AccessToken string `json:"access_token" binding:"required"`
+	TokenType   string `json:"token_type" binding:"required"`
 }
 
 // Login godoc
@@ -95,7 +98,7 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 		gCtx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	if req.As_guest {
+	if req.Guest {
 		token, err := utils.GenerateJWT(h.Config, 0, ds.Role(ds.Guest))
 		if err != nil {
 			gCtx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("failed to generate a token"))
@@ -107,7 +110,9 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 		}
 
 		gCtx.JSON(http.StatusOK, loginResp{
-			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn.Hours()).String(),
+			Login:       "Гость",
+			Role:        0,
+			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn).String(),
 			AccessToken: token,
 			TokenType:   "Bearer",
 		})
@@ -131,7 +136,9 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 		}
 
 		gCtx.JSON(http.StatusOK, loginResp{
-			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn.Hours()).String(),
+			Login:       user.Login,
+			Role:        user.Role,
+			ExpiresIn:   time.Duration(h.Config.JWT.ExpiresIn).String(),
 			AccessToken: token,
 			TokenType:   "Bearer",
 		})
@@ -142,12 +149,12 @@ func (h *Handler) LoginUser(gCtx *gin.Context) {
 }
 
 type registerReq struct {
-	Login    string `json:"login"`
-	Password string `json:"password"`
+	Login    string `json:"login" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type registerResp struct {
-	Ok bool `json:"ok"`
+	Ok bool `json:"ok" binding:"required"`
 }
 
 // Register godoc
@@ -199,6 +206,7 @@ func (h *Handler) Register(gCtx *gin.Context) {
 // @Description  very very friendly response
 // @Tags         Users
 // @Produce      json
+// @Param        Authorization header string true "Auth Bearer token header"
 // @Success      200
 // @Failure      500
 // @Router       /user/logout [post]

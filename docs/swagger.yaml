@@ -16,6 +16,13 @@ definitions:
         type: string
       title:
         type: string
+    required:
+    - color
+    - descr
+    - ext_desc
+    - measure_type
+    - short_title
+    - title
     type: object
   ds.ForecastResponse:
     properties:
@@ -23,18 +30,27 @@ definitions:
         type: string
       descr:
         type: string
-      extended_desc:
+      ext_desc:
         type: string
-      id:
+      forecast_id:
         type: integer
-      img_url:
+      image:
         type: string
       measure_type:
         type: string
-      short:
+      short_title:
         type: string
       title:
         type: string
+    required:
+    - color
+    - descr
+    - ext_desc
+    - forecast_id
+    - image
+    - measure_type
+    - short_title
+    - title
     type: object
   ds.ForecastResponseWithFlags:
     properties:
@@ -44,7 +60,7 @@ definitions:
         type: string
       ext_desc:
         type: string
-      id:
+      forecast_id:
         type: integer
       image:
         type: string
@@ -58,6 +74,17 @@ definitions:
         type: string
       title:
         type: string
+    required:
+    - color
+    - descr
+    - ext_desc
+    - forecast_id
+    - image
+    - input
+    - measure_type
+    - result
+    - short_title
+    - title
     type: object
   ds.Forecasts:
     properties:
@@ -77,6 +104,14 @@ definitions:
         type: string
       title:
         type: string
+    required:
+    - color
+    - descr
+    - ext_desc
+    - forecast_id
+    - measure_type
+    - short_title
+    - title
     type: object
   ds.GetForecastsResponse:
     properties:
@@ -90,6 +125,10 @@ definitions:
         type: string
       prediction_size:
         type: integer
+    required:
+    - forecasts
+    - prediction_id
+    - prediction_size
     type: object
   ds.PredictionWithForecasts:
     properties:
@@ -99,6 +138,9 @@ definitions:
         type: array
       prediction:
         $ref: '#/definitions/ds.Predictions'
+    required:
+    - forecasts
+    - prediction
     type: object
   ds.Predictions:
     properties:
@@ -133,6 +175,10 @@ definitions:
         type: integer
       result:
         type: string
+    required:
+    - forecast_id
+    - prediction_id
+    - preds_forecs_id
     type: object
   ds.Role:
     enum:
@@ -169,6 +215,10 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - guest
+    - login
+    - password
     type: object
   handler.loginResp:
     properties:
@@ -176,8 +226,18 @@ definitions:
         type: string
       expires_in:
         type: string
+      login:
+        type: string
+      role:
+        type: integer
       token_type:
         type: string
+    required:
+    - access_token
+    - expires_in
+    - login
+    - role
+    - token_type
     type: object
   handler.registerReq:
     properties:
@@ -185,11 +245,16 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - login
+    - password
     type: object
   handler.registerResp:
     properties:
       ok:
         type: boolean
+    required:
+    - ok
     type: object
   handler.updateReq:
     properties:
@@ -199,6 +264,10 @@ definitions:
         type: string
       role:
         $ref: '#/definitions/ds.Role'
+    required:
+    - login
+    - password
+    - role
     type: object
   handler.updateResp:
     properties:
@@ -208,6 +277,10 @@ definitions:
         $ref: '#/definitions/ds.Role'
       uid:
         type: string
+    required:
+    - login
+    - role
+    - uid
     type: object
 host: localhost:8080
 info:
@@ -258,6 +331,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -278,6 +356,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/ds.ForecastRequest'
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -301,6 +384,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -328,6 +416,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/ds.ForecastRequest'
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -342,7 +435,7 @@ paths:
       summary: Edit forecast
       tags:
       - Forecasts
-  /forecast_to_pred/{forecast_id}:
+  /forecast/to_pred/{forecast_id}:
     post:
       description: If there`s no draft found, a new draft is to be created.
       parameters:
@@ -351,6 +444,11 @@ paths:
         name: forecast_id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -369,7 +467,7 @@ paths:
       parameters:
       - description: name filter
         in: query
-        name: searchText
+        name: forecast_name
         type: string
       produces:
       - application/json
@@ -403,6 +501,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/ds.UpdatePred_ForecInput'
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -429,6 +532,11 @@ paths:
         name: prediction_id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -448,6 +556,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -470,6 +583,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -497,6 +615,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -522,6 +645,11 @@ paths:
         in: query
         name: status
         type: string
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -543,6 +671,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -570,6 +703,11 @@ paths:
       - description: 'Latest date created filter: YYYY-Mon-DD'
         in: query
         name: end_date
+        type: string
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
         type: string
       produces:
       - application/json
@@ -612,6 +750,12 @@ paths:
   /user/logout:
     post:
       description: very very friendly response
+      parameters:
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -663,6 +807,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/handler.updateReq'
+      - description: Auth Bearer token header
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
