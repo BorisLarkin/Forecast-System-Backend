@@ -655,7 +655,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/ds.Predictions"
+                                "$ref": "#/definitions/ds.PredictionWithUsers"
                             }
                         }
                     },
@@ -1022,9 +1022,27 @@ const docTemplate = `{
                 }
             }
         },
+        "ds.PredictionWithUsers": {
+            "type": "object",
+            "required": [
+                "prediction",
+                "username"
+            ],
+            "properties": {
+                "prediction": {
+                    "$ref": "#/definitions/ds.Predictions"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "ds.Predictions": {
             "type": "object",
             "properties": {
+                "creator_id": {
+                    "type": "integer"
+                },
                 "date_completed": {
                     "type": "string"
                 },
@@ -1042,6 +1060,12 @@ const docTemplate = `{
                 },
                 "prediction_window": {
                     "type": "integer"
+                },
+                "qr": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "status": {
                     "type": "string"

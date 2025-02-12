@@ -142,8 +142,20 @@ definitions:
     - forecasts
     - prediction
     type: object
+  ds.PredictionWithUsers:
+    properties:
+      prediction:
+        $ref: '#/definitions/ds.Predictions'
+      username:
+        type: string
+    required:
+    - prediction
+    - username
+    type: object
   ds.Predictions:
     properties:
+      creator_id:
+        type: integer
       date_completed:
         type: string
       date_created:
@@ -156,6 +168,10 @@ definitions:
         type: integer
       prediction_window:
         type: integer
+      qr:
+        items:
+          type: integer
+        type: array
       status:
         type: string
     type: object
@@ -716,7 +732,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/ds.Predictions'
+              $ref: '#/definitions/ds.PredictionWithUsers'
             type: array
         "400":
           description: Bad Request

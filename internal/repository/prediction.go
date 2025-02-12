@@ -8,6 +8,7 @@ import (
 	"web/internal/ds"
 
 	"github.com/gin-gonic/gin"
+	"github.com/skip2/go-qrcode"
 )
 
 func (r *Repository) PredictionList() (*[]ds.Predictions, error) {
@@ -35,6 +36,17 @@ func (r *Repository) SetPredictionStatus(prediction_id string, status string) er
 
 func (r *Repository) CreatePrediction(Prediction_ptr *ds.Predictions) error {
 	return r.db.Create(Prediction_ptr).Error
+}
+
+func (r *Repository) FinishPrediction(prediction_id string) error {
+	var prediction ds.Predictions
+
+	if err := r.db.First(&prediction, prediction_id).Error; err != nil {
+		return err
+	}
+
+	prediction.Date_completed = time.Now()
+	return r.db.Save(prediction).Error
 }
 
 func (r *Repository) DeletePrediction(prediction_id string, creator_id string) error {
@@ -98,7 +110,7 @@ func (r *Repository) SavePrediction(id string, ctx *gin.Context) error {
 func (r *Repository) GetPredictions(uid string, role ds.Role, status string, hasStartDate, hasEndDate bool, startDate, endDate time.Time) (*[]ds.Predictions, error) {
 	var predictions []ds.Predictions
 
-	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.creator_id")
+	query := r.db.Model(&ds.Predictions{}).Select("predictions.prediction_id, predictions.status, predictions.prediction_amount, predictions.prediction_window, predictions.date_created, predictions.date_formed, predictions.date_completed, predictions.creator_id, predictions.qr")
 	if role != ds.Moderator {
 		query = query.Where("predictions.creator_id = ?", uid)
 	}
@@ -180,4 +192,30 @@ func (r *Repository) CalculatePrediction(pred_id string) (*[]ds.Preds_Forecs, er
 	}
 	preds_forecs, _ = r.Preds_forecsList(pred_id)
 	return preds_forecs, nil
+}
+
+func (r *Repository) SetPredictionQr(prediction_id string) error {
+	var prediction ds.Predictions
+	if err := r.db.Model(&ds.Predictions{}).Where("prediction_id = ?", prediction_id).First(&prediction).Error; err != nil {
+		return err
+	}
+	var preds_forecs, _ = r.Preds_forecsList(prediction_id)
+
+	var png []byte
+	var result string
+	var creator, _ = r.GetUserByID(strconv.Itoa(prediction.CreatorID))
+	result += "Пользователь: " + creator.Login + ", "
+	result += "Время отправки: " + prediction.Date_created.Format("2006-01-02 15:04:05") + ", "
+	result += "Время завершения: " + prediction.Date_completed.Format("2006-01-02 15:04:05") + ", "
+
+	for _, v := range *preds_forecs {
+		f, _ := r.GetForecastByID(strconv.Itoa(int(v.ForecastID)))
+		result += "Прогноз: " + f.Short + ", "
+		result += "Ввод: " + v.Input + ", "
+		result += "Предсказание: " + v.Result + "; "
+	}
+
+	png, _ = qrcode.Encode(result, qrcode.Medium, 256)
+	prediction.Qr = png
+	return r.db.Save(&prediction).Error
 }

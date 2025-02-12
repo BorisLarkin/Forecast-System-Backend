@@ -20,7 +20,7 @@ import (
 // @Param start_date query string false "Earliest date created filter: YYYY-Mon-DD"
 // @Param end_date query string false "Latest date created filter: YYYY-Mon-DD"
 // @Param        Authorization header string true "Auth Bearer token header"
-// @Success      200  {object}  []ds.Predictions
+// @Success      200  {object}  []ds.PredictionWithUsers
 // @Failure      400
 // @Router       /predictions [get]
 func (h *Handler) GetPredictions(ctx *gin.Context) {
@@ -50,8 +50,15 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-
-	ctx.JSON(http.StatusOK, preds)
+	var finish []ds.PredictionWithUsers
+	var curr ds.PredictionWithUsers
+	for _, v := range *preds {
+		us, _ := h.Repository.GetUserByID(strconv.Itoa(v.CreatorID))
+		curr.User = us.Login
+		curr.Prediction = v
+		finish = append(finish, curr)
+	}
+	ctx.JSON(http.StatusOK, finish)
 }
 
 // GetPredictionByID godoc
@@ -196,6 +203,14 @@ func (h *Handler) FinishPrediction(ctx *gin.Context) {
 		}
 		if err := h.Repository.SetPredictionStatus(id, "done"); err != nil {
 			ctx.JSON(http.StatusConflict, err.Error())
+			return
+		}
+		if err := h.Repository.FinishPrediction(id); err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		if err := h.Repository.SetPredictionQr(id); err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
 		pred, _ := h.Repository.GetPredictionByID(id)
