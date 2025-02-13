@@ -126,16 +126,33 @@ func (h *Handler) DeleteForecast(ctx *gin.Context) {
 // @Produce      json
 // @Param        forecast body ds.ForecastRequest true "New forecast data"
 // @Param        Authorization header string true "Auth Bearer token header"
-// @Success      200  {object}  ds.ForecastRequest
-// @Failure      500  {object}  ds.Forecasts
+// @Success      200  {object}  ds.Forecasts
+// @Failure      500
 // @Router       /forecast/add [post]
 func (h *Handler) AddForecast(ctx *gin.Context) {
 	var forecast ds.Forecasts
-
-	if err := ctx.BindJSON(&forecast); err != nil {
-		ctx.JSON(http.StatusBadRequest, "неверные данные")
+	var freq ds.ForecastRequest
+	var max_id uint
+	forecs, _, err := h.Repository.ForecastList()
+	if err != nil {
+		max_id = 0
+	} else {
+		for _, v := range *forecs {
+			max_id = max(max_id, v.Forecast_id)
+		}
+	}
+	forecast.Forecast_id = max_id + 1
+	if err := ctx.BindJSON(&freq); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+	forecast.Color = freq.Color
+	forecast.Title = freq.Title
+	forecast.Short = freq.Short
+	forecast.Extended_desc = freq.Extended_desc
+	forecast.Descr = freq.Descr
+	forecast.Img_url = freq.Img_url
+	forecast.Measure_type = freq.Measure_type
 
 	id, err := h.Repository.CreateForecast(&forecast)
 

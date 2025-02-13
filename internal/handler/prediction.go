@@ -33,13 +33,13 @@ func (h *Handler) GetPredictions(ctx *gin.Context) {
 	startDateStr := ctx.Query("start_date")
 	endDateStr := ctx.Query("end_date")
 
-	startDate, err := time.Parse("2006-Jan-02", startDateStr)
+	startDate, err := time.Parse("2006-01-02", startDateStr)
 	if err != nil && startDateStr != "" {
 		ctx.JSON(http.StatusBadRequest, "Invalid start date format")
 		return
 	}
 
-	endDate, err := time.Parse("2006-Jan-02", endDateStr)
+	endDate, err := time.Parse("2006-01-02", endDateStr)
 	if err != nil && endDateStr != "" {
 		ctx.JSON(http.StatusBadRequest, "Invalid end date format")
 		return

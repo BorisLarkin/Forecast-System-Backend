@@ -57,14 +57,11 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ds.ForecastRequest"
+                            "$ref": "#/definitions/ds.Forecasts"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ds.Forecasts"
-                        }
+                        "description": "Internal Server Error"
                     }
                 }
             }
