@@ -9,13 +9,13 @@ endpoint = "127.0.0.1:9000"
 [redis]
 DialTimeout = "10s"
 ReadTimeout = "10s"
-REDIS_HOST="0.0.0.0"
+REDIS_HOST="172.21.0.2"
 REDIS_PORT=6379
 REDIS_USER="default"
 REDIS_PASSWORD=""
 
 [postgresql]
-DB_HOST="0.0.0.0"
+DB_HOST="172.21.0.3"
 DB_PORT=5432
 DB_NAME="weather_db"
 DB_USER="root"
